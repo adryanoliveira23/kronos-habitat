@@ -1,35 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Sora:wght@100..800&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Dela Gothic One", cursive;
-  --color-neon-green: #38F27F;
-  --color-neon-yellow: #DFFF00;
-  --color-petrol: #06121A;
-  --color-teal: #0D2E2B;
+  --color-neon-green: #38f27f;
+  --color-neon-yellow: #dfff00;
+  --color-petrol: #06121a;
+  --color-teal: #0d2e2b;
   --color-bg-dark: #050505;
-  --color-accent-green: #4CFFB2;
+  --color-accent-green: #4cffb2;
 }
 
 @layer base {
   body {
-    @apply bg-bg-dark text-white font-sans antialiased;
+    background-color: var(--color-bg-dark);
+    color: white;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer utilities {
   .hero-bg-gradient {
-    background-color: #06121A;
+    background-color: #06121a;
     background-image:
-      linear-gradient(to bottom, #000000 0%, #000000 80px, rgba(6, 18, 26, 0.95) 140px, #06121A 220px),
+      linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 80px,
+        rgba(6, 18, 26, 0.95) 140px,
+        #06121a 220px
+      ),
       linear-gradient(to top, rgba(56, 242, 127, 0.15) 0%, transparent 60%);
   }
 
   @media (max-width: 768px) {
     .hero-bg-gradient {
       background-image:
-        linear-gradient(to bottom, #000000 0%, #000000 70px, rgba(13, 46, 43, 0.95) 120px, #0D2E2B 200px),
+        linear-gradient(
+          to bottom,
+          #000000 0%,
+          #000000 70px,
+          rgba(13, 46, 43, 0.95) 120px,
+          #0d2e2b 200px
+        ),
         linear-gradient(to top, rgba(56, 242, 127, 0.2) 0%, transparent 50%);
     }
   }
@@ -47,20 +62,39 @@
   }
 
   .section-bg-glow {
-    background: radial-gradient(circle at 50% 50%, rgba(56, 242, 127, 0.1) 0%, transparent 85%);
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(56, 242, 127, 0.1) 0%,
+      transparent 85%
+    );
   }
 
   .section-bg-glow-alt {
-    background: radial-gradient(circle at 20% 50%, rgba(223, 255, 0, 0.08) 0%, transparent 75%),
-      radial-gradient(circle at 80% 50%, rgba(56, 242, 127, 0.08) 0%, transparent 75%);
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(223, 255, 0, 0.08) 0%,
+        transparent 75%
+      ),
+      radial-gradient(
+        circle at 80% 50%,
+        rgba(56, 242, 127, 0.08) 0%,
+        transparent 75%
+      );
   }
 
   .radial-glow {
-    background: radial-gradient(circle, var(--color-accent-green) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      var(--color-accent-green) 0%,
+      transparent 70%
+    );
   }
 
   .glass-card {
-    @apply bg-black/40 backdrop-blur-[24px] border border-white/10;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .neon-shadow-yellow {
@@ -72,7 +106,8 @@
   }
 
   .grid-lines {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
   }

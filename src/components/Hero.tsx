@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { ArrowRight, Globe } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import petImg from "@/lib/pet.png";
 import personagemImg from "@/lib/personagem.png";
 
@@ -161,7 +161,7 @@ export default function Hero({
               <div className="text-3xl sm:text-4xl lg:text-3xl xl:text-5xl font-black font-sans mb-1 xl:mb-2 uppercase text-white group-hover:text-neon-green transition-colors">
                 NÍVEL 200
               </div>
-              <div className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] leading-relaxed">
+              <div className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] rounded-md px-1 py-0.5 leading-relaxed">
                 O seu nível aumenta conforme sua consistência.
               </div>
             </div>

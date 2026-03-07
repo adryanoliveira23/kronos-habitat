@@ -91,7 +91,7 @@ export default function LoginPage({
           initial={{ opacity: 0, y: 30, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="relative bg-white/3 border border-white/10 rounded-[32px] p-8 sm:p-10 backdrop-blur-xl overflow-hidden"
+          className="relative bg-white/[0.03] border border-white/10 rounded-[32px] p-8 sm:p-10 backdrop-blur-xl overflow-hidden"
         >
           {/* Inner glow */}
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-neon-green/10 blur-[60px] rounded-full pointer-events-none" />
@@ -107,7 +107,7 @@ export default function LoginPage({
               </div>
               <h1 className="text-2xl sm:text-3xl font-black font-display uppercase leading-tight">
                 Acesse seu <br />
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-neon-yellow">
                   Cockpit.
                 </span>
               </h1>

@@ -138,7 +138,7 @@ const SHOP_PETS = [
   {
     id: 1,
     name: "Robo-Pet T01",
-    class: "Bí¡sico",
+    class: "Básico",
     rarity: "COMUM",
     price: 0,
     img: petImg.src,
@@ -147,8 +147,8 @@ const SHOP_PETS = [
   },
   {
     id: 2,
-    name: "Drone de Vigí­lia",
-    class: "Rí¡pido",
+    name: "Drone de Vigília",
+    class: "Rápido",
     rarity: "RARO",
     price: 2000,
     img: "https://i.ibb.co/HT2cTXfW/Chat-GPT-Image-1-de-mar-de-2026-13-24-02.png",
@@ -167,8 +167,8 @@ const SHOP_PETS = [
   },
   {
     id: 4,
-    name: "Dragí£o de Dados",
-    class: "Mí­stico",
+    name: "Dragão de Dados",
+    class: "Místico",
     rarity: "ULTRA",
     price: 15000,
     img: "https://i.ibb.co/HT2cTXfW/Chat-GPT-Image-1-de-mar-de-2026-13-24-02.png",
@@ -267,13 +267,13 @@ const CharacterStage = ({
       >
         <SideButton
           icon={Bot}
-          color="bg-linear-to-b from-blue-600/40 to-blue-900/40"
+          color="bg-gradient-to-b from-blue-600/40 to-blue-900/40"
           onClick={onAiChatClick}
         />
         <SideButton icon={Newspaper} onClick={() => setCurrentView("news")} />
         <SideButton
           icon={Briefcase}
-          color="bg-linear-to-b from-gray-600/40 to-gray-900/40"
+          color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
           onClick={onProjectsClick}
         />
       </div>
@@ -1542,7 +1542,7 @@ function CreateQuestModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl z-2001 overflow-hidden max-h-[90vh] flex flex-col"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-neon-green to-neon-yellow z-10" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-green to-neon-yellow z-10" />
 
             {/* Banner & Header */}
             <div className="p-6 pb-4 border-b border-white/5 relative bg-black/40">
@@ -1551,7 +1551,7 @@ function CreateQuestModal({
               </div>
               <div className="flex justify-between items-center relative z-10">
                 <h3 className="text-2xl font-black uppercase italic tracking-wider">
-                  Nova Missí£o
+                  Nova Missão
                 </h3>
                 <button
                   onClick={onClose}
@@ -1582,7 +1582,7 @@ function CreateQuestModal({
                       type="text"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Tí­tulo da Missí£o (Ex: Treino de Força)"
+                      placeholder="Título da Missão (Ex: Treino de Força)"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                       required
                     />
@@ -1592,18 +1592,18 @@ function CreateQuestModal({
                       type="text"
                       value={desc}
                       onChange={(e) => setDesc(e.target.value)}
-                      placeholder="Descrií§í£o / Contexto Tí¡tico (Opcional)"
+                      placeholder="Descrição / Contexto Tático (Opcional)"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                     />
                   </div>
                 </div>
 
-                {/* 1ï¸âƒ£ REPETIí‡íƒO */}
+                {/* 1️⃣ REPETIÇÃO */}
                 <div className="space-y-4 p-4 rounded-xl bg-white/[0.02] border border-white/5">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-neon-yellow" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-neon-yellow">
-                      1. Repetií§í£o
+                      1. Repetição
                     </span>
                   </div>
                   <div className="flex bg-black/50 p-1 rounded-xl border border-white/5">
@@ -1679,7 +1679,7 @@ function CreateQuestModal({
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-blue-400" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">
-                      2. Meta Obrigatí³ria
+                      2. Meta Obrigatória
                     </span>
                   </div>
                   <div className="flex flex-col gap-3">
@@ -1800,7 +1800,7 @@ function CreateQuestModal({
                 className="w-full bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#2fe073] hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(56,242,127,0.3)] hover:shadow-[0_0_30px_rgba(56,242,127,0.5)]"
               >
                 <Target className="w-5 h-5" />
-                Confirmar Missí£o
+                Confirmar Missão
               </button>
             </div>
           </motion.div>
@@ -1883,11 +1883,11 @@ function CreateHabitModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl z-2001 overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-neon-green to-neon-yellow" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-green to-neon-yellow" />
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black uppercase italic">
-                  Novo Hí¡bito
+                  Novo Hábito
                 </h3>
                 <button
                   onClick={onClose}
@@ -1900,7 +1900,7 @@ function CreateHabitModal({
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Nome do Hí¡bito
+                    Nome do Hábito
                   </label>
                   <input
                     type="text"
@@ -1915,15 +1915,15 @@ function CreateHabitModal({
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                      Frequíªncia
+                      Frequência
                     </label>
                     <select
                       value={frequency}
                       onChange={(e) => setFrequency(e.target.value)}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors appearance-none text-white"
                     >
-                      <option value="Dií¡rio" className="text-black">
-                        Dií¡rio
+                      <option value="Diário" className="text-black">
+                        Diário
                       </option>
                       <option value="Semanal" className="text-black">
                         Semanal
@@ -1935,7 +1935,7 @@ function CreateHabitModal({
                   </div>
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                      Horí¡rio (Opcional)
+                      Horário (Opcional)
                     </label>
                     <input
                       type="time"
@@ -1970,7 +1970,7 @@ function CreateHabitModal({
                         type="text"
                         value={task}
                         onChange={(e) => updateSubTask(idx, e.target.value)}
-                        placeholder={`Hí¡bito ${idx + 1}`}
+                        placeholder={`Hábito ${idx + 1}`}
                         className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs font-bold focus:outline-none focus:border-neon-green transition-colors"
                       />
                       {subTasks.length > 1 && (
@@ -1989,7 +1989,7 @@ function CreateHabitModal({
                     onClick={addSubTask}
                     className="w-full py-2 bg-white/5 border border-dashed border-white/10 rounded-xl text-[10px] font-black flex justify-center items-center gap-2 text-white/40 hover:text-white transition-all"
                   >
-                    <Plus className="w-3 h-3" /> Adicionar Hí¡bito ao Pacote
+                    <Plus className="w-3 h-3" /> Adicionar Hábito ao Pacote
                   </button>
                 </div>
 
@@ -1998,7 +1998,7 @@ function CreateHabitModal({
                   className="w-full mt-6 bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#2fe073] transition-colors flex justify-center items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
-                  Confirmar Hí¡bito
+                  Confirmar Hábito
                 </button>
               </form>
             </div>
@@ -2025,10 +2025,10 @@ function ReadyHabitsModal({
     {
       title: "Madrugada de Ferro",
       name: "Madrugada de Ferro",
-      desc: "Acordar í s 05:00 AM para dominar o dia com foco mí¡ximo.",
+      desc: "Acordar às 05:00 AM para dominar o dia com foco máximo.",
       max: 30,
       color: "from-orange-500 to-red-500",
-      frequency: "Dií¡rio",
+      frequency: "Diário",
       time: "05:00 AM",
       tasks: [
         { title: "Acordar 05:00", done: false },
@@ -2040,10 +2040,10 @@ function ReadyHabitsModal({
     {
       title: "Monge Digital",
       name: "Monge Digital",
-      desc: "Zero redes sociais e distraí§íµes atí© o meio-dia.",
+      desc: "Zero redes sociais e distrações até o meio-dia.",
       max: 21,
       color: "from-purple-500 to-blue-500",
-      frequency: "Dií¡rio",
+      frequency: "Diário",
       time: "08:00 AM",
       tasks: [
         { title: "Foco Total", done: false },
@@ -2055,28 +2055,28 @@ function ReadyHabitsModal({
     {
       title: "Corpo Blindado",
       name: "Corpo Blindado",
-      desc: "Sessí£o de treinamento de alta intensidade.",
+      desc: "Sessão de treinamento de alta intensidade.",
       max: 30,
       color: "from-neon-green to-blue-400",
-      frequency: "Dií¡rio",
+      frequency: "Diário",
       time: "06:00 PM",
       tasks: [
-        { title: "Musculaí§í£o", done: false },
+        { title: "Musculação", done: false },
         { title: "Corrida", done: false },
-        { title: "Proteí­na", done: false },
+        { title: "Proteína", done: false },
       ],
       completed: [],
     },
     {
-      title: "Mente de Aí§o",
-      name: "Mente de Aí§o",
-      desc: "30 minutos de meditaí§í£o profunda ou leitura tí©cnica.",
+      title: "Mente de Aço",
+      name: "Mente de Aço",
+      desc: "30 minutos de meditação profunda ou leitura técnica.",
       max: 21,
       color: "from-blue-400 to-indigo-500",
-      frequency: "Dií¡rio",
+      frequency: "Diário",
       time: "10:00 PM",
       tasks: [
-        { title: "Meditaí§í£o", done: false },
+        { title: "Meditação", done: false },
         { title: "Journaling", done: false },
         { title: "Estudo", done: false },
       ],
@@ -2085,14 +2085,14 @@ function ReadyHabitsModal({
     {
       title: "Rito do Gelo",
       name: "Rito do Gelo",
-      desc: "Banho gelado ao acordar para choque tí©rmico regenerador.",
+      desc: "Banho gelado ao acordar para choque térmico regenerador.",
       max: 15,
       color: "from-cyan-400 to-blue-600",
-      frequency: "Dií¡rio",
+      frequency: "Diário",
       time: "06:30 AM",
       tasks: [
-        { title: "Respiraí§í£o", done: false },
-        { title: "Imersí£o", done: false },
+        { title: "Respiração", done: false },
+        { title: "Imersão", done: false },
         { title: "Secagem", done: false },
       ],
       completed: [],
@@ -2123,7 +2123,7 @@ function ReadyHabitsModal({
                     PROTOCOLO KRONOS
                   </p>
                   <h3 className="text-2xl font-black uppercase italic">
-                    Hí¡bitos de Elite
+                    Hábitos de Elite
                   </h3>
                 </div>
                 <button
@@ -2166,7 +2166,7 @@ function ReadyHabitsModal({
                     <div className="flex items-center gap-4">
                       <div className="flex flex-col">
                         <span className="text-[7px] font-black text-white/20 uppercase">
-                          DURAí‡íƒO
+                          DURAÇÃO
                         </span>
                         <span className="text-[10px] font-black text-white/70">
                           {hb.max} DIAS
@@ -2174,7 +2174,7 @@ function ReadyHabitsModal({
                       </div>
                       <div className="flex flex-col">
                         <span className="text-[7px] font-black text-white/20 uppercase">
-                          FREQUíŠNCIA
+                          FREQUÊNCIA
                         </span>
                         <span className="text-[10px] font-black text-white/70">
                           {hb.frequency}
@@ -2192,7 +2192,7 @@ function ReadyHabitsModal({
   );
 }
 
-// â”€â”€â”€ Habit Tasks Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Habit Tasks Modal ───
 function HabitTasksModal({
   habit,
   isOpen,
@@ -2220,7 +2220,7 @@ function HabitTasksModal({
             exit={{ opacity: 0, scale: 0.9, y: 30 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-[2rem] z-[4001] overflow-hidden shadow-2xl"
           >
-            <div className={`h-1.5 w-full bg-linear-to-r ${habit.color}`} />
+            <div className={`h-1.5 w-full bg-gradient-to-r ${habit.color}`} />
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -2273,7 +2273,7 @@ function HabitTasksModal({
   );
 }
 
-// â”€â”€â”€ Progress Report Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Progress Report Modal ───
 function ProgressReportModal({
   isOpen,
   onClose,
@@ -2289,7 +2289,7 @@ function ProgressReportModal({
     { name: "Qua", value: 45 },
     { name: "Qui", value: 90 },
     { name: "Sex", value: 55 },
-    { name: "Sí¡b", value: 30 },
+    { name: "Sáb", value: 30 },
     { name: "Dom", value: 70 },
   ];
 
@@ -2310,17 +2310,17 @@ function ProgressReportModal({
             exit={{ opacity: 0, scale: 0.9, y: 50 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-5xl h-[90vh] bg-[#050505] border border-white/10 rounded-[3rem] z-[10001] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(56,242,127,0.1)]"
           >
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-neon-green via-neon-yellow to-neon-green" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-neon-green via-neon-yellow to-neon-green" />
 
             <div className="p-8 md:p-12 overflow-y-auto scrollbar-none flex-1">
               <div className="flex justify-between items-center mb-12">
                 <div>
                   <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white">
-                    RELIQUíRIO DE{" "}
+                    RELIQUÁRIO DE{" "}
                     <span className="text-neon-yellow">PROXIMIDADE</span>
                   </h2>
                   <p className="text-white/40 text-sm font-bold uppercase tracking-widest mt-2 px-1">
-                    Relatí³rio Tí¡tico â€¢ Protocolo Alpha-9
+                    Relatório Tático • Protocolo Alpha-9
                   </p>
                 </div>
                 <button
@@ -2333,7 +2333,7 @@ function ProgressReportModal({
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                 {/* Character Profile Card */}
-                <div className="p-8 bg-linear-to-br from-white/[0.03] to-white/[0.01] border border-white/10 rounded-[2.5rem] flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                <div className="p-8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 rounded-[2.5rem] flex flex-col items-center justify-center text-center relative overflow-hidden group">
                   <div className="absolute inset-0 bg-neon-green/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="w-32 h-32 rounded-full bg-neon-green/10 border-4 border-neon-green/20 flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(56,242,127,0.2)]">
                     <Crown className="w-16 h-16 text-neon-yellow" />
@@ -2342,7 +2342,7 @@ function ProgressReportModal({
                     {stats.class}
                   </h3>
                   <p className="text-neon-yellow text-sm font-black uppercase tracking-widest">
-                    Ní­vel {stats.level}
+                    Nível {stats.level}
                   </p>
                   <div className="grid grid-cols-2 gap-4 w-full mt-8">
                     <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
@@ -2371,7 +2371,7 @@ function ProgressReportModal({
                     </h4>
                     <div className="flex gap-2">
                       <span className="px-3 py-1 rounded-full bg-neon-green/20 text-neon-green text-[10px] font-black uppercase tracking-widest leading-none">
-                        íšltimos 7 Dias
+                        Últimos 7 Dias
                       </span>
                     </div>
                   </div>
@@ -2432,13 +2432,13 @@ function ProgressReportModal({
               {/* Detalhadamente sections */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
                 <DetailCard
-                  title="Missíµes Concluí­das"
+                  title="Missões Concluídas"
                   value={String(stats.questsCompleted || 0)}
                   icon={Target}
                   color="text-blue-400"
                 />
                 <DetailCard
-                  title="Hí¡bitos Concluí­dos"
+                  title="Hábitos Concluídos"
                   value={String(stats.habitsCompleted || 0)}
                   icon={Flame}
                   color="text-orange-400"
@@ -2450,7 +2450,7 @@ function ProgressReportModal({
                   color="text-neon-green"
                 />
                 <DetailCard
-                  title="Vití³rias"
+                  title="Vitórias"
                   value={String(stats.victories || 0)}
                   icon={Award}
                   color="text-yellow-400"
@@ -6775,7 +6775,7 @@ function BattleView({
     { name: "Sombra do Caos", img: vilao1 },
     { name: "Rei das Trevas", img: vilao2 },
     { name: "Lorde Corrupto", img: vilao3 },
-    { name: "Dragí£o Sombrio", img: vilao4 },
+    { name: "Dragão Sombrio", img: vilao4 },
   ];
   const currentVillain = VILLAINS[battleIndex % 4];
 
@@ -7026,7 +7026,7 @@ function BattleView({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="max-w-md text-center mb-8 px-6 py-4 bg-white/3 border border-white/10 rounded-2xl"
+          className="max-w-md text-center mb-8 px-6 py-4 bg-white/[0.03] border border-white/10 rounded-2xl"
         >
           <p className="text-white/70 text-sm sm:text-base font-medium italic leading-relaxed">
             "{phrase}"
@@ -7041,9 +7041,9 @@ function BattleView({
           className="flex items-center gap-3 sm:gap-5 mb-8 flex-wrap justify-center"
         >
           {[
-            { label: "Ní­vel", value: "â†’ 1", color: "text-red-400" },
-            { label: "XP", value: "â†’ 0", color: "text-orange-400" },
-            { label: "Moedas", value: "â†’ 0", color: "text-yellow-400" },
+            { label: "Nível", value: "→ 1", color: "text-red-400" },
+            { label: "XP", value: "→ 0", color: "text-orange-400" },
+            { label: "Moedas", value: "→ 0", color: "text-yellow-400" },
             { label: "Conquistas", value: "Zeradas", color: "text-purple-400" },
           ].map((stat) => (
             <div
@@ -7072,9 +7072,9 @@ function BattleView({
               onFullReset();
               onExit();
             }}
-            className="flex-1 py-5 bg-linear-to-r from-red-700 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_40px_rgba(220,38,38,0.4)] hover:shadow-[0_10px_60px_rgba(220,38,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border border-red-500/30"
+            className="flex-1 py-5 bg-gradient-to-r from-red-700 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_40px_rgba(220,38,38,0.4)] hover:shadow-[0_10px_60px_rgba(220,38,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border border-red-500/30"
           >
-            <span className="text-lg">ðŸ”„</span> RECOMEí‡AR DO ZERO
+            <span className="text-lg">🔄</span> RECOMEÇAR DO ZERO
           </button>
         </motion.div>
         <motion.p
@@ -7083,7 +7083,7 @@ function BattleView({
           transition={{ delay: 1.5 }}
           className="mt-5 text-[10px] font-bold text-white/15 uppercase tracking-widest text-center"
         >
-          Todo o progresso serí¡ perdido permanentemente
+          Todo o progresso será perdido permanentemente
         </motion.p>
       </motion.div>
     );
@@ -7101,7 +7101,7 @@ function BattleView({
           className="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none"
           style={{ backgroundImage: "url('/medieval-battle.png')" }}
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 pointer-events-none" />
 
         {/* Header Gameplay */}
         <div className="absolute top-3 left-3 right-3 sm:top-6 sm:left-6 sm:right-6 flex justify-between items-center z-20">
@@ -7134,7 +7134,7 @@ function BattleView({
             <div className="w-full relative h-5 sm:h-6 bg-black/60 rounded-full border border-white/20 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
               <motion.div
                 animate={{ width: `${enemyHP}%` }}
-                className="h-full bg-linear-to-r from-red-800 to-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                className="h-full bg-gradient-to-r from-red-800 to-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]"
               />
               <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-black text-white uppercase tracking-widest">
                 {Math.max(0, enemyHP)}%
@@ -7196,7 +7196,7 @@ function BattleView({
             <div className="w-full relative h-5 sm:h-6 bg-black/60 rounded-full border border-white/20 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
               <motion.div
                 animate={{ width: `${playerHP}%` }}
-                className="h-full bg-linear-to-r from-emerald-800 to-neon-green shadow-[0_0_20px_rgba(56,242,127,0.5)]"
+                className="h-full bg-gradient-to-r from-emerald-800 to-neon-green shadow-[0_0_20px_rgba(56,242,127,0.5)]"
               />
               <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-black text-white uppercase tracking-widest">
                 {Math.max(0, playerHP)}%
@@ -7242,7 +7242,7 @@ function BattleView({
               Objetivos de Guerra
             </h2>
             <p className="text-[9px] lg:text-[10px] font-medium text-white/30 uppercase tracking-[0.2em] mt-1">
-              Protocolo de Execuí§í£o Tí¡tica
+              Protocolo de Execução Tática
             </p>
           </div>
           <div className="flex items-center gap-6">
@@ -11606,7 +11606,7 @@ function NewsView({
             >
               {/* Article Image Container */}
               <div className="h-48 overflow-hidden relative">
-                <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent z-10" />
                 <img
                   src={article.image}
                   alt={article.title}
@@ -11652,7 +11652,7 @@ function NewsView({
 
                 <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
                   <button className="text-[10px] font-black text-neon-yellow uppercase tracking-widest flex items-center gap-2 group/btn">
-                    Ler Crí´nica
+                    Ler Crônica
                     <TrendingUp className="w-3 h-3 transition-transform group-hover/btn:translate-x-1" />
                   </button>
                   <button className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all">
@@ -11670,7 +11670,7 @@ function NewsView({
         {/* Bottom decoration */}
         <div className="mt-16 py-12 border-t border-white/5 text-center">
           <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.5em]">
-            Fim das Crí´nicas Atuais
+            Fim das Crônicas Atuais
           </p>
         </div>
       </div>
@@ -11712,7 +11712,7 @@ function FriendsView({
 
   return (
     <FullViewWrapper
-      title="Central de Alianí§as"
+      title="Central de Alianças"
       icon={Friends}
       color="border-neon-green"
       onClose={onClose}
@@ -11780,8 +11780,7 @@ function FriendsView({
                           {hero.name}
                         </h4>
                         <p className="text-[8px] font-black text-white/30 uppercase tracking-widest mt-1">
-                          Ní­vel {hero.level} â€¢ {(hero.xp / 1000).toFixed(1)}k
-                          XP
+                          Nível {hero.level} • {(hero.xp / 1000).toFixed(1)}k XP
                         </p>
                       </div>
                     </div>
@@ -11856,7 +11855,7 @@ function FriendsView({
 
                       <div className="flex items-center gap-5 relative z-10">
                         <div className="w-14 h-14 relative">
-                          <div className="absolute inset-0 bg-linear-to-br from-neon-green/20 to-transparent rounded-2xl blur-md scale-75" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-neon-green/20 to-transparent rounded-2xl blur-md scale-75" />
                           <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-black p-1.5 relative z-10">
                             <img
                               src={friend.photoURL}
@@ -11871,7 +11870,7 @@ function FriendsView({
                           </h4>
                           <div className="flex items-center gap-3 mt-1.5">
                             <p className="text-[8px] font-black text-white/30 uppercase tracking-widest">
-                              Ní­vel {friend.level}
+                              Nível {friend.level}
                             </p>
                             <div className="w-1 h-1 rounded-full bg-white/10" />
                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">
@@ -11941,7 +11940,7 @@ function UnifiedShopModal({
       >
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-10 border-b border-white/5 bg-white/[0.02] gap-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-neon-yellow/50 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-yellow/50 to-transparent" />
 
           <div className="flex flex-col items-center sm:items-start w-full sm:w-auto">
             <h2 className="text-2xl sm:text-4xl font-black italic tracking-tighter text-white uppercase leading-none text-center sm:text-left">
@@ -12009,14 +12008,14 @@ function UnifiedShopModal({
                 className={`bg-black/40 border ${isSelected ? "border-neon-yellow shadow-[0_0_30px_rgba(255,242,0,0.2)]" : "border-white/10"} rounded-[2.5rem] p-6 flex flex-col items-center gap-6 group transition-all hover:bg-white/[0.04] hover:border-white/20 relative overflow-hidden`}
               >
                 <div
-                  className={`absolute inset-0 bg-linear-to-b ${item.color} opacity-0 group-hover:opacity-1 transition-opacity pointer-events-none`}
+                  className={`absolute inset-0 bg-gradient-to-b ${item.color} opacity-0 group-hover:opacity-1 transition-opacity pointer-events-none`}
                 />
 
                 <div
                   className={`absolute top-4 left-6 z-20 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10 text-[8px] font-black tracking-widest uppercase`}
                 >
                   <span
-                    className={`bg-linear-to-r ${item.color} bg-clip-text text-transparent`}
+                    className={`bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}
                   >
                     {item.rarity}
                   </span>
@@ -12040,7 +12039,7 @@ function UnifiedShopModal({
                   <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 4, repeat: Infinity }}
-                    className={`absolute inset-0 rounded-full bg-linear-to-r ${item.color} blur-[40px] scale-50 opacity-10 group-hover:opacity-40 transition-opacity`}
+                    className={`absolute inset-0 rounded-full bg-gradient-to-r ${item.color} blur-[40px] scale-50 opacity-10 group-hover:opacity-40 transition-opacity`}
                   />
 
                   <img
@@ -12075,7 +12074,7 @@ function UnifiedShopModal({
                   className={`w-full py-4 rounded-2xl text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden ${isSelected ? "bg-neon-yellow text-black cursor-default" : isOwned ? "bg-white/10 text-white hover:bg-white/20" : "bg-neon-yellow text-black hover:scale-105 active:scale-95 shadow-[0_5px_20px_rgba(255,242,0,0.3)]"}`}
                 >
                   {!isOwned && (
-                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   )}
                   {isSelected
                     ? "Selecionado"
