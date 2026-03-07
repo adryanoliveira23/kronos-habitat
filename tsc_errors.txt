@@ -1,0 +1,121 @@
+﻿legacy/src/components/DashboardSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/components/HabitSystemSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/components/LifeCategoriesSection.tsx(8,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/components/MissionsRewardsSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/components/Multiplayer.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/components/Pricing.tsx(4,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/components/SystemDashboard.tsx(4105,25): error TS2345: Argument of type '(prev: never[]) => any[]' is not assignable to parameter of type 'never[] | ((val: never[]) => never[])'.
+  Type '(prev: never[]) => any[]' is not assignable to type '(val: never[]) => never[]'.
+    Type 'any[]' is not assignable to type 'never[]'.
+      Type 'any' is not assignable to type 'never'.
+legacy/src/components/SystemDashboard.tsx(4106,19): error TS2339: Property 'id' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4107,39): error TS2339: Property 'completed' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4109,25): error TS2339: Property 'completed' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4109,42): error TS7006: Parameter 'd' implicitly has an 'any' type.
+legacy/src/components/SystemDashboard.tsx(4110,29): error TS2339: Property 'completed' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4116,26): error TS2698: Spread types may only be created from object types.
+legacy/src/components/SystemDashboard.tsx(4162,27): error TS2339: Property 'name' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4163,27): error TS2339: Property 'name' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4164,27): error TS2339: Property 'name' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4166,58): error TS2339: Property 'completed' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4171,27): error TS2339: Property 'name' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4172,27): error TS2339: Property 'name' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4173,27): error TS2339: Property 'name' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4175,50): error TS2339: Property 'completed' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4205,56): error TS2339: Property 'id' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4209,25): error TS2345: Argument of type '(prev: never[]) => { id: number; name: string; completed: never[]; }[]' is not assignable to parameter of type 'never[] | ((val: never[]) => never[])'.
+  Type '(prev: never[]) => { id: number; name: string; completed: never[]; }[]' is not assignable to type '(val: never[]) => never[]'.
+    Type '{ id: number; name: string; completed: never[]; }[]' is not assignable to type 'never[]'.
+      Type '{ id: number; name: string; completed: never[]; }' is not assignable to type 'never'.
+legacy/src/components/SystemDashboard.tsx(4213,25): error TS2345: Argument of type '(prev: never[]) => any[]' is not assignable to parameter of type 'never[] | ((val: never[]) => never[])'.
+  Type '(prev: never[]) => any[]' is not assignable to type '(val: never[]) => never[]'.
+    Type 'any[]' is not assignable to type 'never[]'.
+      Type 'any' is not assignable to type 'never'.
+legacy/src/components/SystemDashboard.tsx(4213,49): error TS2339: Property 'id' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4213,63): error TS2698: Spread types may only be created from object types.
+legacy/src/components/SystemDashboard.tsx(4217,52): error TS2339: Property 'id' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(4559,67): error TS2345: Argument of type '"ai"' is not assignable to parameter of type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5174,100): error TS2345: Argument of type '(prev: { day: string; tasks: never[]; }[]) => { tasks: { id: number; title: string; done: boolean; priority: "Urgente" | "Normal" | "Aten├º├úo"; }[]; day: string; }[]' is not assignable to parameter of type '{ day: string; tasks: never[]; }[] | ((val: { day: string; tasks: never[]; }[]) => { day: string; tasks: never[]; }[])'.
+  Type '(prev: { day: string; tasks: never[]; }[]) => { tasks: { id: number; title: string; done: boolean; priority: "Urgente" | "Normal" | "Aten├º├úo"; }[]; day: string; }[]' is not assignable to type '(val: { day: string; tasks: never[]; }[]) => { day: string; tasks: never[]; }[]'.
+    Type '{ tasks: { id: number; title: string; done: boolean; priority: "Urgente" | "Normal" | "Aten├º├úo"; }[]; day: string; }[]' is not assignable to type '{ day: string; tasks: never[]; }[]'.
+      Type '{ tasks: { id: number; title: string; done: boolean; priority: "Urgente" | "Normal" | "Aten├º├úo"; }[]; day: string; }' is not assignable to type '{ day: string; tasks: never[]; }'.
+        Types of property 'tasks' are incompatible.
+          Type '{ id: number; title: string; done: boolean; priority: "Urgente" | "Normal" | "Aten├º├úo"; }[]' is not assignable to type 'never[]'.
+            Type '{ id: number; title: string; done: boolean; priority: "Urgente" | "Normal" | "Aten├º├úo"; }' is not assignable to type 'never'.
+legacy/src/components/SystemDashboard.tsx(5196,112): error TS2339: Property 'done' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(5197,113): error TS2339: Property 'done' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(5204,100): error TS2345: Argument of type '(prev: { day: string; tasks: never[]; }[]) => { tasks: any[]; day: string; }[]' is not assignable to parameter of type '{ day: string; tasks: never[]; }[] | ((val: { day: string; tasks: never[]; }[]) => { day: string; tasks: never[]; }[])'.
+  Type '(prev: { day: string; tasks: never[]; }[]) => { tasks: any[]; day: string; }[]' is not assignable to type '(val: { day: string; tasks: never[]; }[]) => { day: string; tasks: never[]; }[]'.
+    Type '{ tasks: any[]; day: string; }[]' is not assignable to type '{ day: string; tasks: never[]; }[]'.
+      Type '{ tasks: any[]; day: string; }' is not assignable to type '{ day: string; tasks: never[]; }'.
+        Types of property 'tasks' are incompatible.
+          Type 'any[]' is not assignable to type 'never[]'.
+            Type 'any' is not assignable to type 'never'.
+legacy/src/components/SystemDashboard.tsx(5205,149): error TS2339: Property 'id' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(5205,168): error TS2698: Spread types may only be created from object types.
+legacy/src/components/SystemDashboard.tsx(5205,183): error TS2339: Property 'done' does not exist on type 'never'.
+legacy/src/components/SystemDashboard.tsx(5719,29): error TS2367: This comparison appears to be unintentional because the types 'ViewId' and '"ai"' have no overlap.
+legacy/src/components/SystemDashboard.tsx(5806,37): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5807,37): error TS2322: Type 'Dispatch<SetStateAction<"characters" | "pets" | null>>' is not assignable to type '(v: string | null) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<"characters" | "pets" | null>'.
+      Type 'string' is not assignable to type 'SetStateAction<"characters" | "pets" | null>'.
+legacy/src/components/SystemDashboard.tsx(5814,73): error TS2345: Argument of type '"ai"' is not assignable to parameter of type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5898,37): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5907,37): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5917,37): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5923,47): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5964,53): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5975,53): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5987,53): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(5995,63): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(6035,37): error TS2322: Type 'Dispatch<SetStateAction<ViewId>>' is not assignable to type '(v: string) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string' is not assignable to type 'SetStateAction<ViewId>'.
+legacy/src/components/SystemDashboard.tsx(6036,37): error TS2322: Type 'Dispatch<SetStateAction<"characters" | "pets" | null>>' is not assignable to type '(v: string | null) => void'.
+  Types of parameters 'value' and 'v' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<"characters" | "pets" | null>'.
+      Type 'string' is not assignable to type 'SetStateAction<"characters" | "pets" | null>'.
+legacy/src/components/SystemDashboard.tsx(6043,73): error TS2345: Argument of type '"ai"' is not assignable to parameter of type 'SetStateAction<ViewId>'.
+legacy/src/components/UnlockableCharactersSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+legacy/src/main.tsx(3,17): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+legacy/vite.config.ts(1,25): error TS2307: Cannot find module '@tailwindcss/vite' or its corresponding type declarations.
+legacy/vite.config.ts(2,19): error TS2307: Cannot find module '@vitejs/plugin-react' or its corresponding type declarations.
+legacy/vite.config.ts(4,37): error TS2307: Cannot find module 'vite' or its corresponding type declarations.
+legacy/vite.config.ts(6,31): error TS7031: Binding element 'mode' implicitly has an 'any' type.
+src/app/api/chat/route.ts(1,36): error TS2307: Cannot find module '@google/generative-ai' or its corresponding type declarations.
+src/components/DashboardSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+src/components/HabitSystemSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+src/components/LifeCategoriesSection.tsx(8,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+src/components/MissionsRewardsSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+src/components/Multiplayer.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+src/components/Pricing.tsx(4,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
+src/components/SystemDashboard.tsx(1851,12): error TS2345: Argument of type '{ title: string; max: number; color: string; time: string | undefined; frequency: string; desc: string; tasks: { title: string; done: false; }[]; }' is not assignable to parameter of type 'Omit<Habit, "id" | "streak">'.
+  Type '{ title: string; max: number; color: string; time: string | undefined; frequency: string; desc: string; tasks: { title: string; done: false; }[]; }' is missing the following properties from type 'Omit<Habit, "id" | "streak">': name, completed
+src/components/SystemDashboard.tsx(2145,33): error TS2345: Argument of type '{ title: string; desc: string; max: number; color: string; frequency: string; time: string; tasks: { title: string; done: boolean; }[]; }' is not assignable to parameter of type 'Omit<Habit, "id" | "streak">'.
+  Type '{ title: string; desc: string; max: number; color: string; frequency: string; time: string; tasks: { title: string; done: boolean; }[]; }' is missing the following properties from type 'Omit<Habit, "id" | "streak">': name, completed
+src/components/SystemDashboard.tsx(8069,7): error TS2741: Property 'id' is missing in type '{ name: string; desc: string; icon: string; active: false; unlocked: false; }' but required in type 'Buff'.
+src/components/SystemDashboard.tsx(8076,7): error TS2741: Property 'id' is missing in type '{ name: string; desc: string; icon: string; active: false; unlocked: false; }' but required in type 'Buff'.
+src/components/SystemDashboard.tsx(8083,7): error TS2741: Property 'id' is missing in type '{ name: string; desc: string; icon: string; active: false; unlocked: false; }' but required in type 'Buff'.
+src/components/SystemDashboard.tsx(8090,7): error TS2741: Property 'id' is missing in type '{ name: string; desc: string; icon: string; active: false; unlocked: false; }' but required in type 'Buff'.
+src/components/SystemDashboard.tsx(11743,50): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/components/UnlockableCharactersSection.tsx(3,20): error TS2307: Cannot find module '@/src/lib/utils' or its corresponding type declarations.
