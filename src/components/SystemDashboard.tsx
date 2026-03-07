@@ -331,7 +331,7 @@ const CharacterStage = ({
           <img
             src={selectedCharImg}
             alt="Personagem"
-            className={`object-contain drop-shadow-[0_20px_60px_rgba(56,242,127,0.4)] relative z-10 pointer-events-auto w-[240px] h-[240px] sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px]`}
+            className={`object-contain drop-shadow-[0_20px_60px_rgba(56,242,127,0.4)] relative z-10 pointer-events-auto w-[240px] h-[240px] sm:w-96 sm:h-96 lg:w-[400px] lg:h-[400px] xl:w-[480px] xl:h-[480px]`}
             style={
               isMobile ? { maxHeight: "35dvh", maxWidth: "35dvh" } : undefined
             }
@@ -388,7 +388,7 @@ const QuestsPanel = ({
   <>
     <div className="flex items-center justify-between mb-2 shrink-0">
       <span className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
-        <Target className="w-3 h-3 xl:w-4 xl:h-4 text-neon-green" /> MISSí•ES
+        <Target className="w-3 h-3 xl:w-4 xl:h-4 text-neon-green" /> MISSÕES
       </span>
       <button
         onClick={() => setCurrentView("quests")}
@@ -403,7 +403,7 @@ const QuestsPanel = ({
     >
       <Plus className="w-5 h-5 text-neon-green group-hover:scale-110 transition-transform" />
       <span className="text-[12px] sm:text-[14px] font-black text-neon-green uppercase tracking-widest">
-        + NOVA MISSíƒO
+        + NOVA MISSÃO
       </span>
     </button>
     <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-neon-green/20 hover:scrollbar-thumb-neon-green/40">
@@ -1111,10 +1111,15 @@ function XPBar({
   const pct = Math.min((current / max) * 100, 100);
   return (
     <div className="w-full">
-      <div className="flex justify-between items-baseline mb-1">
-        <span className="text-[9px] font-black uppercase tracking-widest text-white/40">
-          {label}
-        </span>
+      <div className="flex justify-between items-center mb-1">
+        <div className="flex items-center gap-1.5">
+          {label === "Vida" && (
+            <Heart className="w-2.5 h-2.5 text-red-500 fill-red-500/20" />
+          )}
+          <span className="text-[9px] font-black uppercase tracking-widest text-white/40">
+            {label}
+          </span>
+        </div>
         <span className="text-[9px] font-black text-neon-green">
           {current.toLocaleString()}
           <span className="text-white/20">/{max.toLocaleString()}</span>
@@ -6913,10 +6918,10 @@ function BattleView({
             className="text-6xl sm:text-8xl font-black uppercase italic mb-4 text-neon-green"
             style={{ textShadow: "0 0 40px rgba(56,242,127,0.5)" }}
           >
-            VITí“RIA!
+            VITÓRIA!
           </div>
           <p className="text-white/50 text-sm font-black uppercase tracking-widest mb-2">
-            Todas as tarefas concluí­das!
+            Todas as tarefas concluídas!
           </p>
           <motion.div
             initial={{ y: 20, opacity: 0 }}
@@ -7095,8 +7100,8 @@ function BattleView({
       animate={{ opacity: 1 }}
       className="fixed inset-0 z-[2500] bg-black flex flex-col overflow-hidden font-sans text-white"
     >
-      {/* TOP â€” Gameplay (50%) */}
-      <section className="h-1/2 w-full relative flex flex-col border-b border-white/10 overflow-hidden bg-[#050505]">
+      {/* TOP — Gameplay (60% to ensure space for assets) */}
+      <section className="h-[60dvh] min-h-[400px] w-full relative flex flex-col border-b border-white/10 overflow-hidden bg-[#050505] shrink-0">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none"
           style={{ backgroundImage: "url('/medieval-battle.png')" }}
@@ -7232,8 +7237,8 @@ function BattleView({
         </div>
       </section>
 
-      {/* BOTTOM â€” Objectives (50%) */}
-      <section className="h-1/2 w-full bg-black flex flex-col z-30 relative overflow-hidden">
+      {/* BOTTOM — Objectives (remaining space) */}
+      <section className="flex-1 w-full bg-black flex flex-col z-30 relative overflow-hidden">
         {/* Header Objetivos */}
         <div className="px-6 py-4 lg:px-10 lg:py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
           <div>
@@ -7640,7 +7645,7 @@ export default function SystemDashboard({
       name: "Sombra Noturna",
       level: 38,
       xp: "72.4k",
-      status: "EM MISSíƒO",
+      status: "EM MISSÃO",
       img: "https://i.ibb.co/Mm8fkMz/Chat-GPT-Image-1-de-mar-de-2026-21-15-22.png",
     },
     {
@@ -8122,7 +8127,7 @@ export default function SystemDashboard({
       },
       {
         id: 4,
-        name: "Dragí£o Dormindo",
+        name: "Dragão Dormindo",
         desc: "Desbloqueie apí³s 30 dias de treino",
         icon: "ðŸ‰",
         active: false,
@@ -9198,7 +9203,7 @@ export default function SystemDashboard({
                           xp: "42.1k",
                           badge: "âš¡",
                           division: "PLATINA II",
-                          status: "EM MISSíƒO",
+                          status: "EM MISSÃO",
                         },
                         {
                           rank: 3,
