@@ -6,6 +6,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import LoginPage from "@/components/LoginPage";
 import RegisterPage from "@/components/RegisterPage";
 import PlanSelectPage from "@/components/PlanSelectPage";
+import CheckoutPage from "@/components/CheckoutPage";
 import SystemDashboard from "@/components/SystemDashboard";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -23,16 +24,16 @@ import Pricing from "@/components/Pricing";
 import Footer from "@/components/Footer";
 import CommunitySection from "@/components/CommunitySection";
 
-type View = "landing" | "login" | "register" | "plan-select";
+type View = "landing" | "login" | "register" | "plan-select" | "checkout";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSystemLoading, setIsSystemLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [view, setView] = useState<View>("landing");
-  const [selectedPlan, setSelectedPlan] = useState<"basic" | "pro" | undefined>(
-    undefined,
-  );
+  const [selectedPlan, setSelectedPlan] = useState<
+    "basic" | "pro" | "powerful" | undefined
+  >(undefined);
   const [globalVolume, setGlobalVolume] = useState(70);
 
   const goTo = (v: View) => {
@@ -42,7 +43,7 @@ export default function Home() {
     setView(v);
   };
 
-  const goToRegister = () => goTo("register");
+  const goToRegister = () => goTo("plan-select");
   const goToLogin = () => goTo("login");
 
   const handleLoginSuccess = () => {
@@ -59,7 +60,7 @@ export default function Home() {
     setView("landing");
   };
 
-  const handleSelectPlan = (plan: "basic" | "pro") => {
+  const handleSelectPlan = (plan: "basic" | "pro" | "powerful") => {
     setSelectedPlan(plan);
     goTo("register");
   };
@@ -110,10 +111,23 @@ export default function Home() {
             exit={{ opacity: 0 }}
           >
             <RegisterPage
-              onBack={() => goTo(selectedPlan ? "plan-select" : "landing")}
+              onBack={() => goTo("plan-select")}
               onGoToLogin={goToLogin}
-              onRegisterSuccess={handleLoginSuccess}
+              onRegisterSuccess={() => goTo("checkout")}
               selectedPlan={selectedPlan}
+            />
+          </motion.div>
+        ) : view === "checkout" ? (
+          <motion.div
+            key="checkout"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <CheckoutPage
+              onBack={() => goTo("plan-select")}
+              selectedPlan={selectedPlan}
+              onComplete={handleLoginSuccess}
             />
           </motion.div>
         ) : view === "plan-select" ? (

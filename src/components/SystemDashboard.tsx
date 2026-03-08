@@ -250,7 +250,7 @@ const CharacterStage = ({
 }) => (
   <motion.div
     initial={{ y: 60, opacity: 0, scale: 0.9 }}
-    animate={charAnim ? { y: 0, opacity: 1, scale: 1 } : {}}
+    animate={charAnim ? { y: 0, opacity: 1, scale: 0.9 } : {}}
     transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
     className={`relative z-10 flex flex-col items-center w-full ${isMobile ? "px-1" : "h-full justify-center"}`}
   >
@@ -302,7 +302,7 @@ const CharacterStage = ({
           <img
             src={selectedPetImg}
             alt="Pet"
-            className={`object-contain drop-shadow-[0_8px_20px_rgba(56,242,127,0.5)] transition-filter pointer-events-auto w-[130px] h-[130px] sm:w-52 sm:h-52 lg:w-64 lg:h-64`}
+            className={`object-contain drop-shadow-[0_8px_20px_rgba(56,242,127,0.5)] transition-filter pointer-events-auto w-[100px] h-[100px] sm:w-40 sm:h-40 lg:w-56 lg:h-56 xl:w-64 xl:h-64 2xl:w-80 2xl:h-80`}
             style={
               isMobile ? { maxHeight: "18dvh", maxWidth: "18dvh" } : undefined
             }
@@ -331,7 +331,7 @@ const CharacterStage = ({
           <img
             src={selectedCharImg}
             alt="Personagem"
-            className={`object-contain drop-shadow-[0_20px_60px_rgba(56,242,127,0.4)] relative z-10 pointer-events-auto w-[240px] h-[240px] sm:w-96 sm:h-96 lg:w-[400px] lg:h-[400px] xl:w-[480px] xl:h-[480px]`}
+            className={`object-contain drop-shadow-[0_20px_60px_rgba(56,242,127,0.4)] relative z-10 pointer-events-auto w-[180px] h-[180px] sm:w-72 sm:h-72 lg:w-[340px] lg:h-[340px] xl:w-[420px] xl:h-[420px] 2xl:w-[520px] 2xl:h-[520px]`}
             style={
               isMobile ? { maxHeight: "35dvh", maxWidth: "35dvh" } : undefined
             }
@@ -573,7 +573,7 @@ const TrainingPanel = ({
       <div className="p-4 bg-neon-green/5 border border-neon-green/20 rounded-2xl mb-4 shrink-0">
         <div className="flex justify-between items-center mb-2">
           <p className="text-[10px] font-black text-neon-green uppercase tracking-widest">
-            Evoluí§í£o Semanal
+            Evolução Semanal
           </p>
           <span className="text-[10px] font-black text-neon-green">
             {completedCount}/{weeklyTrainings.length}
@@ -640,7 +640,7 @@ const TrainingPanel = ({
                               {t.exercises.length} EXERCíCIOS
                             </span>
                             <span className="text-[8px] font-black text-neon-green/60 uppercase">
-                              {totalSeries} Sí‰RIES TOTAIS
+                              {totalSeries} SÉRIES TOTAIS
                             </span>
                           </div>
                         </div>
@@ -722,7 +722,7 @@ const RankingPanel = ({
         <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black text-neon-green mt-1">
           {myRank > 0 && myRank <= 3
             ? "ðŸ† Elite do Olimpo"
-            : "âš¡ Divisí£o Principal"}
+            : "⚡ Divisão Principal"}
         </p>
       </div>
       <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-neon-yellow/20 hover:scrollbar-thumb-neon-yellow/40">
@@ -730,10 +730,10 @@ const RankingPanel = ({
           const isMe = r.id === auth.currentUser?.uid;
           const rankNum = i + 1;
           let badge = "";
-          if (rankNum === 1) badge = "ðŸ‘‘";
-          else if (rankNum === 2) badge = "âš¡";
-          else if (rankNum === 3) badge = "ðŸ”¥";
-          else if (isMe) badge = "ðŸŽ¯";
+          if (rankNum === 1) badge = "👑";
+          else if (rankNum === 2) badge = "⚡";
+          else if (rankNum === 3) badge = "🔥";
+          else if (isMe) badge = "🎯";
 
           return (
             <div
@@ -850,13 +850,13 @@ const ArsenalPanel = ({
     </div>
     <div className="p-3 2xl:p-4 bg-neon-yellow/5 border border-neon-yellow/20 rounded-xl">
       <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase text-neon-yellow/60 mb-2 flex items-center gap-1">
-        <Crown className="w-2.5 h-2.5 xl:w-3 xl:h-3" /> Prí³xima Evoluí§í£o
+        <Crown className="w-2.5 h-2.5 xl:w-3 xl:h-3" /> Próxima Evolução
       </p>
       <div className="flex items-center gap-3">
-        <span className="text-2xl 2xl:text-3xl">âš¡</span>
+        <span className="text-2xl 2xl:text-3xl">⚡</span>
         <div className="flex-1">
           <p className="text-[10px] xl:text-[12px] 2xl:text-[14px] font-black text-neon-yellow uppercase">
-            Ní­vel {playerStats.level + 1}
+            Nível {playerStats.level + 1}
           </p>
           <div className="flex items-center gap-1.5 mt-1 2xl:mt-2">
             <div className="flex-1 h-1 2xl:h-1.5 bg-white/10 rounded-full overflow-hidden">
@@ -987,7 +987,7 @@ interface WeeklyTaskItem {
   id: number;
   title: string;
   done: boolean;
-  priority: "Normal" | "Atení§í£o" | "Urgente";
+  priority: "Normal" | "Atenção" | "Urgente";
 }
 
 interface WeeklyDayTasks {
@@ -999,7 +999,7 @@ interface PomodoroTask {
   id: number;
   title: string;
   done: boolean;
-  priority?: "Normal" | "Atení§í£o" | "Urgente";
+  priority?: "Normal" | "Atenção" | "Urgente";
   targetSessions: number;
   completedSessions: number;
   targetDays?: number;
@@ -1406,7 +1406,7 @@ function FullViewWrapper({
                 {title}
               </h2>
               <p className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.3em] mt-1 opacity-40">
-                SISTEMA KRONOS // Mí“DULO_ESPECíFICO
+                SISTEMA KRONOS // MÓDULO_ESPECíFICO
               </p>
             </div>
           </div>
@@ -1443,7 +1443,7 @@ function CreateQuestModal({
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
-  // 1ï¸âƒ£ Repetií§í£o
+  // 1ï¸âƒ£ Repetição
   const [repetition, setRepetition] = useState("Diária");
   const [days, setDays] = useState<string[]>([
     "SEG",
@@ -1468,7 +1468,7 @@ function CreateQuestModal({
   const [timeInterval, setTimeInterval] = useState("A qualquer momento");
 
   const weekDays = ["SEG", "TER", "QUA", "QUI", "SEX", "SíB", "DOM"];
-  const timeOptions = ["A qualquer momento", "Manhí£", "Tarde", "Noite"];
+  const timeOptions = ["A qualquer momento", "Manhã", "Tarde", "Noite"];
   const unitOptions = ["Segundos", "Minutos", "Horas"];
 
   const handleDayToggle = (day: string) => {
@@ -1480,7 +1480,7 @@ function CreateQuestModal({
     e.preventDefault();
     if (!title) return;
 
-    // Validaí§í£o da Meta (Obrigatí³ria)
+    // Validação da Meta (Obrigatória)
     if (goalUnit !== "Horas" && (!goalAmount || goalAmount <= 0)) return;
     if (goalUnit === "Horas" && !goalHours && !goalMinutes && !goalSeconds)
       return;
@@ -2153,7 +2153,7 @@ function ReadyHabitsModal({
                         onClick={() => {
                           if (!canAdd) {
                             alert(
-                              "Protocolo Ativo: Você jí¡ possui hí¡bitos em andamento. Conclua a batalha atual para instalar um novo protocolo.",
+                              "Protocolo Ativo: Você jí¡ possui hábitos em andamento. Conclua a batalha atual para instalar um novo protocolo.",
                             );
                             return;
                           }
@@ -2778,7 +2778,7 @@ function KanbanColumn({
                 : col === "A Fazer"
                   ? "ðŸ“‹"
                   : col === "Em Progresso"
-                    ? "âš¡"
+                    ? "⚡"
                     : col === "Em Revisí£o"
                       ? "ðŸ”"
                       : "âœ…"}
@@ -2906,7 +2906,7 @@ const PROJECT_COLORS = [
 const PROJECT_ICONS = [
   "ðŸš€",
   "ðŸ’¡",
-  "ðŸŽ¯",
+  "🎯",
   "ðŸ”§",
   "ðŸ“±",
   "ðŸŒ",
@@ -2914,8 +2914,8 @@ const PROJECT_ICONS = [
   "ðŸ¤–",
   "ðŸ“Š",
   "ðŸ†",
-  "âš¡",
-  "ðŸ”¥",
+  "⚡",
+  "🔥",
 ];
 const COLUMN_IDS = [
   "Ideias",
@@ -3026,9 +3026,9 @@ function aiGenerateTasks(
     base.push(
       ...[
         "Pesquisa e planejamento",
-        "Execuí§í£o principal",
+        "Execução principal",
         "Revisí£o e ajustes",
-        "Finalizaí§í£o e entrega",
+        "Finalização e entrega",
       ].map((t) => mkTask(t)),
     );
   }
@@ -3048,7 +3048,7 @@ function aiGenerateChecklist(taskTitle: string): string[] {
   if (/backend|api|servidor/i.test(lower))
     return [
       "Definir rotas",
-      "Implementar lí³gica",
+      "Implementar lógica",
       "Conectar banco de dados",
       "Escrever testes",
       "Documentar API",
@@ -3056,7 +3056,7 @@ function aiGenerateChecklist(taskTitle: string): string[] {
   if (/landing/i.test(lower))
     return [
       "Definir headline",
-      "Criar seí§í£o hero",
+      "Criar seção hero",
       "Escrever copy",
       "Adicionar CTA",
       "Testar formulí¡rio",
@@ -3066,7 +3066,7 @@ function aiGenerateChecklist(taskTitle: string): string[] {
     return [
       "Criar casos de teste",
       "Executar testes unití¡rios",
-      "Testes de integraí§í£o",
+      "Testes de integração",
       "Corrigir bugs",
       "Validar",
     ];
@@ -3097,7 +3097,7 @@ function ProjectsDashboard({
   >([
     {
       role: "ai",
-      text: 'ðŸ¤– Olí¡! Descreva um projeto e eu crio as tarefas automaticamente!\nEx: "Criar um aplicativo de controle financeiro"',
+      text: 'ðŸ¤– Olá! Descreva um projeto e eu crio as tarefas automaticamente!\nEx: "Criar um aplicativo de controle financeiro"',
     },
   ]);
   const [dragTask, setDragTask] = useState<string | null>(null);
@@ -3296,7 +3296,7 @@ function ProjectsDashboard({
                     p.tasks.filter((t) => t.column === "Em Progresso").length,
                   0,
                 ),
-                icon: "âš¡",
+                icon: "⚡",
                 c: "orange",
               },
             ].map((s) => (
@@ -3598,18 +3598,18 @@ function AIChatView({
       id: "welcome",
       role: "assistant",
       content: mentorMode
-        ? "ðŸŽ“ **Modo Mentor IA Ativado!**\n\nOlí¡, Guerreiro! Sou seu mentor pessoal.\n\nAnalisei seu perfil:\nâ€¢ Ní­vel " +
+        ? "ðŸŽ“ **Modo Mentor IA Ativado!**\n\nOlí¡, Guerreiro! Sou seu mentor pessoal.\n\nAnalisei seu perfil:\nâ€¢ Nível " +
           playerStats.level +
           " - " +
           playerStats.class +
           "\nâ€¢ " +
           quests.filter((q: any) => q.done).length +
-          " missíµes concluí­das\nâ€¢ " +
+          " missões concluídas\nâ€¢ " +
           habits.length +
-          " hí¡bitos ativos\nâ€¢ " +
+          " hábitos ativos\nâ€¢ " +
           projects.length +
-          " projetos em andamento\n\nEstou aqui para te guiar ao prí³ximo ní­vel. O que deseja melhorar hoje?"
-        : "Olí¡! Sou seu **Assistente IA** integrado ao Kronos. ðŸš€\n\nPosso te ajudar com:\nâ€¢ ðŸ’° Finaní§as e gastos\nâ€¢ ðŸ“‹ Projetos e tarefas\nâ€¢ ðŸŽ¯ Rotina e produtividade\nâ€¢ ðŸ’¡ Ideias e estratí©gias\n\nO que precisa hoje?",
+          " projetos em andamento\n\nEstou aqui para te guiar ao próximo nível. O que deseja melhorar hoje?"
+        : "Olá! Sou seu **Assistente IA** integrado ao Kronos. ðŸš€\n\nPosso te ajudar com:\nâ€¢ ðŸ’° Finanças e gastos\nâ€¢ ðŸ“‹ Projetos e tarefas\nâ€¢ 🎯 Rotina e produtividade\nâ€¢ ðŸ’¡ Ideias e estratégias\n\nO que precisa hoje?",
       timestamp: new Date(),
     };
     const conv: ChatConversation = {
@@ -3858,8 +3858,8 @@ function AIChatView({
   const quickPrompts = [
     {
       icon: "ðŸ“Š",
-      label: "Finaní§as",
-      prompt: "Como estí£o minhas finaní§as esse míªs?",
+      label: "Finanças",
+      prompt: "Como estí£o minhas finaní§as esse mês?",
     },
     {
       icon: "ðŸ“‹",
@@ -3872,11 +3872,11 @@ function AIChatView({
       prompt: "Organize meu dia de hoje",
     },
     {
-      icon: "ðŸŽ¯",
+      icon: "🎯",
       label: "Progresso",
       prompt: "Analise meu progresso como mentor",
     },
-    { icon: "ðŸ’¡", label: "Ideias", prompt: "Me díª ideias de negí³cio" },
+    { icon: "ðŸ’¡", label: "Ideias", prompt: "Me dê ideias de negócio" },
     { icon: "ðŸ’°", label: "Economia", prompt: "Como posso economizar mais?" },
   ];
 
@@ -3913,7 +3913,7 @@ function AIChatView({
               </div>
               <div className="flex-1 overflow-y-auto p-3 space-y-2">
                 <p className="text-[9px] font-black text-white/20 uppercase tracking-widest px-2 mb-3">
-                  Histí³rico
+                  Histórico
                 </p>
                 {conversations.map((conv) => (
                   <div
@@ -4212,7 +4212,7 @@ function NewProjectModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Descrií§í£o
+              Descrição
             </label>
             <textarea
               value={desc}
@@ -4465,7 +4465,7 @@ function TaskDetailModal({
           </div>
           <div>
             <label className="text-[10px] text-white font-black uppercase flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-white" /> Descrií§í£o
+              <div className="w-1.5 h-1.5 rounded-full bg-white" /> Descrição
             </label>
             <textarea
               value={t.desc}
@@ -4707,7 +4707,7 @@ function TaskDetailModal({
 // â”€â”€â”€ Financial Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const EXPENSE_CATEGORIES = [
   { name: "Moradia", color: "#3b82f6" },
-  { name: "Alimentaí§í£o", color: "#f97316" },
+  { name: "Alimentação", color: "#f97316" },
   { name: "Transporte", color: "#06b6d4" },
   { name: "Lazer", color: "#a855f7" },
   { name: "Conhecimento", color: "#22c55e" },
@@ -4765,7 +4765,7 @@ function nlpParseTransaction(text: string): {
       lower,
     )
   )
-    category = "Alimentaí§í£o";
+    category = "Alimentação";
   else if (
     /aluguel|condomí­nio|luz|agua|internet|casa|moradia|iptu/i.test(lower)
   )
@@ -4774,7 +4774,7 @@ function nlpParseTransaction(text: string): {
     category = "Assinaturas";
   else if (/academia|mí©dico|remí©dio|farmí¡cia|saíºde|plano/i.test(lower))
     category = "Saíºde";
-  else if (/roupas|roupa|tíªnis|camisa|calí§a|loja|shopping/i.test(lower))
+  else if (/roupas|roupa|tênis|camisa|calí§a|loja|shopping/i.test(lower))
     category = "Roupas";
   else if (
     /curso|livro|udemy|alura|estudo|escola|faculdade|conhecimento/i.test(lower)
@@ -4821,7 +4821,7 @@ function FinancialDashboard({
   >([
     {
       type: "ai",
-      text: 'Olí¡! Sou sua IA Financeira ðŸ¤–\n\nMe diga o que gastou ou recebeu!\nEx: "Gastei 50 no Uber" ou "Recebi 3000 de salí¡rio"',
+      text: 'Olá! Sou sua IA Financeira ðŸ¤–\n\nMe diga o que gastou ou recebeu!\nEx: "Gastei 50 no Uber" ou "Recebi 3000 de salí¡rio"',
       accent: "blue",
     },
   ]);
@@ -4914,9 +4914,9 @@ function FinancialDashboard({
         `ðŸ“Š Maior gasto: ${[...categoryTotals].sort((a, b) => b.total - a.total)[0].name}`,
       );
     if (totalSaidas > totalEntradas && totalEntradas > 0)
-      ins.push("ðŸ“‰ Você gastou mais do que recebeu esse míªs!");
+      ins.push("ðŸ“‰ Você gastou mais do que recebeu esse mês!");
     if (saldo > 0 && totalEntradas > 0)
-      ins.push(`ðŸ’¡ Saldo positivo de ${parseBRL(saldo)} esse míªs!`);
+      ins.push(`ðŸ’¡ Saldo positivo de ${parseBRL(saldo)} esse mês!`);
     if (ins.length === 0)
       ins.push("Adicione transaí§íµes para ver insights personalizados!");
     return ins;
@@ -4961,14 +4961,14 @@ function FinancialDashboard({
               {playerStats.name || "Guerreiro"}
             </p>
             <p className="text-emerald-400 text-xs font-black uppercase">
-              {getRank(playerStats.level)} â€¢ Ní­vel {playerStats.level}
+              {getRank(playerStats.level)} â€¢ Nível {playerStats.level}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
             {[
               {
-                emoji: "ðŸ”¥",
-                label: "Sequíªncia",
+                emoji: "🔥",
+                label: "Sequência",
                 value: `${playerStats.level} dias`,
                 cls: "orange",
               },
@@ -5056,7 +5056,7 @@ function FinancialDashboard({
                   >
                     {parseBRL(card.value)}
                   </p>
-                  <p className="text-[10px] text-white/20 mt-1">Este míªs</p>
+                  <p className="text-[10px] text-white/20 mt-1">Este mês</p>
                 </motion.div>
               ))}
             </div>
@@ -5066,9 +5066,7 @@ function FinancialDashboard({
             >
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">
-                    {budgetOver ? "âš ï¸" : "ðŸŽ¯"}
-                  </span>
+                  <span className="text-lg">{budgetOver ? "âš ï¸" : "🎯"}</span>
                   <p className="text-white font-black text-sm">
                     Orí§amento Mensal
                   </p>
@@ -5106,7 +5104,7 @@ function FinancialDashboard({
                 </p>
                 {categoryTotals.length === 0 ? (
                   <div className="flex items-center justify-center h-40 text-white/20 text-xs">
-                    Sem despesas este míªs
+                    Sem despesas este mês
                   </div>
                 ) : (
                   <>
@@ -5171,7 +5169,7 @@ function FinancialDashboard({
               </div>
               <div className="p-5 bg-white/[0.02] border border-white/10 rounded-3xl">
                 <p className="text-white font-black text-sm mb-4 uppercase tracking-widest">
-                  ðŸ“ˆ Evoluí§í£o (6 Meses)
+                  ðŸ“ˆ Evolução (6 Meses)
                 </p>
                 <div className="h-52">
                   <ResponsiveContainer width="100%" height="100%">
@@ -5393,7 +5391,7 @@ function FinancialDashboard({
               </div>
               {transactions.length === 0 ? (
                 <div className="p-8 border border-dashed border-white/10 rounded-2xl text-center text-white/20 text-xs">
-                  Nenhuma transaí§í£o. Use o botí£o abaixo ou a IA!
+                  Nenhuma transação. Use o botí£o abaixo ou a IA!
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -5526,7 +5524,7 @@ function FinancialDashboard({
           onClick={() => setShowTransactionModal(true)}
           className="w-full max-w-xl mx-auto flex items-center justify-center gap-3 py-4 bg-linear-to-r from-emerald-600 to-emerald-500 text-black font-black text-xs uppercase tracking-widest rounded-2xl shadow-[0_10px_30px_rgba(52,211,153,0.3)] hover:from-emerald-500 hover:to-emerald-400 transition-all active:scale-95"
         >
-          <Plus className="w-5 h-5" /> Nova Transaí§í£o
+          <Plus className="w-5 h-5" /> Nova Transação
         </button>
       </div>
 
@@ -5612,7 +5610,7 @@ function FinancialTransactionModal({
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-white font-black text-xl uppercase">
-            Nova Transaí§í£o
+            Nova Transação
           </h3>
           <button
             onClick={onClose}
@@ -5671,7 +5669,7 @@ function FinancialTransactionModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Descrií§í£o
+              Descrição
             </label>
             <input
               type="text"
@@ -5723,7 +5721,7 @@ function FinancialTransactionModal({
           }}
           className="w-full mt-6 py-3.5 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-emerald-500/30 transition-all"
         >
-          Salvar Transaí§í£o
+          Salvar Transação
         </button>
       </motion.div>
     </motion.div>
@@ -6001,7 +5999,7 @@ function CreateTrainingModal({
 
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Identificaí§í£o do Treino
+                    Identificação do Treino
                   </label>
                   <input
                     type="text"
@@ -6184,7 +6182,7 @@ const MonthProgressChart = ({
             Progresso de Desempenho
           </h3>
           <p className="text-[8px] md:text-[10px] text-white/30 font-bold uppercase tracking-widest">
-            Protocolo de Eficiíªncia Biolí³gica v4.0
+            Protocolo de Eficiência Biológica v4.0
           </p>
         </div>
         <div className="text-right">
@@ -6306,15 +6304,15 @@ const HabitMonthlyGrid = ({
       <div className="flex items-center justify-between mb-8 md:mb-12">
         <div>
           <h3 className="text-xs md:text-base font-black uppercase tracking-[0.3em] text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
-            Cí­rculo de Hí¡bitos
+            Cí­rculo de Hábitos
           </h3>
           <p className="text-[8px] md:text-[10px] text-white/20 font-bold uppercase tracking-widest mt-1">
-            Matriz de aquisií§í£o e consistíªncia
+            Matriz de aquisição e consistência
           </p>
         </div>
         <div className="flex items-center gap-4">
           <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-white/30 italic">
-            Aquisií§í£o 31d
+            Aquisição 31d
           </span>
           <button
             onClick={() => {
@@ -6580,15 +6578,15 @@ function ModeSelectionModal({
     {
       id: "rotina",
       label: "Rotina",
-      desc: "Complete suas missíµes dií¡rias",
+      desc: "Complete suas missões dií¡rias",
       icon: Target,
       color: "from-red-500 to-orange-500",
       glow: "rgba(255,0,76,0.4)",
     },
     {
       id: "habitos",
-      label: "Hí¡bitos",
-      desc: "Fortaleí§a seus hí¡bitos",
+      label: "Hábitos",
+      desc: "Fortaleí§a seus hábitos",
       icon: Flame,
       color: "from-orange-400 to-yellow-400",
       glow: "rgba(255,145,0,0.4)",
@@ -6744,7 +6742,7 @@ function ValidationModal({
               </p>
               <button
                 onClick={onClose}
-                className="w-full py-4 mt-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all active:scale-95"
+                className="w-full py-4 bg-white/3 border border-white/10 text-white/60 hover:text-white font-black text-[10px] uppercase tracking-widest rounded-2xl transition-all"
               >
                 ENTENDIDO
               </button>
@@ -6954,12 +6952,12 @@ function BattleView({
 
   // â”€â”€ Defeat / Game Over â”€â”€
   const MOTIVATIONAL_PHRASES = [
-    "A derrota ní£o í© o fim. í‰ o comeí§o de uma nova batalha.",
-    "Os guerreiros mais fortes foram construí­dos pelas suas piores derrotas.",
-    "Cada queda í© uma lií§í£o. Levante-se mais forte do que antes.",
-    "O caminho para a vití³ria passa pelo fracasso. Continue.",
-    "Recomeí§ar do zero í© o privilí©gio dos corajosos. Você í© um.",
-    "Ní£o existe guerreiro invencí­vel â€” existe quem nunca desistiu.",
+    "A derrota não é o fim. É o começo de uma nova batalha.",
+    "Os guerreiros mais fortes foram construídos pelas suas piores derrotas.",
+    "Cada queda é uma lição. Levante-se mais forte do que antes.",
+    "O caminho para a vitória passa pelo fracasso. Continue.",
+    "Recomeçar do zero é o privilégio dos corajosos. Você é um.",
+    "Não existe guerreiro invencível — existe quem nunca desistiu.",
   ];
   const phrase =
     MOTIVATIONAL_PHRASES[
@@ -7002,7 +7000,7 @@ function BattleView({
           transition={{ type: "spring", bounce: 0.5, delay: 0.1 }}
           className="mb-6 w-24 h-24 rounded-full border-4 border-red-600/60 bg-red-950/40 flex items-center justify-center shadow-[0_0_80px_rgba(220,38,38,0.5)]"
         >
-          <span className="text-5xl select-none">ðŸ’€</span>
+          <span className="text-5xl select-none">💀</span>
         </motion.div>
 
         {/* Title */}
@@ -7163,7 +7161,7 @@ function BattleView({
                     : (currentVillain.img as any)?.src || currentVillain.img
                 }
                 alt="Inimigo"
-                className="w-40 h-40 sm:w-56 sm:h-56 lg:w-[300px] lg:h-[300px] xl:w-[380px] xl:h-[380px] object-contain drop-shadow-[0_0_40px_rgba(255,0,0,0.3)]"
+                className="w-32 h-32 sm:w-56 sm:h-56 lg:w-[300px] lg:h-[300px] xl:w-[380px] xl:h-[380px] 2xl:w-[450px] 2xl:h-[450px] object-contain drop-shadow-[0_0_40px_rgba(255,0,0,0.3)]"
               />
               {damageFloat && damageFloat.isEnemy && (
                 <motion.div
@@ -7221,7 +7219,7 @@ function BattleView({
               <img
                 src={playerLeft.src}
                 alt="Player"
-                className="w-40 h-40 sm:w-56 sm:h-56 lg:w-[300px] lg:h-[300px] xl:w-[380px] xl:h-[380px] object-contain drop-shadow-[0_0_40px_rgba(56,242,127,0.3)]"
+                className="w-32 h-32 sm:w-56 sm:h-56 lg:w-[300px] lg:h-[300px] xl:w-[380px] xl:h-[380px] 2xl:w-[450px] 2xl:h-[450px] object-contain drop-shadow-[0_0_40px_rgba(56,242,127,0.3)]"
               />
               {damageFloat && !damageFloat.isEnemy && (
                 <motion.div
@@ -7353,7 +7351,7 @@ function BattleView({
             className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] text-white/20 hover:text-red-500 hover:bg-red-500/5 transition-all"
           >
             <X className="w-3.5 h-3.5" />
-            Abortar Missí£o Tí¡tica
+            Abortar Missão Tática
           </button>
         </div>
       </section>
@@ -7566,7 +7564,7 @@ export default function SystemDashboard({
 
     if (tasks.length === 0) {
       setValidationError(
-        `Atení§í£o detetada: Protocolo de batalha ní£o pode ser iniciado sem objetivos. Adicione tarefas para continuar.`,
+        `Atenção detetada: Protocolo de batalha não pode ser iniciado sem objetivos. Adicione tarefas para continuar.`,
       );
       return;
     }
@@ -7616,13 +7614,13 @@ export default function SystemDashboard({
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [newTaskInput, setNewTaskInput] = useState("");
   const [newTaskPriority, setNewTaskPriority] = useState<
-    "Normal" | "Atení§í£o" | "Urgente"
+    "Normal" | "Atenção" | "Urgente"
   >("Normal");
 
   const [isAddingPersonalTask, setIsAddingPersonalTask] = useState(false);
   const [newPersonalTaskInput, setNewPersonalTaskInput] = useState("");
   const [newPersonalTaskPriority, setNewPersonalTaskPriority] = useState<
-    "Normal" | "Atení§í£o" | "Urgente"
+    "Normal" | "Atenção" | "Urgente"
   >("Normal");
   const [newPersonalTaskDate, setNewPersonalTaskDate] = useState(
     new Date().toISOString().split("T")[0],
@@ -7650,7 +7648,7 @@ export default function SystemDashboard({
     },
     {
       id: 3,
-      name: "Mestre do Cí³digo",
+      name: "Mestre do Código",
       level: 50,
       xp: "124.9k",
       status: "OFFLINE",
@@ -7666,7 +7664,7 @@ export default function SystemDashboard({
       title: "A Ascensí£o dos Guardiíµes",
       category: "LORE",
       summary:
-        "Antigas profecias despertam nas Colinas de Prata. Novos herí³is sí£o convocados.",
+        "Antigas profecias despertam nas Colinas de Prata. Novos heróis sí£o convocados.",
       date: "03 MAR 2026",
       image:
         "https://i.ibb.co/6cD731hz/Chat-GPT-Image-1-de-mar-de-2026-13-23-58.png",
@@ -7685,7 +7683,7 @@ export default function SystemDashboard({
     },
     {
       id: 3,
-      title: "Notas da Atualizaí§í£o v2.4",
+      title: "Notas da Atualização v2.4",
       category: "SISTEMA",
       summary:
         "Novas funcionalidades de alianí§as e chat de guilda agora disponí­veis.",
@@ -7696,7 +7694,7 @@ export default function SystemDashboard({
     },
   ]);
   const [newPomodoroTaskPriority, setNewPomodoroTaskPriority] = useState<
-    "Normal" | "Atení§í£o" | "Urgente"
+    "Normal" | "Atenção" | "Urgente"
   >("Normal");
   const [newPomodoroTaskSessions, setNewPomodoroTaskSessions] = useState(1);
   const [newPomodoroTaskDays, setNewPomodoroTaskDays] = useState(30);
@@ -8128,7 +8126,7 @@ export default function SystemDashboard({
       {
         id: 4,
         name: "Dragão Dormindo",
-        desc: "Desbloqueie apí³s 30 dias de treino",
+        desc: "Desbloqueie após 30 dias de treino",
         icon: "ðŸ‰",
         active: false,
         unlocked: false,
@@ -8146,7 +8144,7 @@ export default function SystemDashboard({
   const handleSaveTraining = (updated: Training) => {
     if (editingTrainingIndex !== null) {
       setWeeklyTrainings((prev) => {
-        // Ao editar, se mudou o dia para um que jí¡ existe (e ní£o í© o mesmo que estamos editando)
+        // Ao editar, se mudou o dia para um que jí¡ existe (e não í© o mesmo que estamos editando)
         const targetDayIdx = prev.findIndex(
           (t, i) => t.day === updated.day && i !== editingTrainingIndex,
         );
@@ -8169,7 +8167,7 @@ export default function SystemDashboard({
           return mergedTrainings.filter((_, i) => i !== editingTrainingIndex);
         }
 
-        // Apenas atualiza o registro atual se ní£o houver conflito de dia
+        // Apenas atualiza o registro atual se não houver conflito de dia
         return prev.map((t, i) => (i === editingTrainingIndex ? updated : t));
       });
     }
@@ -8319,7 +8317,7 @@ export default function SystemDashboard({
         >
           <Settings className="w-4 h-4" />
           <span className="text-[10px] font-black uppercase tracking-wider text-left">
-            Configuraí§í£o
+            Configuração
           </span>
         </button>
         <button
@@ -8705,7 +8703,7 @@ export default function SystemDashboard({
 
             {currentView === "habits" && (
               <FullViewWrapper
-                title="Sistema de Hí¡bitos"
+                title="Sistema de Hábitos"
                 icon={Flame}
                 color="border-orange-500"
                 onClose={() => setCurrentView("dashboard")}
@@ -9052,7 +9050,7 @@ export default function SystemDashboard({
                         {
                           label: "Streak Semanal",
                           value: "3 sem",
-                          icon: "ðŸ”¥",
+                          icon: "🔥",
                         },
                         {
                           label: "Exercí­cios Totais",
@@ -9153,7 +9151,7 @@ export default function SystemDashboard({
                             </div>
                             <div>
                               <p className="text-[10px] font-black text-white/80 uppercase tracking-tight">
-                                Evoluí§í£o Diária
+                                Evolução Diária
                               </p>
                               <p className="text-[9px] font-black text-neon-green uppercase">
                                 +128 POSIí‡í•ES
@@ -9192,7 +9190,7 @@ export default function SystemDashboard({
                           name: "KronosMaster",
                           instagram: "kronos_official",
                           xp: "48.2k",
-                          badge: "ðŸ‘‘",
+                          badge: "👑",
                           division: "DIAMANTE I",
                           status: "ONLINE",
                         },
@@ -9201,7 +9199,7 @@ export default function SystemDashboard({
                           name: "Alpha_Prime",
                           instagram: "alpha.fitness",
                           xp: "42.1k",
-                          badge: "âš¡",
+                          badge: "⚡",
                           division: "PLATINA II",
                           status: "EM MISSÃO",
                         },
@@ -9210,7 +9208,7 @@ export default function SystemDashboard({
                           name: "IronMonk",
                           instagram: "iron_monk_life",
                           xp: "38.7k",
-                          badge: "ðŸ”¥",
+                          badge: "🔥",
                           division: "OURO IV",
                           status: "ONLINE",
                         },
@@ -9246,7 +9244,7 @@ export default function SystemDashboard({
                           name: "TEST_GUERREIRO",
                           instagram: "test_warrior",
                           xp: "14.2k",
-                          badge: "ðŸŽ¯",
+                          badge: "🎯",
                           division: "FERRO IV",
                           status: "ONLINE",
                           isMe: true,
@@ -9455,7 +9453,7 @@ export default function SystemDashboard({
                                         setNewTaskInput(e.target.value)
                                       }
                                       className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm font-bold text-white focus:outline-none focus:border-neon-green/50 transition-all"
-                                      placeholder="O que vocíª vai fazer?"
+                                      placeholder="O que você vai fazer?"
                                     />
                                   </div>
                                   <div>
@@ -9466,7 +9464,7 @@ export default function SystemDashboard({
                                       {(
                                         [
                                           "Normal",
-                                          "Atení§í£o",
+                                          "Atenção",
                                           "Urgente",
                                         ] as const
                                       ).map((p) => (
@@ -9477,7 +9475,7 @@ export default function SystemDashboard({
                                             newTaskPriority === p
                                               ? p === "Normal"
                                                 ? "bg-neon-green/20 border-neon-green/50 text-neon-green"
-                                                : p === "Atení§í£o"
+                                                : p === "Atenção"
                                                   ? "bg-yellow-400/20 border-yellow-400/50 text-yellow-400"
                                                   : "bg-red-500/20 border-red-500/50 text-red-500"
                                               : "bg-white/5 border-white/5 text-white/40 hover:bg-white/10"
@@ -9590,7 +9588,7 @@ export default function SystemDashboard({
                                       className={`px-2 py-1 rounded-md text-[8px] font-black uppercase ${
                                         task.priority === "Normal"
                                           ? "bg-neon-green/10 text-neon-green"
-                                          : task.priority === "Atení§í£o"
+                                          : task.priority === "Atenção"
                                             ? "bg-yellow-400/10 text-yellow-400"
                                             : "bg-red-500/10 text-red-500"
                                       }`}
@@ -9690,7 +9688,7 @@ export default function SystemDashboard({
                                         Prioridade
                                       </p>
                                       <div className="flex gap-2">
-                                        {["Normal", "Atení§í£o", "Urgente"].map(
+                                        {["Normal", "Atenção", "Urgente"].map(
                                           (p) => (
                                             <button
                                               key={p}
@@ -9703,7 +9701,7 @@ export default function SystemDashboard({
                                                 newPersonalTaskPriority === p
                                                   ? p === "Normal"
                                                     ? "bg-neon-green/20 border-neon-green/40 text-neon-green"
-                                                    : p === "Atení§í£o"
+                                                    : p === "Atenção"
                                                       ? "bg-yellow-400/20 border-yellow-400/40 text-yellow-400"
                                                       : "bg-red-500/20 border-red-500/40 text-red-500"
                                                   : "bg-white/5 border-white/5 text-white/20 hover:bg-white/10"
@@ -9811,7 +9809,7 @@ export default function SystemDashboard({
                                         className={`px-2 py-1 rounded-md text-[8px] font-black uppercase ${
                                           task.priority === "Normal"
                                             ? "bg-neon-green/10 text-neon-green"
-                                            : task.priority === "Atení§í£o"
+                                            : task.priority === "Atenção"
                                               ? "bg-yellow-400/10 text-yellow-400"
                                               : "bg-red-500/10 text-red-500"
                                         }`}
@@ -9976,37 +9974,35 @@ export default function SystemDashboard({
                                           Prioridade
                                         </p>
                                         <div className="flex gap-2">
-                                          {[
-                                            "Normal",
-                                            "Atení§í£o",
-                                            "Urgente",
-                                          ].map((p) => (
-                                            <button
-                                              key={p}
-                                              onClick={() =>
-                                                setNewPomodoroTaskPriority(
-                                                  p as any,
-                                                )
-                                              }
-                                              className={`flex-1 py-2 rounded-lg text-[8px] font-black uppercase border transition-all ${
-                                                newPomodoroTaskPriority === p
-                                                  ? p === "Normal"
-                                                    ? "bg-neon-green/20 border-neon-green/40 text-neon-green"
-                                                    : p === "Atení§í£o"
-                                                      ? "bg-yellow-400/20 border-yellow-400/40 text-yellow-400"
-                                                      : "bg-red-500/20 border-red-500/40 text-red-500"
-                                                  : "bg-white/5 border-white/5 text-white/20 hover:bg-white/10"
-                                              }`}
-                                            >
-                                              {p}
-                                            </button>
-                                          ))}
+                                          {["Normal", "Atenção", "Urgente"].map(
+                                            (p) => (
+                                              <button
+                                                key={p}
+                                                onClick={() =>
+                                                  setNewPomodoroTaskPriority(
+                                                    p as any,
+                                                  )
+                                                }
+                                                className={`flex-1 py-2 rounded-lg text-[8px] font-black uppercase border transition-all ${
+                                                  newPomodoroTaskPriority === p
+                                                    ? p === "Normal"
+                                                      ? "bg-neon-green/20 border-neon-green/40 text-neon-green"
+                                                      : p === "Atenção"
+                                                        ? "bg-yellow-400/20 border-yellow-400/40 text-yellow-400"
+                                                        : "bg-red-500/20 border-red-500/40 text-red-500"
+                                                    : "bg-white/5 border-white/5 text-white/20 hover:bg-white/10"
+                                                }`}
+                                              >
+                                                {p}
+                                              </button>
+                                            ),
+                                          )}
                                         </div>
                                       </div>
                                       <div className="space-y-4">
                                         <div>
                                           <p className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-1.5">
-                                            Meta (Sessíµes)
+                                            Meta (Sessões)
                                           </p>
                                           <input
                                             type="number"
@@ -10232,8 +10228,7 @@ export default function SystemDashboard({
                                               className={`w-fit px-1.5 py-0.5 rounded text-[7px] font-black uppercase ${
                                                 task.priority === "Normal"
                                                   ? "bg-neon-green/10 text-neon-green"
-                                                  : task.priority ===
-                                                      "Atení§í£o"
+                                                  : task.priority === "Atenção"
                                                     ? "bg-yellow-400/10 text-yellow-400"
                                                     : "bg-red-500/10 text-red-500"
                                               }`}
@@ -10249,7 +10244,7 @@ export default function SystemDashboard({
                                                 {task.targetSessions}
                                               </span>
                                               <span className="text-[7px] font-black text-white/20 uppercase tracking-widest">
-                                                Sessíµes
+                                                Sessões
                                               </span>
                                             </div>
                                           </div>
@@ -10401,7 +10396,7 @@ export default function SystemDashboard({
                     >
                       <Crown className="w-3 h-3 text-neon-yellow" />
                       <span className="text-[9px] font-black uppercase tracking-widest text-neon-yellow">
-                        {playerStats.class} â€¢ Ní­vel {playerStats.level}
+                        {playerStats.class} â€¢ Nível {playerStats.level}
                       </span>
                     </motion.div>
                   )}
@@ -10437,7 +10432,7 @@ export default function SystemDashboard({
                     <XPBar
                       current={playerStats.xp}
                       max={playerStats.xpMax}
-                      label="Progresso de Experiíªncia"
+                      label="Progresso de Experiência"
                     />
                     <XPBar
                       current={playerStats.hp}
@@ -10485,7 +10480,7 @@ export default function SystemDashboard({
                       },
                       {
                         id: "habits",
-                        label: "Hí¡bitos",
+                        label: "Hábitos",
                         icon: Flame,
                         hex: "#FF9100",
                         glow: "rgba(255,145,0,0.5)",
@@ -10580,7 +10575,7 @@ export default function SystemDashboard({
               <BottomSheet
                 open={mobilePanel === "habits"}
                 onClose={() => setMobilePanel(null)}
-                title="Streaks & Hí¡bitos"
+                title="Streaks & Hábitos"
               >
                 <HabitsPanel
                   habits={habits}
@@ -10645,7 +10640,7 @@ export default function SystemDashboard({
                   {(
                     [
                       { id: "quests", label: "Rotina", icon: Target },
-                      { id: "habits", label: "Hí¡bitos", icon: Flame },
+                      { id: "habits", label: "Hábitos", icon: Flame },
                       { id: "training", label: "Treinos", icon: Swords },
                       { id: "ranking", label: "Rank", icon: Trophy },
                     ] as const
@@ -10735,7 +10730,7 @@ export default function SystemDashboard({
                   <XPBar
                     current={playerStats.xp}
                     max={playerStats.xpMax}
-                    label="Experiíªncia"
+                    label="Experiência"
                   />
                   <XPBar
                     current={playerStats.hp}
@@ -10772,7 +10767,7 @@ export default function SystemDashboard({
                           â€¢
                         </span>
                         <span className="text-[10px] font-black text-white/60">
-                          Ní­vel {playerStats.level}
+                          Nível {playerStats.level}
                         </span>
                       </div>
                     </motion.div>
@@ -10911,7 +10906,7 @@ export default function SystemDashboard({
                   setOwnedCharacters((prev) => [...prev, id]);
                 else setOwnedPets((prev) => [...prev, id]);
               } else {
-                setValidationError("CASH insuficiente para esta aquisií§í£o!");
+                setValidationError("CASH insuficiente para esta aquisição!");
               }
             }}
             onSelect={(type, id) => {
@@ -11101,10 +11096,10 @@ export default function SystemDashboard({
 // â”€â”€â”€ Global Game Over Overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GameOverOverlay({ onReset }: { onReset: () => void }) {
   const MOTIVATIONAL_PHRASES = [
-    "A derrota ní£o í© o fim. í‰ o comeí§o de uma nova batalha.",
+    "A derrota não í© o fim. í‰ o comeí§o de uma nova batalha.",
     "Os guerreiros mais fortes foram construí­dos pelas suas piores derrotas.",
-    "Cada queda í© uma lií§í£o. Levante-se mais forte do que antes.",
-    "O caminho para a vití³ria passa pelo fracasso. Continue.",
+    "Cada queda í© uma lição. Levante-se mais forte do que antes.",
+    "O caminho para a vitória passa pelo fracasso. Continue.",
     "Recomeí§ar do zero í© o privilí©gio dos corajosos. Você í© um.",
     "Ní£o existe guerreiro invencí­vel â€” existe quem nunca desistiu.",
   ];
@@ -11298,7 +11293,7 @@ function EditTrainingModal({
                 {/* Duration */}
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Duraí§í£o
+                    Duração
                   </label>
                   <input
                     type="text"
@@ -11541,10 +11536,10 @@ function SettingsModal({
             <div className="flex items-center justify-between p-6 bg-neon-green/5 border-2 border-neon-green/40 rounded-3xl relative overflow-hidden group">
               <div className="relative z-10">
                 <p className="text-sm font-black uppercase text-white tracking-widest">
-                  Pí³s-Processamento
+                  Pós-Processamento
                 </p>
                 <p className="text-[9px] text-neon-green/60 uppercase mt-1 tracking-[0.2em] font-bold">
-                  Resoluí§í£o Nativa Ativada
+                  Resolução Nativa Ativada
                 </p>
               </div>
               <div className="flex items-center gap-4 relative z-10">

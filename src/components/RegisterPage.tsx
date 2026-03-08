@@ -18,7 +18,7 @@ interface RegisterPageProps {
   onBack: () => void;
   onGoToLogin: () => void;
   onRegisterSuccess: () => void;
-  selectedPlan?: "basic" | "pro";
+  selectedPlan?: "basic" | "powerful" | "pro";
 }
 
 export default function RegisterPage({
@@ -69,16 +69,34 @@ export default function RegisterPage({
     }
   };
 
-  const planLabel =
-    selectedPlan === "pro" ? "Kronos Habit PRO" : "Kronos Habit";
-  const planColor =
-    selectedPlan === "pro" ? "text-neon-green" : "text-neon-yellow";
-  const planBg =
-    selectedPlan === "pro"
-      ? "bg-neon-green/10 border-neon-green/20"
-      : "bg-neon-yellow/10 border-neon-yellow/20";
-  const planTextColor =
-    selectedPlan === "pro" ? "text-neon-green" : "text-neon-yellow";
+  const getPlanInfo = () => {
+    switch (selectedPlan) {
+      case "pro":
+        return {
+          label: "Kronos Habit PRO",
+          color: "text-blue-400",
+          bg: "bg-blue-500/10 border-blue-500/20",
+        };
+      case "powerful":
+        return {
+          label: "Kronos Premium",
+          color: "text-neon-green",
+          bg: "bg-neon-green/10 border-neon-green/20",
+        };
+      default:
+        return {
+          label: "Kronos Habit",
+          color: "text-neon-yellow",
+          bg: "bg-neon-yellow/10 border-neon-yellow/20",
+        };
+    }
+  };
+
+  const planInfo = getPlanInfo();
+  const planLabel = planInfo.label;
+  const planColor = planInfo.color;
+  const planBg = planInfo.bg;
+  const planTextColor = planInfo.color;
 
   return (
     <div className="min-h-screen bg-bg-dark flex items-center justify-center relative overflow-hidden px-4 py-12">
