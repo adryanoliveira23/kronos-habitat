@@ -58,6 +58,8 @@ export default function RegisterPage({
         rank: 1,
         xp: 0,
         createdAt: new Date().toISOString(),
+        paymentStatus: "pending",
+        active: false,
         friends: [],
       });
 

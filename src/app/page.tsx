@@ -43,7 +43,7 @@ export default function Home() {
     setView(v);
   };
 
-  const goToRegister = () => goTo("plan-select");
+  const goToRegister = () => goTo("register");
   const goToLogin = () => goTo("login");
 
   const handleLoginSuccess = () => {
@@ -62,7 +62,7 @@ export default function Home() {
 
   const handleSelectPlan = (plan: "basic" | "pro" | "powerful") => {
     setSelectedPlan(plan);
-    goTo("register");
+    goTo("checkout");
   };
 
   return (
@@ -99,7 +99,7 @@ export default function Home() {
           >
             <LoginPage
               onBack={() => goTo("landing")}
-              onCreateAccount={() => goTo("plan-select")}
+              onCreateAccount={() => goTo("register")}
               onLoginSuccess={handleLoginSuccess}
             />
           </motion.div>
@@ -111,9 +111,9 @@ export default function Home() {
             exit={{ opacity: 0 }}
           >
             <RegisterPage
-              onBack={() => goTo("plan-select")}
+              onBack={() => goTo("landing")}
               onGoToLogin={goToLogin}
-              onRegisterSuccess={() => goTo("checkout")}
+              onRegisterSuccess={() => goTo("plan-select")}
               selectedPlan={selectedPlan}
             />
           </motion.div>
@@ -138,7 +138,7 @@ export default function Home() {
             exit={{ opacity: 0 }}
           >
             <PlanSelectPage
-              onBack={() => goTo("login")}
+              onBack={() => goTo("landing")}
               onSelectPlan={handleSelectPlan}
             />
           </motion.div>

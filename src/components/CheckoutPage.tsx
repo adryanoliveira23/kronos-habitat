@@ -7,6 +7,9 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { auth, db } from "@/lib/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 interface CheckoutPageProps {
   onBack: () => void;
@@ -44,6 +47,27 @@ export default function CheckoutPage({
   };
 
   const currentPlan = selectedPlan ? planData[selectedPlan] : planData.basic;
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    // Listen for payment status changes
+    const unsub = onSnapshot(doc(db, "users", user.uid), (doc) => {
+      const data = doc.data();
+      if (data?.paymentStatus === "paid") {
+        onComplete();
+      }
+    });
+
+    return () => unsub();
+  }, [onComplete]);
+
+  // Append email to link if user is logged in
+  const userEmail = auth.currentUser?.email || "";
+  const checkoutUrl =
+    currentPlan.link +
+    (userEmail ? `?email=${encodeURIComponent(userEmail)}` : "");
 
   return (
     <div className="min-h-screen bg-bg-dark flex items-center justify-center relative overflow-hidden px-4 py-12">
@@ -154,7 +178,7 @@ export default function CheckoutPage({
             {/* CTA */}
             <div className="space-y-4">
               <a
-                href={currentPlan.link}
+                href={checkoutUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-4 bg-neon-green text-black font-black text-sm uppercase tracking-widest rounded-2xl shadow-[0_0_20px_rgba(56,242,127,0.3)] hover:shadow-[0_0_30px_rgba(56,242,127,0.5)] transition-all flex items-center justify-center gap-2"
