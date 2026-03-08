@@ -3,11 +3,7 @@ import { ArrowRight } from "lucide-react";
 import petImg from "@/lib/pet.png";
 import personagemImg from "@/lib/personagem.png";
 
-export default function Hero({
-  onGoToRegister,
-}: {
-  onGoToRegister: () => void;
-}) {
+export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
   return (
     <section className="relative min-h-[90vh] sm:min-h-screen xl:min-h-[110vh] hero-bg-gradient overflow-hidden pt-32 sm:pt-40 lg:pt-32 xl:pt-48 pb-12 sm:pb-20 xl:pb-32 px-4 sm:px-8">
       {/* Background Layers */}
@@ -74,7 +70,7 @@ export default function Hero({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            onClick={onGoToRegister}
+            onClick={onGoToPricing}
             className="bg-neon-yellow text-black px-7 py-3.5 rounded-[14px] font-black text-sm uppercase tracking-wider neon-shadow-green hover:scale-105 transition-transform"
           >
             Ativar Sistema

@@ -2,7 +2,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Menu, X } from "lucide-react";
 
-export default function Navbar({ onGoToLogin, onGoToRegister }: { onGoToLogin: () => void; onGoToRegister: () => void }) {
+export default function Navbar({
+  onGoToLogin,
+  onGoToPricing,
+}: {
+  onGoToLogin: () => void;
+  onGoToPricing: () => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -19,16 +25,27 @@ export default function Navbar({ onGoToLogin, onGoToRegister }: { onGoToLogin: (
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-white/70">
-          <a href="#" className="hover:text-white transition-colors flex items-center gap-1">
+          <a
+            href="#"
+            className="hover:text-white transition-colors flex items-center gap-1"
+          >
             All Pages
             <ChevronDown className="w-4 h-4 opacity-50" />
           </a>
-          <a href="#" className="hover:text-white transition-colors flex items-center gap-1">
+          <a
+            href="#"
+            className="hover:text-white transition-colors flex items-center gap-1"
+          >
             Collection
             <ChevronDown className="w-4 h-4 opacity-50" />
           </a>
-          <a href="#" className="hover:text-white transition-colors">About</a>
-          <a href="#" className="hover:text-white transition-colors flex items-center gap-1.5">
+          <a href="#" className="hover:text-white transition-colors">
+            About
+          </a>
+          <a
+            href="#"
+            className="hover:text-white transition-colors flex items-center gap-1.5"
+          >
             Blog
             <div className="w-1 h-1 bg-neon-green rounded-full shadow-[0_0_5px_rgba(56,242,127,0.8)]" />
           </a>
@@ -36,10 +53,16 @@ export default function Navbar({ onGoToLogin, onGoToRegister }: { onGoToLogin: (
 
         {/* CTA & Mobile Toggle */}
         <div className="flex items-center gap-4">
-          <button onClick={onGoToRegister} className="hidden sm:block bg-neon-yellow text-black px-5 py-3 rounded-[12px] font-bold text-sm neon-shadow-yellow hover:scale-105 transition-transform">
+          <button
+            onClick={onGoToPricing}
+            className="hidden sm:block bg-neon-yellow text-black px-5 py-3 rounded-[12px] font-bold text-sm neon-shadow-yellow hover:scale-105 transition-transform"
+          >
             Ativar Sistema
           </button>
-          <button onClick={onGoToLogin} className="hidden sm:block text-white border border-white/20 px-5 py-3 rounded-[12px] font-bold text-sm hover:bg-white/5 transition-colors">
+          <button
+            onClick={onGoToLogin}
+            className="hidden sm:block text-white border border-white/20 px-5 py-3 rounded-[12px] font-bold text-sm hover:bg-white/5 transition-colors"
+          >
             Logar
           </button>
           <button
@@ -60,21 +83,41 @@ export default function Navbar({ onGoToLogin, onGoToRegister }: { onGoToLogin: (
             exit={{ opacity: 0, y: -20 }}
             className="absolute top-full left-4 right-4 mt-2 p-6 rounded-3xl glass-card border-white/10 lg:hidden z-50 flex flex-col gap-6"
           >
-            <a href="#" className="text-lg font-bold text-white flex items-center justify-between">
+            <a
+              href="#"
+              className="text-lg font-bold text-white flex items-center justify-between"
+            >
               All Pages <ChevronDown className="w-5 h-5 opacity-50" />
             </a>
-            <a href="#" className="text-lg font-bold text-white flex items-center justify-between">
+            <a
+              href="#"
+              className="text-lg font-bold text-white flex items-center justify-between"
+            >
               Collection <ChevronDown className="w-5 h-5 opacity-50" />
             </a>
-            <a href="#" className="text-lg font-bold text-white">About</a>
-            <a href="#" className="text-lg font-bold text-white flex items-center gap-2">
+            <a href="#" className="text-lg font-bold text-white">
+              About
+            </a>
+            <a
+              href="#"
+              className="text-lg font-bold text-white flex items-center gap-2"
+            >
               Blog
               <div className="w-1.5 h-1.5 bg-neon-green rounded-full shadow-[0_0_5px_rgba(56,242,127,0.8)]" />
             </a>
-            <button onClick={onGoToRegister} className="w-full bg-neon-yellow text-black py-4 rounded-2xl font-black text-sm uppercase tracking-widest neon-shadow-yellow">
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                onGoToPricing();
+              }}
+              className="w-full bg-neon-yellow text-black py-4 rounded-2xl font-black text-sm uppercase tracking-widest neon-shadow-yellow"
+            >
               Ativar Sistema
             </button>
-            <button onClick={onGoToLogin} className="w-full text-white border border-white/10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/5 transition-colors">
+            <button
+              onClick={onGoToLogin}
+              className="w-full text-white border border-white/10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/5 transition-colors"
+            >
               Logar
             </button>
           </motion.div>

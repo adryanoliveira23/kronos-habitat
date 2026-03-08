@@ -46,6 +46,13 @@ export default function Home() {
   const goToRegister = () => goTo("register");
   const goToLogin = () => goTo("login");
 
+  const scrollToPricing = () => {
+    const el = document.getElementById("precos");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const handleLoginSuccess = () => {
     setIsSystemLoading(true);
     // Mimic system initialization
@@ -149,8 +156,8 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            <Navbar onGoToLogin={goToLogin} onGoToRegister={goToRegister} />
-            <Hero onGoToRegister={goToRegister} />
+            <Navbar onGoToLogin={goToLogin} onGoToPricing={scrollToPricing} />
+            <Hero onGoToPricing={scrollToPricing} />
             <UnlockableCharactersSection />
             <ProblemSection />
             <DashboardSection />
