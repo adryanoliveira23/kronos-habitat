@@ -22,6 +22,7 @@ const plans = [
     hasHighlightBadge: false,
     badgeText: "",
     period: "/mês",
+    image: "/pet-1.png",
     checkoutLink: "https://pay.wiapy.com/69ab70b4238dee7b0180888c",
   },
   {
@@ -29,6 +30,7 @@ const plans = [
     badgeName: "Lendário",
     price: "22,08",
     description: "Acesso absoluto ao sistema completo.",
+    image: "/pet-2.png",
     features: [
       "Tudo do plano PRO",
       "Acesso total a todos os recursos",
@@ -54,6 +56,7 @@ const plans = [
     badgeName: "Elite",
     price: "32,90",
     description: "A verdadeira evolução acontece aqui.",
+    image: "/pet-3.png",
     features: [
       "IA avançada (mentor estratégico)",
       "Sistema multiplayer completo",
@@ -150,6 +153,15 @@ export default function Pricing({
                 <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-tight leading-relaxed">
                   {plan.description}
                 </p>
+              </div>
+
+              {/* Plan Pet Image */}
+              <div className="mb-6 flex justify-center">
+                <img
+                  src={(plan as any).image}
+                  alt={plan.name}
+                  className="w-24 h-24 sm:w-32 sm:h-32 object-contain drop-shadow-[0_0_20px_rgba(56,242,127,0.3)]"
+                />
               </div>
 
               <div className="mb-6 sm:mb-8">

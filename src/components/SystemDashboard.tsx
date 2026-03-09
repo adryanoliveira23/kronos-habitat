@@ -268,7 +268,7 @@ const CharacterStage = ({
     >
       {/* Left Action Column (IA + News + Projects) */}
       <div
-        className={`absolute left-0 top-0 flex flex-col lg:flex-row items-center gap-4 z-30 transition-all ${isMobile ? "pl-2" : "-translate-x-32 xl:-translate-x-44"}`}
+        className={`absolute left-0 top-0 flex flex-col lg:flex-row items-center gap-4 z-30 transition-all md:hidden ${isMobile ? "pl-2" : "-translate-x-32 xl:-translate-x-44"}`}
       >
         <SideButton
           icon={Bot}
@@ -276,13 +276,11 @@ const CharacterStage = ({
           onClick={onAiChatClick}
         />
         <SideButton icon={Newspaper} onClick={() => setCurrentView("news")} />
-        <div className="md:hidden">
-          <SideButton
-            icon={Briefcase}
-            color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
-            onClick={onProjectsClick}
-          />
-        </div>
+        <SideButton
+          icon={Briefcase}
+          color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
+          onClick={onProjectsClick}
+        />
       </div>
 
       {/* Character/Pet Group */}

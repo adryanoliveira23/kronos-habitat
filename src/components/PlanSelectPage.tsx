@@ -29,6 +29,7 @@ export default function PlanSelectPage({
       tag: null,
       badgeName: "Iniciante",
       period: "/mês",
+      image: "/pet-1.png",
     },
     {
       id: "powerful" as const,
@@ -50,6 +51,7 @@ export default function PlanSelectPage({
       period: "/mês",
       strikePrice: "59,90",
       billingNote: "Cobrado anualmente (ou R$ 195,00 à vista)",
+      image: "/pet-2.png",
     },
     {
       id: "pro" as const,
@@ -71,6 +73,7 @@ export default function PlanSelectPage({
       tag: "Popular",
       badgeName: "Elite",
       period: "/mês",
+      image: "/pet-3.png",
     },
   ];
 
@@ -192,11 +195,20 @@ export default function PlanSelectPage({
                     {plan.period || "/mês"}
                   </span>
                 </div>
-                {(plan as any).billingNote && (
+                {((plan as any).billingNote || plan.id === "powerful") && (
                   <div className="text-neon-green/80 text-[9px] uppercase font-bold tracking-widest mt-2 bg-neon-green/10 inline-block px-2 py-1 rounded-sm">
-                    {(plan as any).billingNote}
+                    {(plan as any).billingNote || "Melhor Custo-Benefício"}
                   </div>
                 )}
+              </div>
+
+              {/* Pet Image */}
+              <div className="mb-6 flex justify-center">
+                <img
+                  src={(plan as any).image}
+                  alt={plan.name}
+                  className="w-20 h-20 object-contain drop-shadow-[0_0_15px_rgba(56,242,127,0.3)]"
+                />
               </div>
 
               {/* Features */}

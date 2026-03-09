@@ -71,11 +71,14 @@ export async function POST(req: Request) {
     const text = response.text();
 
     return NextResponse.json({ content: text });
-  } catch (error) {
+  } catch (error: any) {
     console.error("AI Chat Error:", error);
     return NextResponse.json(
-      { error: "Failed to generate AI response" },
-      { status: 500 },
+      {
+        error: "Erro na IA Kronos",
+        details: error.message || "Falha ao gerar resposta",
+      },
+      { status: error.status || 500 },
     );
   }
 }
