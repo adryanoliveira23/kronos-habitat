@@ -8528,6 +8528,27 @@ export default function SystemDashboard({
               {/* Right: News, Friends, Calendar + Avatar */}
               <div className="flex items-center gap-3 relative">
                 <button
+                  onClick={() => setCurrentView("friends")}
+                  className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center text-neon-green"
+                  title="Amigos"
+                >
+                  <Friends className="w-5 h-5 group-hover:text-white transition-colors" />
+                </button>
+                <button
+                  onClick={() => setCurrentView("projects")}
+                  className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center text-blue-400"
+                  title="Projetos"
+                >
+                  <Briefcase className="w-5 h-5 group-hover:text-white transition-colors" />
+                </button>
+                <button
+                  onClick={() => setCurrentView("finance")}
+                  className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center text-yellow-400"
+                  title="Financeiro"
+                >
+                  <CircleDollarSign className="w-5 h-5 group-hover:text-white transition-colors" />
+                </button>
+                <button
                   onClick={() => setCurrentView("ai")}
                   className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center text-blue-400"
                   title="Chat IA"
