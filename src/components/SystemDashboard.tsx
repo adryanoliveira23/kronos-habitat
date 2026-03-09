@@ -181,16 +181,21 @@ const SHOP_PETS = [
 export function useLocalStorage<T>(
   key: string,
   initialValue: T,
-): [T, (val: T | ((val: T) => T)) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
-      return initialValue;
+): [T, (value: T | ((val: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const item = window.localStorage.getItem(key);
+        if (item) {
+          setStoredValue(JSON.parse(item));
+        }
+      } catch (error) {
+        console.warn(`Error reading localStorage key "${key}":`, error);
+      }
     }
-  });
+  }, [key]);
 
   const setValue = (value: T | ((val: T) => T)) => {
     try {
@@ -1078,7 +1083,7 @@ interface ProjectTask {
   title: string;
   desc: string;
   priority: "Baixa" | "Média" | "Alta" | "Urgente";
-  column: "Ideias" | "A Fazer" | "Em Progresso" | "Em Revisí£o" | "Concluí­do";
+  column: "Ideias" | "A Fazer" | "Em Progresso" | "Em Revisão" | "Concluído";
   deadline: string;
   tags: string[];
   checklist: TaskChecklist[];
@@ -1826,7 +1831,7 @@ function CreateHabitModal({
   onSave: (habit: Omit<Habit, "id" | "streak">) => void;
 }) {
   const [title, setTitle] = useState("");
-  const [frequency, setFrequency] = useState("Dií¡rio");
+  const [frequency, setFrequency] = useState("Diário");
   const [time, setTime] = useState("");
   const [difficulty, setDifficulty] = useState(30);
   const [subTasks, setSubTasks] = useState<string[]>([""]);
@@ -1858,7 +1863,7 @@ function CreateHabitModal({
       color,
       time: time || undefined,
       frequency,
-      desc: "Hí¡bito personalizado do sistema.",
+      desc: "Hábito personalizado do sistema.",
       tasks: subTasks
         .filter((t) => t.trim() !== "")
         .map((t) => ({ title: t, done: false })),
@@ -1866,7 +1871,7 @@ function CreateHabitModal({
     });
 
     setTitle("");
-    setFrequency("Dií¡rio");
+    setFrequency("Diário");
     setTime("");
     setDifficulty(30);
   };
@@ -2153,7 +2158,7 @@ function ReadyHabitsModal({
                         onClick={() => {
                           if (!canAdd) {
                             alert(
-                              "Protocolo Ativo: Você jí¡ possui hábitos em andamento. Conclua a batalha atual para instalar um novo protocolo.",
+                              "Protocolo Ativo: Você já possui hábitos em andamento. Conclua a batalha atual para instalar um novo protocolo.",
                             );
                             return;
                           }
@@ -2591,7 +2596,7 @@ function BoardView({
             {proj.name}
           </h2>
           <p className="text-white/40 text-[9px] sm:text-[10px] font-bold">
-            {proj.tasks.length} tarefas â€¢ {projectProgress(proj)}% concluí­do
+            {proj.tasks.length} tarefas • {projectProgress(proj)}% concluído
           </p>
         </div>
         {/* Progress bar - hidden on very small screens */}
@@ -2726,7 +2731,7 @@ function KanbanColumn({
 }) {
   const style = COLUMN_STYLES[col];
   const colTasks = proj.tasks.filter((t) => t.column === col);
-  const isDoneCol = col === "Concluí­do";
+  const isDoneCol = col === "Concluído";
 
   return (
     <div
@@ -2745,7 +2750,7 @@ function KanbanColumn({
         <span className="bg-white px-2 py-0.5 rounded-lg text-black text-[10px] font-black">
           {colTasks.length}
         </span>
-        {col !== "Ideias" && col !== "Concluí­do" && (
+        {col !== "Ideias" && col !== "Concluído" && (
           <button
             onClick={() =>
               setShowTaskModal({
@@ -2774,14 +2779,14 @@ function KanbanColumn({
           <div className="flex flex-col items-center justify-center py-10 gap-2 opacity-30">
             <div className="text-3xl">
               {col === "Ideias"
-                ? "ðŸ’¡"
+                ? "💡"
                 : col === "A Fazer"
-                  ? "ðŸ“‹"
+                  ? "📋"
                   : col === "Em Progresso"
                     ? "⚡"
-                    : col === "Em Revisí£o"
+                    : col === "Em Revisão"
                       ? "ðŸ”"
-                      : "âœ…"}
+                      : "✅"}
             </div>
             <p className="text-white text-[10px] font-black uppercase">
               Sem tarefas aqui
@@ -2837,7 +2842,7 @@ function KanbanColumn({
               </p>
               {task.deadline && (
                 <p className="text-white/30 text-[9px] font-bold mt-0.5">
-                  ðŸ“… {task.deadline}
+                  📅 {task.deadline}
                 </p>
               )}
             </div>
@@ -2861,7 +2866,7 @@ function KanbanColumn({
       {/* Quick Add input */}
       <div className="p-3 border-t border-white/10 bg-white/[0.02] flex-shrink-0">
         <input
-          placeholder="+ Adicionar tarefa rí¡pida..."
+          placeholder="+ Adicionar tarefa rápida..."
           onKeyDown={(e) => {
             if (e.key === "Enter" && e.currentTarget.value.trim()) {
               const title = e.currentTarget.value.trim();
@@ -2904,15 +2909,15 @@ const PROJECT_COLORS = [
   "#eab308",
 ];
 const PROJECT_ICONS = [
-  "ðŸš€",
-  "ðŸ’¡",
+  "🚀",
+  "💡",
   "🎯",
-  "ðŸ”§",
-  "ðŸ“±",
+  "🔧",
+  "📱",
   "ðŸŒ",
-  "ðŸŽ¨",
-  "ðŸ¤–",
-  "ðŸ“Š",
+  "🎨",
+  "🤖",
+  "📊",
   "ðŸ†",
   "⚡",
   "🔥",
@@ -2921,8 +2926,8 @@ const COLUMN_IDS = [
   "Ideias",
   "A Fazer",
   "Em Progresso",
-  "Em Revisí£o",
-  "Concluí­do",
+  "Em Revisão",
+  "Concluído",
 ] as const;
 const COLUMN_STYLES: Record<
   string,
@@ -2963,7 +2968,7 @@ const PRIORITY_STYLE: Record<string, string> = {
 
 function projectProgress(project: Project) {
   if (project.tasks.length === 0) return 0;
-  const done = project.tasks.filter((t) => t.column === "Concluí­do").length;
+  const done = project.tasks.filter((t) => t.column === "Concluído").length;
   return Math.round((done / project.tasks.length) * 100);
 }
 
@@ -2996,27 +3001,27 @@ function aiGenerateTasks(
         "Desenvolver tela de login",
         "Desenvolver dashboard principal",
         "Testar funcionalidades",
-        "Publicar versí£o inicial",
+        "Publicar versão inicial",
       ].map((t) => mkTask(t)),
     );
-  } else if (/site|website|landing|pí¡gina/i.test(lower)) {
+  } else if (/site|website|landing|página/i.test(lower)) {
     base.push(
       ...[
-        "Definir objetivo da pí¡gina",
+        "Definir objetivo da página",
         "Criar wireframe",
         "Desenvolver design",
         "Escrever copy",
         "Implementar HTML/CSS",
-        "Conectar formulí¡rio",
+        "Conectar formulário",
         "Publicar online",
       ].map((t) => mkTask(t)),
     );
-  } else if (/marketing|campanha|conteíºdo/i.test(lower)) {
+  } else if (/marketing|campanha|conteúdo/i.test(lower)) {
     base.push(
       ...[
-        "Definir píºblico-alvo",
-        "Criar estratí©gia",
-        "Produzir conteíºdo",
+        "Definir público-alvo",
+        "Criar estratégia",
+        "Produzir conteúdo",
         "Revisar e aprovar",
         "Publicar",
         "Analisar resultados",
@@ -3027,7 +3032,7 @@ function aiGenerateTasks(
       ...[
         "Pesquisa e planejamento",
         "Execução principal",
-        "Revisí£o e ajustes",
+        "Revisão e ajustes",
         "Finalização e entrega",
       ].map((t) => mkTask(t)),
     );
@@ -3059,13 +3064,13 @@ function aiGenerateChecklist(taskTitle: string): string[] {
       "Criar seção hero",
       "Escrever copy",
       "Adicionar CTA",
-      "Testar formulí¡rio",
+      "Testar formulário",
       "Publicar",
     ];
   if (/test|testar/i.test(lower))
     return [
       "Criar casos de teste",
-      "Executar testes unití¡rios",
+      "Executar testes unitários",
       "Testes de integração",
       "Corrigir bugs",
       "Validar",
@@ -3097,7 +3102,7 @@ function ProjectsDashboard({
   >([
     {
       role: "ai",
-      text: 'ðŸ¤– Olá! Descreva um projeto e eu crio as tarefas automaticamente!\nEx: "Criar um aplicativo de controle financeiro"',
+      text: '🤖 Olá! Descreva um projeto e eu crio as tarefas automaticamente!\nEx: "Criar um aplicativo de controle financeiro"',
     },
   ]);
   const [dragTask, setDragTask] = useState<string | null>(null);
@@ -3109,7 +3114,7 @@ function ProjectsDashboard({
     if (!dragTask || !activeProject) return;
     const wasCompleted =
       activeProject.tasks.find((t) => t.id === dragTask)?.column ===
-      "Concluí­do";
+      "Concluído";
     updateProject(activeProject.id, (p) => {
       const updated = {
         ...p,
@@ -3119,7 +3124,7 @@ function ProjectsDashboard({
       };
       setActiveProject(updated);
       // Gamify on complete
-      if (col === "Concluí­do" && !wasCompleted) {
+      if (col === "Concluído" && !wasCompleted) {
         setPlayerStats((prev: any) => ({
           ...prev,
           xp: (prev.xp || 0) + 20,
@@ -3160,7 +3165,7 @@ function ProjectsDashboard({
         ...prev,
         {
           role: "ai",
-          text: `âœ… Projeto criado: "${proj.name}"\nðŸ“Œ ${tasks.length} tarefas geradas automaticamente!\nðŸª™ Use o quadro para gerencií¡-las.`,
+          text: `✅ Projeto criado: "${proj.name}"\n📌 ${tasks.length} tarefas geradas automaticamente!\n🗂️ Use o quadro para gerenciá-las.`,
         },
       ]);
       setShowAI(false);
@@ -3190,13 +3195,13 @@ function ProjectsDashboard({
           if (t.id) {
             updateProject(proj.id, (p) => {
               const wasCompleted =
-                p.tasks.find((x) => x.id === t.id)?.column === "Concluí­do";
+                p.tasks.find((x) => x.id === t.id)?.column === "Concluído";
               const updated = {
                 ...p,
                 tasks: p.tasks.map((x) => (x.id === t.id ? t : x)),
               };
               setActiveProject(updated);
-              if (t.column === "Concluí­do" && !wasCompleted)
+              if (t.column === "Concluído" && !wasCompleted)
                 setPlayerStats((prev: any) => ({
                   ...prev,
                   xp: (prev.xp || 0) + 20,
@@ -3275,17 +3280,17 @@ function ProjectsDashboard({
               {
                 label: "Tarefas",
                 value: projects.reduce((s, p) => s + p.tasks.length, 0),
-                icon: "ðŸ“‹",
+                icon: "📋",
                 c: "purple",
               },
               {
-                label: "Concluí­das",
+                label: "Concluídas",
                 value: projects.reduce(
                   (s, p) =>
-                    s + p.tasks.filter((t) => t.column === "Concluí­do").length,
+                    s + p.tasks.filter((t) => t.column === "Concluído").length,
                   0,
                 ),
-                icon: "âœ…",
+                icon: "✅",
                 c: "emerald",
               },
               {
@@ -3337,7 +3342,7 @@ function ProjectsDashboard({
         {/* PROJECTS GRID */}
         {projects.length === 0 ? (
           <div className="py-24 flex flex-col items-center gap-4 text-center">
-            <span className="text-6xl">ðŸš€</span>
+            <span className="text-6xl">🚀</span>
             <p className="text-white font-black text-xl">
               Nenhum projeto ainda
             </p>
@@ -3418,14 +3423,14 @@ function ProjectsDashboard({
                     </div>
                     <div className="flex justify-between text-[10px]">
                       <div className="flex items-center gap-1.5 text-white/70 font-bold">
-                        <span>ðŸ“‹</span>
+                        <span>📋</span>
                         <span>{proj.tasks.length} tarefas</span>
                       </div>
                       {daysLeft !== null && (
                         <div
                           className={`flex items-center gap-1.5 font-black ${daysLeft < 0 ? "text-red-400" : daysLeft < 7 ? "text-orange-400" : "text-white/60"}`}
                         >
-                          <span>ðŸ“…</span>
+                          <span>📅</span>
                           <span>
                             {daysLeft < 0
                               ? `${Math.abs(daysLeft)}d atrasado`
@@ -3510,7 +3515,7 @@ function ProjectsDashboard({
                   value={aiInput}
                   onChange={(e) => setAiInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAiSend()}
-                  placeholder='Ex: "Criar um app de finaní§as"'
+                  placeholder='Ex: "Criar um app de finanças"'
                   className="flex-1 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs outline-none placeholder:text-white/20 focus:border-purple-500/40"
                 />
                 <button
@@ -3598,18 +3603,18 @@ function AIChatView({
       id: "welcome",
       role: "assistant",
       content: mentorMode
-        ? "ðŸŽ“ **Modo Mentor IA Ativado!**\n\nOlí¡, Guerreiro! Sou seu mentor pessoal.\n\nAnalisei seu perfil:\nâ€¢ Nível " +
+        ? "🎓 **Modo Mentor IA Ativado!**\n\nOlá, Guerreiro! Sou seu mentor pessoal.\n\nAnalisei seu perfil:\n• Nível " +
           playerStats.level +
           " - " +
           playerStats.class +
-          "\nâ€¢ " +
+          "\n• " +
           quests.filter((q: any) => q.done).length +
-          " missões concluídas\nâ€¢ " +
+          " missões concluídas\n• " +
           habits.length +
-          " hábitos ativos\nâ€¢ " +
+          " hábitos ativos\n• " +
           projects.length +
           " projetos em andamento\n\nEstou aqui para te guiar ao próximo nível. O que deseja melhorar hoje?"
-        : "Olá! Sou seu **Assistente IA** integrado ao Kronos. ðŸš€\n\nPosso te ajudar com:\nâ€¢ ðŸ’° Finanças e gastos\nâ€¢ ðŸ“‹ Projetos e tarefas\nâ€¢ 🎯 Rotina e produtividade\nâ€¢ ðŸ’¡ Ideias e estratégias\n\nO que precisa hoje?",
+        : "Olá! Sou seu **Assistente IA** integrado ao Kronos. 🚀\n\nPosso te ajudar com:\n• 💰 Finanças e gastos\n• 📋 Projetos e tarefas\n• 🎯 Rotina e produtividade\n• 💡 Ideias e estratégias\n\nO que precisa hoje?",
       timestamp: new Date(),
     };
     const conv: ChatConversation = {
@@ -3684,7 +3689,7 @@ function AIChatView({
         id: Date.now().toString(),
         role: "assistant",
         content:
-          "âš ï¸ **Ops!** Tive um problema de conexí£o com meus níºcleos de processamento. Tente novamente em alguns instantes.",
+          "âš ï¸ **Ops!** Tive um problema de conexão com meus núcleos de processamento. Tente novamente em alguns instantes.",
         timestamp: new Date(),
       };
       updateConv(convId, (c) => ({
@@ -3779,7 +3784,7 @@ function AIChatView({
         {msg.visual?.type === "finance" && (
           <div className="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl space-y-2">
             <p className="text-[10px] font-black text-emerald-400 uppercase tracking-wider">
-              ðŸ’¹ Resumo Financeiro
+              💸 Resumo Financeiro
             </p>
             {"totalIn" in msg.visual.data && (
               <div className="grid grid-cols-3 gap-2">
@@ -3820,7 +3825,7 @@ function AIChatView({
         {msg.visual?.type === "tasks" && (
           <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
             <p className="text-[10px] font-black text-blue-400 uppercase tracking-wider mb-2">
-              ðŸ“‹ Status das Tarefas
+              📋 Status das Tarefas
             </p>
             <div className="flex gap-4">
               <div className="text-center">
@@ -3833,7 +3838,7 @@ function AIChatView({
                 <p className="text-lg font-black text-neon-green">
                   {msg.visual.data.done}
                 </p>
-                <p className="text-[9px] text-white/40">Concluí­das</p>
+                <p className="text-[9px] text-white/40">Concluídas</p>
               </div>
             </div>
           </div>
@@ -3841,7 +3846,7 @@ function AIChatView({
         {msg.visual?.type === "projects" && (
           <div className="mt-3 p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
             <p className="text-[10px] font-black text-indigo-400 uppercase tracking-wider">
-              ðŸš€ Projeto Criado
+              🚀 Projeto Criado
             </p>
             <p className="text-sm font-bold text-white mt-1">
               {msg.visual.data.name}
@@ -3857,12 +3862,12 @@ function AIChatView({
 
   const quickPrompts = [
     {
-      icon: "ðŸ“Š",
+      icon: "📊",
       label: "Finanças",
-      prompt: "Como estí£o minhas finaní§as esse mês?",
+      prompt: "Como estão minhas finanças esse mês?",
     },
     {
-      icon: "ðŸ“‹",
+      icon: "📋",
       label: "Tarefas",
       prompt: "Quais tarefas ainda faltam nos meus projetos?",
     },
@@ -3876,8 +3881,8 @@ function AIChatView({
       label: "Progresso",
       prompt: "Analise meu progresso como mentor",
     },
-    { icon: "ðŸ’¡", label: "Ideias", prompt: "Me dê ideias de negócio" },
-    { icon: "ðŸ’°", label: "Economia", prompt: "Como posso economizar mais?" },
+    { icon: "💡", label: "Ideias", prompt: "Me dê ideias de negócio" },
+    { icon: "💰", label: "Economia", prompt: "Como posso economizar mais?" },
   ];
 
   return (
@@ -4133,8 +4138,8 @@ function AIChatView({
               }
               placeholder={
                 mentorMode
-                  ? "Peí§a conselho ao seu mentor..."
-                  : "Digite sua mensagem... (ex: gastei R$ 50 com almoí§o)"
+                  ? "Peça conselho ao seu mentor..."
+                  : "Digite sua mensagem... (ex: gastei R$ 50 com almoço)"
               }
               className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-white/20 py-1.5 resize-none"
             />
@@ -4230,7 +4235,7 @@ function NewProjectModal({
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
               className="mt-1 w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none"
-              placeholder="Ex: Laní§ar atí© dia 30"
+              placeholder="Ex: Lançar até dia 30"
             />
           </div>
           <div>
@@ -4365,7 +4370,7 @@ function TaskDetailModal({
               value={t.title}
               onChange={(e) => setT((x) => ({ ...x, title: e.target.value }))}
               className="w-full bg-transparent text-white font-black text-base outline-none placeholder:text-white/20"
-              placeholder="Tí­tulo da tarefa"
+              placeholder="Título da tarefa"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -4505,11 +4510,11 @@ function TaskDetailModal({
             {showAiChecklist && (
               <div className="mb-3 p-3 bg-purple-500/5 border border-purple-500/20 rounded-xl">
                 <p className="text-purple-400 text-[9px] font-black uppercase mb-2">
-                  ðŸ¤– Checklist sugerido pela IA:
+                  🤖 Checklist sugerido pela IA:
                 </p>
                 {aiChecklist.map((item, i) => (
                   <p key={i} className="text-white text-[10px] py-1 font-bold">
-                    â€¢ {item}
+                    • {item}
                   </p>
                 ))}
                 <div className="flex gap-2 mt-2">
@@ -4631,7 +4636,7 @@ function TaskDetailModal({
           {/* COMMENTS */}
           <div>
             <label className="text-[9px] text-white/30 font-black uppercase">
-              Comentí¡rios ({t.comments.length})
+              Comentários ({t.comments.length})
             </label>
             <div className="space-y-2 mt-2">
               {t.comments.map((c) => (
@@ -4665,7 +4670,7 @@ function TaskDetailModal({
                   }
                 }}
                 className="flex-1 px-2 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-xs outline-none placeholder:text-white/20"
-                placeholder="Adicionar comentí¡rio..."
+                placeholder="Adicionar comentário..."
               />
               <button
                 onClick={() => {
@@ -4712,7 +4717,7 @@ const EXPENSE_CATEGORIES = [
   { name: "Lazer", color: "#a855f7" },
   { name: "Conhecimento", color: "#22c55e" },
   { name: "Assinaturas", color: "#ec4899" },
-  { name: "Saíºde", color: "#ef4444" },
+  { name: "Saúde", color: "#ef4444" },
   { name: "Roupas", color: "#eab308" },
   { name: "Outros", color: "#6b7280" },
 ];
@@ -4743,7 +4748,7 @@ function nlpParseTransaction(text: string): {
   if (isNaN(value) || value <= 0) return null;
   // Income keywords
   const isEntrada =
-    /recebi|salí¡rio|salario|ganhei|consegui|peguei|me deu|me deram| deu |caiu na|transferiram|depositaram|pix chegou|vendi|venda|bonus|bí´nus|comissí£o|comissao|lucro|entrada|renda|freelance|pagaram|pix recebi/i.test(
+    /recebi|salário|salario|ganhei|consegui|peguei|me deu|me deram| deu |caiu na|transferiram|depositaram|pix chegou|vendi|venda|bonus|bônus|comissão|comissao|lucro|entrada|renda|freelance|pagaram|pix recebi/i.test(
       lower,
     );
   // Expense keywords
@@ -4755,26 +4760,26 @@ function nlpParseTransaction(text: string): {
 
   let category = "Outros";
   if (
-    /uber|taxi|í´nibus|onibus|metro|gasolina|combustí­vel|passagem|transporte/i.test(
+    /uber|taxi|ônibus|onibus|metro|gasolina|combustível|passagem|transporte/i.test(
       lower,
     )
   )
     category = "Transporte";
   else if (
-    /comida|lanche|restaurante|ifood|delivery|almoí§o|jantar|cafí©|supermercado|mercado|alimentaí§/i.test(
+    /comida|lanche|restaurante|ifood|delivery|almoço|jantar|café|supermercado|mercado|alimentaç/i.test(
       lower,
     )
   )
     category = "Alimentação";
   else if (
-    /aluguel|condomí­nio|luz|agua|internet|casa|moradia|iptu/i.test(lower)
+    /aluguel|condomínio|luz|agua|internet|casa|moradia|iptu/i.test(lower)
   )
     category = "Moradia";
   else if (/netflix|spotify|youtube|prime|hbo|disney|assinatura/i.test(lower))
     category = "Assinaturas";
-  else if (/academia|mí©dico|remí©dio|farmí¡cia|saíºde|plano/i.test(lower))
-    category = "Saíºde";
-  else if (/roupas|roupa|tênis|camisa|calí§a|loja|shopping/i.test(lower))
+  else if (/academia|médico|remédio|farmácia|saúde|plano/i.test(lower))
+    category = "Saúde";
+  else if (/roupas|roupa|tênis|camisa|calça|loja|shopping/i.test(lower))
     category = "Roupas";
   else if (
     /curso|livro|udemy|alura|estudo|escola|faculdade|conhecimento/i.test(lower)
@@ -4821,7 +4826,7 @@ function FinancialDashboard({
   >([
     {
       type: "ai",
-      text: 'Olá! Sou sua IA Financeira ðŸ¤–\n\nMe diga o que gastou ou recebeu!\nEx: "Gastei 50 no Uber" ou "Recebi 3000 de salí¡rio"',
+      text: 'Olá! Sou sua IA Financeira 🤖\n\nMe diga o que gastou ou recebeu!\nEx: "Gastei 50 no Uber" ou "Recebi 3000 de salário"',
       accent: "blue",
     },
   ]);
@@ -4887,7 +4892,7 @@ function FinancialDashboard({
           ...prev,
           {
             type: "ai",
-            text: `âœ… ${parsed.type === "entrada" ? "Receita" : "Despesa"} registrada!\nðŸ“‚ Categoria: ${parsed.category}\nðŸ’° Valor: ${parseBRL(parsed.value)}\nðŸª™ +15 moedas ganhas!`,
+            text: `✅ ${parsed.type === "entrada" ? "Receita" : "Despesa"} registrada!\nðŸ“‚ Categoria: ${parsed.category}\n💰 Valor: ${parseBRL(parsed.value)}\n🗂️ +15 moedas ganhas!`,
             accent: parsed.type === "entrada" ? "emerald" : "orange",
           },
         ]);
@@ -4896,7 +4901,7 @@ function FinancialDashboard({
           ...prev,
           {
             type: "ai",
-            text: 'Ní£o consegui entender ðŸ¤”\nTente: "Gastei 50 no Uber" ou "Recebi 2000 de salí¡rio"',
+            text: 'Não consegui entender ðŸ¤”\nTente: "Gastei 50 no Uber" ou "Recebi 2000 de salário"',
             accent: "red",
           },
         ]);
@@ -4907,18 +4912,18 @@ function FinancialDashboard({
     const ins: string[] = [];
     if (budgetOver)
       ins.push(
-        `âš ï¸ Orí§amento ultrapassado em ${parseBRL(totalSaidas - budget)}!`,
+        `âš ï¸ Orçamento ultrapassado em ${parseBRL(totalSaidas - budget)}!`,
       );
     if (categoryTotals.length > 0)
       ins.push(
-        `ðŸ“Š Maior gasto: ${[...categoryTotals].sort((a, b) => b.total - a.total)[0].name}`,
+        `📊 Maior gasto: ${[...categoryTotals].sort((a, b) => b.total - a.total)[0].name}`,
       );
     if (totalSaidas > totalEntradas && totalEntradas > 0)
       ins.push("ðŸ“‰ Você gastou mais do que recebeu esse mês!");
     if (saldo > 0 && totalEntradas > 0)
-      ins.push(`ðŸ’¡ Saldo positivo de ${parseBRL(saldo)} esse mês!`);
+      ins.push(`💡 Saldo positivo de ${parseBRL(saldo)} esse mês!`);
     if (ins.length === 0)
-      ins.push("Adicione transaí§íµes para ver insights personalizados!");
+      ins.push("Adicione transaçõeses para ver insights personalizados!");
     return ins;
   };
 
@@ -4941,7 +4946,7 @@ function FinancialDashboard({
               Centro <span className="text-emerald-400">Financeiro</span>
             </h1>
             <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-0.5">
-              Gestí£o Estratí©gica de Riqueza
+              Gestão Estratégica de Riqueza
             </p>
           </div>
           <button
@@ -4961,7 +4966,7 @@ function FinancialDashboard({
               {playerStats.name || "Guerreiro"}
             </p>
             <p className="text-emerald-400 text-xs font-black uppercase">
-              {getRank(playerStats.level)} â€¢ Nível {playerStats.level}
+              {getRank(playerStats.level)} • Nível {playerStats.level}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -4973,7 +4978,7 @@ function FinancialDashboard({
                 cls: "orange",
               },
               {
-                emoji: "ðŸª™",
+                emoji: "🗂️",
                 label: "Moedas",
                 value: (playerStats.gold || 0).toLocaleString(),
                 cls: "yellow",
@@ -5006,13 +5011,13 @@ function FinancialDashboard({
             onClick={() => setActiveTab("overview")}
             className={`flex-1 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === "overview" ? "bg-emerald-500/20 border border-emerald-500/30 text-emerald-400" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
           >
-            ðŸ“Š Visí£o Geral
+            📊 Visão Geral
           </button>
           <button
             onClick={() => setActiveTab("ai")}
             className={`flex-1 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === "ai" ? "bg-blue-500/20 border border-blue-500/30 text-blue-400" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
           >
-            ðŸ¤– IA Financeira
+            🤖 IA Financeira
           </button>
         </div>
 
@@ -5028,7 +5033,7 @@ function FinancialDashboard({
                   c: "emerald",
                 },
                 {
-                  label: "Saí­das",
+                  label: "Saídas",
                   value: totalSaidas,
                   icon: "ðŸ“‰",
                   c: "red",
@@ -5036,7 +5041,7 @@ function FinancialDashboard({
                 {
                   label: "Saldo",
                   value: saldo,
-                  icon: "ðŸ’°",
+                  icon: "💰",
                   c: saldo >= 0 ? "emerald" : "red",
                 },
               ].map((card) => (
@@ -5068,7 +5073,7 @@ function FinancialDashboard({
                 <div className="flex items-center gap-2">
                   <span className="text-lg">{budgetOver ? "âš ï¸" : "🎯"}</span>
                   <p className="text-white font-black text-sm">
-                    Orí§amento Mensal
+                    Orçamento Mensal
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -5092,7 +5097,7 @@ function FinancialDashboard({
               </div>
               {budgetOver && (
                 <p className="text-red-400 text-[10px] font-black mt-2 uppercase">
-                  âš ï¸ Orí§amento ultrapassado!
+                  âš ï¸ Orçamento ultrapassado!
                 </p>
               )}
             </div>
@@ -5208,7 +5213,7 @@ function FinancialDashboard({
                       />
                       <Line
                         type="monotone"
-                        dataKey="Saí­das"
+                        dataKey="Saídas"
                         stroke="#f87171"
                         strokeWidth={2.5}
                         dot={{ fill: "#f87171", strokeWidth: 0, r: 4 }}
@@ -5223,7 +5228,7 @@ function FinancialDashboard({
                   </div>
                   <div className="flex items-center gap-1.5">
                     <div className="w-3 h-1 bg-red-400 rounded" />
-                    <span className="text-[10px] text-white/40">Saí­das</span>
+                    <span className="text-[10px] text-white/40">Saídas</span>
                   </div>
                 </div>
               </div>
@@ -5232,7 +5237,7 @@ function FinancialDashboard({
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  ðŸ’³ Faturas de Cartí£o
+                  ðŸ’³ Faturas de Cartão
                 </p>
                 <button
                   onClick={() => setShowCardModal(true)}
@@ -5243,7 +5248,7 @@ function FinancialDashboard({
               </div>
               {creditCards.length === 0 ? (
                 <div className="p-6 border border-dashed border-white/10 rounded-2xl text-center text-white/20 text-xs">
-                  Nenhum cartí£o cadastrado
+                  Nenhum cartão cadastrado
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -5368,7 +5373,7 @@ function FinancialDashboard({
                           />
                         </div>
                         <p className="text-[10px] text-white/30 mt-1">
-                          {pct.toFixed(0)}% concluí­do
+                          {pct.toFixed(0)}% concluído
                         </p>
                       </div>
                     );
@@ -5380,7 +5385,7 @@ function FinancialDashboard({
             <div className="mb-2">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  ðŸ“‹ Transaí§íµes Recentes
+                  📋 Transaçõeses Recentes
                 </p>
                 <button
                   onClick={() => setShowTransactionModal(true)}
@@ -5391,7 +5396,7 @@ function FinancialDashboard({
               </div>
               {transactions.length === 0 ? (
                 <div className="p-8 border border-dashed border-white/10 rounded-2xl text-center text-white/20 text-xs">
-                  Nenhuma transação. Use o botí£o abaixo ou a IA!
+                  Nenhuma transação. Use o botão abaixo ou a IA!
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -5410,7 +5415,7 @@ function FinancialDashboard({
                           {tx.desc}
                         </p>
                         <p className="text-white/30 text-[10px]">
-                          {tx.category} â€¢ {tx.date} â€¢ {tx.paymentMethod}
+                          {tx.category} • {tx.date} • {tx.paymentMethod}
                         </p>
                       </div>
                       <p
@@ -5441,7 +5446,7 @@ function FinancialDashboard({
           <div className="space-y-5">
             <div className="p-5 bg-blue-500/5 border border-blue-500/20 rounded-3xl">
               <p className="text-blue-400 font-black text-sm uppercase tracking-widest mb-3">
-                ðŸ”¬ Aní¡lise Inteligente
+                ðŸ”¬ Análise Inteligente
               </p>
               <div className="space-y-2">
                 {getInsights().map((ins, i) => (
@@ -5502,7 +5507,7 @@ function FinancialDashboard({
               {[
                 "Gastei 50 no Uber",
                 "Paguei 120 de luz",
-                "Recebi 3000 de salí¡rio",
+                "Recebi 3000 de salário",
                 "Comprei roupa por 200",
               ].map((ex) => (
                 <button
@@ -5631,7 +5636,7 @@ function FinancialTransactionModal({
               onClick={() => setType("saida")}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase ${type === "saida" ? "bg-red-500/20 border border-red-500/30 text-red-400" : "bg-white/5 border border-white/10 text-white/40"}`}
             >
-              ðŸ“¤ Saí­da
+              ðŸ“¤ Saída
             </button>
           </div>
           <div>
@@ -5676,7 +5681,7 @@ function FinancialTransactionModal({
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               className="mt-1 w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none"
-              placeholder="Ex: Almoí§o"
+              placeholder="Ex: Almoço"
             />
           </div>
           <div>
@@ -5695,7 +5700,7 @@ function FinancialTransactionModal({
               Forma de Pagamento
             </label>
             <div className="flex gap-2 mt-1">
-              {["Cartí£o", "PIX", "Dinheiro"].map((m) => (
+              {["Cartão", "PIX", "Dinheiro"].map((m) => (
                 <button
                   key={m}
                   onClick={() => setPaymentMethod(m)}
@@ -5752,7 +5757,7 @@ function FinancialCardModal({
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-white font-black text-xl uppercase">
-            Adicionar Cartí£o
+            Adicionar Cartão
           </h3>
           <button
             onClick={onClose}
@@ -5805,7 +5810,7 @@ function FinancialCardModal({
           }}
           className="w-full mt-6 py-3 bg-blue-500/20 border border-blue-500/30 text-blue-400 font-black text-xs uppercase rounded-2xl hover:bg-blue-500/30 transition-all"
         >
-          Salvar Cartí£o
+          Salvar Cartão
         </button>
       </motion.div>
     </motion.div>
@@ -5963,7 +5968,7 @@ function CreateTrainingModal({
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                      Dia Atribuí­do
+                      Dia Atribuído
                     </label>
                     <select
                       value={day}
@@ -6013,7 +6018,7 @@ function CreateTrainingModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
-                      Set de Exercí­cios
+                      Set de Exercícios
                     </label>
                     <button
                       onClick={addExercise}
@@ -6035,7 +6040,7 @@ function CreateTrainingModal({
                             onChange={(e) =>
                               updateExercise(idx, "name", e.target.value)
                             }
-                            placeholder={`Exercí­cio ${idx + 1}`}
+                            placeholder={`Exercício ${idx + 1}`}
                             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                           />
                           <button
@@ -6048,7 +6053,7 @@ function CreateTrainingModal({
                         <div className="grid grid-cols-3 gap-2">
                           <div>
                             <label className="block text-[8px] font-black uppercase text-white/30 mb-1">
-                              Sí©rie
+                              Série
                             </label>
                             <input
                               type="number"
@@ -6065,7 +6070,7 @@ function CreateTrainingModal({
                           </div>
                           <div>
                             <label className="block text-[8px] font-black uppercase text-white/30 mb-1">
-                              Pí©s/KG
+                              Pés/KG
                             </label>
                             <input
                               type="number"
@@ -6304,7 +6309,7 @@ const HabitMonthlyGrid = ({
       <div className="flex items-center justify-between mb-8 md:mb-12">
         <div>
           <h3 className="text-xs md:text-base font-black uppercase tracking-[0.3em] text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
-            Cí­rculo de Hábitos
+            Círculo de Hábitos
           </h3>
           <p className="text-[8px] md:text-[10px] text-white/20 font-bold uppercase tracking-widest mt-1">
             Matriz de aquisição e consistência
@@ -6522,7 +6527,7 @@ const KronosDashboard = ({
             <div className="flex items-center gap-2 md:gap-3">
               <div className="w-6 md:w-8 h-0.5 md:h-1 bg-red-600 rounded-full" />
               <p className="text-[7px] md:text-xs text-white/40 font-black uppercase tracking-[0.2em]">
-                Acompanhe seu desempenho dií¡rio e complete objetivos para
+                Acompanhe seu desempenho diário e complete objetivos para
                 evoluir.
               </p>
             </div>
@@ -6578,7 +6583,7 @@ function ModeSelectionModal({
     {
       id: "rotina",
       label: "Rotina",
-      desc: "Complete suas missões dií¡rias",
+      desc: "Complete suas missões diárias",
       icon: Target,
       color: "from-red-500 to-orange-500",
       glow: "rgba(255,0,76,0.4)",
@@ -6586,7 +6591,7 @@ function ModeSelectionModal({
     {
       id: "habitos",
       label: "Hábitos",
-      desc: "Fortaleí§a seus hábitos",
+      desc: "Fortaleça seus hábitos",
       icon: Flame,
       color: "from-orange-400 to-yellow-400",
       glow: "rgba(255,145,0,0.4)",
@@ -6735,7 +6740,7 @@ function ValidationModal({
                 <Shield className="w-8 h-8 text-red-500" />
               </div>
               <h3 className="text-xl font-black uppercase italic tracking-wider text-red-500">
-                Guerras Indisponí­veis
+                Guerras Indisponíveis
               </h3>
               <p className="text-xs text-white/60 font-medium leading-relaxed">
                 {message}
@@ -7587,11 +7592,11 @@ export default function SystemDashboard({
     "kronos_weeklyTasks",
     [
       { day: "Segunda", tasks: [] },
-      { day: "Terí§a", tasks: [] },
+      { day: "Terça", tasks: [] },
       { day: "Quarta", tasks: [] },
       { day: "Quinta", tasks: [] },
       { day: "Sexta", tasks: [] },
-      { day: "Sí¡bado", tasks: [] },
+      { day: "Sábado", tasks: [] },
       { day: "Domingo", tasks: [] },
     ],
   );
@@ -7655,16 +7660,14 @@ export default function SystemDashboard({
       img: "https://i.ibb.co/jXgP91m/Chat-GPT-Image-1-de-mar-de-2026-21-15-18.png",
     },
   ]);
-  const [friendSearchInput, setFriendSearchInput] = useState("");
-  const [isSearchingFriends, setIsSearchingFriends] = useState(false);
 
   const [newsArticles, setNewsArticles] = useState([
     {
       id: 1,
-      title: "A Ascensí£o dos Guardiíµes",
+      title: "A Ascensão dos Guardiõeses",
       category: "LORE",
       summary:
-        "Antigas profecias despertam nas Colinas de Prata. Novos heróis sí£o convocados.",
+        "Antigas profecias despertam nas Colinas de Prata. Novos heróis são convocados.",
       date: "03 MAR 2026",
       image:
         "https://i.ibb.co/6cD731hz/Chat-GPT-Image-1-de-mar-de-2026-13-23-58.png",
@@ -7675,7 +7678,7 @@ export default function SystemDashboard({
       title: "Evento: Eclipse Sombrio",
       category: "EVENTO",
       summary:
-        "Prepare suas armas! O torneio mensal de arena comeí§a neste final de semana.",
+        "Prepare suas armas! O torneio mensal de arena começa neste final de semana.",
       date: "01 MAR 2026",
       image:
         "https://i.ibb.co/HT2cTXfW/Chat-GPT-Image-1-de-mar-de-2026-13-24-02.png",
@@ -7686,7 +7689,7 @@ export default function SystemDashboard({
       title: "Notas da Atualização v2.4",
       category: "SISTEMA",
       summary:
-        "Novas funcionalidades de alianí§as e chat de guilda agora disponí­veis.",
+        "Novas funcionalidades de alianças e chat de guilda agora disponíveis.",
       date: "28 FEV 2026",
       image:
         "https://i.ibb.co/jXgP91m/Chat-GPT-Image-1-de-mar-de-2026-21-15-18.png",
@@ -7811,7 +7814,7 @@ export default function SystemDashboard({
       await updateDoc(userRef, {
         friends: arrayUnion(friendId),
       });
-      alert("Alianí§a formada com sucesso!");
+      alert("Aliança formada com sucesso!");
     } catch (err) {
       console.error("Error adding friend:", err);
       alert("Erro ao adicionar aliado.");
@@ -7910,7 +7913,7 @@ export default function SystemDashboard({
             const trainingStreak = weeklyTrainings.filter((t) => t.done).length;
             if (trainingStreak >= 8) return { ...b, unlocked: true };
           }
-          // ðŸ‰ Dragí£o Dormindo: 30 dias de treino total
+          // ðŸ‰ Dragão Dormindo: 30 dias de treino total
           if (i === 3) {
             const totalTrainings = weeklyTrainings.filter((t) => t.done).length; // Simplified for now, should ideally be a counter
             if (totalTrainings >= 30) return { ...b, unlocked: true };
@@ -8144,13 +8147,13 @@ export default function SystemDashboard({
   const handleSaveTraining = (updated: Training) => {
     if (editingTrainingIndex !== null) {
       setWeeklyTrainings((prev) => {
-        // Ao editar, se mudou o dia para um que jí¡ existe (e não í© o mesmo que estamos editando)
+        // Ao editar, se mudou o dia para um que já existe (e não é o mesmo que estamos editando)
         const targetDayIdx = prev.findIndex(
           (t, i) => t.day === updated.day && i !== editingTrainingIndex,
         );
 
         if (targetDayIdx !== -1) {
-          // Mescla o que editamos no treino que jí¡ existia naquele dia
+          // Mescla o que editamos no treino que já existia naquele dia
           const mergedTrainings = prev.map((t, i) => {
             if (i === targetDayIdx) {
               return {
@@ -8163,7 +8166,7 @@ export default function SystemDashboard({
             }
             return t;
           });
-          // Remove o registro original que estí¡vamos editando
+          // Remove o registro original que estávamos editando
           return mergedTrainings.filter((_, i) => i !== editingTrainingIndex);
         }
 
@@ -8566,7 +8569,7 @@ export default function SystemDashboard({
 
             {currentView === "quests" && (
               <FullViewWrapper
-                title="Central de Missíµes"
+                title="Central de Missões"
                 icon={Target}
                 color="border-neon-green"
                 onClose={() => setCurrentView("dashboard")}
@@ -8587,7 +8590,7 @@ export default function SystemDashboard({
                     </div>
                   </div>
 
-                  {/* Botí£o Gigante de Criar Missí£o */}
+                  {/* Botão Gigante de Criar Missão */}
                   <button
                     onClick={() => setIsCreateQuestModalOpen(true)}
                     className="p-6 bg-neon-green/5 border border-neon-green/20 rounded-2xl flex flex-col items-center justify-center gap-4 group hover:bg-neon-green/10 hover:border-neon-green/40 transition-all border-dashed min-h-[160px]"
@@ -8596,7 +8599,7 @@ export default function SystemDashboard({
                       <Plus className="w-6 h-6 text-neon-green" />
                     </div>
                     <span className="text-sm font-black uppercase tracking-widest text-neon-green">
-                      Nova Missí£o
+                      Nova Missão
                     </span>
                   </button>
 
@@ -8709,7 +8712,7 @@ export default function SystemDashboard({
                 onClose={() => setCurrentView("dashboard")}
               >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-20">
-                  {/* Botí£o Gigante de Criar Hí¡bito */}
+                  {/* Botão Gigante de Criar Hábito */}
                   <div className="grid grid-cols-1 gap-4 h-full">
                     <button
                       onClick={() => setIsCreateHabitModalOpen(true)}
@@ -8719,7 +8722,7 @@ export default function SystemDashboard({
                         <Plus className="w-8 h-8 text-orange-400" />
                       </div>
                       <span className="text-xl font-black uppercase italic text-orange-400">
-                        Novo Hí¡bito
+                        Novo Hábito
                       </span>
                     </button>
                     <button
@@ -8837,7 +8840,7 @@ export default function SystemDashboard({
                           </div>
                           <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
                             <span className="text-[10px] font-black text-white/40 uppercase">
-                              Exercí­cios
+                              Exercícios
                             </span>
                             <span className="text-sm font-black text-white">
                               {weeklyTrainings.reduce(
@@ -8943,7 +8946,7 @@ export default function SystemDashboard({
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-2 h-2 rounded-full bg-neon-green shadow-[0_0_8px_rgba(56,242,127,0.5)]" />
                                   <span className="text-[8px] font-black text-neon-green uppercase">
-                                    Concluí­do
+                                    Concluído
                                   </span>
                                 </div>
                               )}
@@ -8960,7 +8963,7 @@ export default function SystemDashboard({
                             {t.name}
                           </h4>
                           <p className="text-[9px] text-white/30 font-bold mb-4">
-                            {t.duration} â€¢ {t.exercises.length} exercí­cios
+                            {t.duration} • {t.exercises.length} exercícios
                           </p>
 
                           <div className="space-y-3">
@@ -8987,7 +8990,7 @@ export default function SystemDashboard({
                                 <div className="flex gap-4 pl-5">
                                   <div className="flex flex-col">
                                     <span className="text-[7px] font-black text-white/20 uppercase tracking-widest">
-                                      Sí©rie
+                                      Série
                                     </span>
                                     <span
                                       className={`text-[10px] font-black ${ex.done ? "text-neon-green/40" : "text-neon-green"}`}
@@ -9053,7 +9056,7 @@ export default function SystemDashboard({
                           icon: "🔥",
                         },
                         {
-                          label: "Exercí­cios Totais",
+                          label: "Exercícios Totais",
                           value: `${weeklyTrainings.reduce((acc, t) => acc + t.exercises.length, 0)}`,
                           icon: "ðŸ’ª",
                         },
@@ -9322,7 +9325,7 @@ export default function SystemDashboard({
                               </span>
                             </div>
                             <p className="text-[7px] sm:text-[8px] font-black text-white/30 uppercase tracking-[0.2em] sm:tracking-[0.25em] truncate mt-0.5">
-                              {r.division} â€¢ {r.status}
+                              {r.division} • {r.status}
                             </p>
                           </div>
 
@@ -9386,7 +9389,7 @@ export default function SystemDashboard({
                   {/* Sub-navigation Menu */}
                   <div className="flex items-center justify-center sm:justify-start gap-4 mb-8">
                     {[
-                      { id: "calendar", icon: Calendar, label: "Calendí¡rio" },
+                      { id: "calendar", icon: Calendar, label: "Calendário" },
                       {
                         id: "checklist",
                         icon: CheckSquare,
@@ -9619,7 +9622,7 @@ export default function SystemDashboard({
                                       <div className="flex items-center gap-2 mb-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-neon-green/40" />
                                         <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                                          Concluí­do
+                                          Concluído
                                         </p>
                                       </div>
                                       {completedTasks.map(renderTask)}
@@ -9826,7 +9829,7 @@ export default function SystemDashboard({
                                   <div className="space-y-3">
                                     {personalTasks.length === 0 && (
                                       <p className="text-center py-8 text-white/10 font-black uppercase italic text-xs">
-                                        Seu checklist estí¡ vazio
+                                        Seu checklist está vazio
                                       </p>
                                     )}
                                     {pending.map(renderPersonal)}
@@ -9837,7 +9840,7 @@ export default function SystemDashboard({
                                       <div className="flex items-center gap-2 mb-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-neon-green/40" />
                                         <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                                          Concluí­do
+                                          Concluído
                                         </p>
                                       </div>
                                       {completed.map(renderPersonal)}
@@ -10133,7 +10136,7 @@ export default function SystemDashboard({
                                         </div>
                                         <div className="mt-4 px-4 py-1.5 bg-white/5 rounded-full border border-white/10">
                                           <span className="text-xs font-black text-white/40 uppercase tracking-widest">
-                                            Sessí£o{" "}
+                                            Sessão{" "}
                                             {pomodoroGroup[currentPomodoroIdx]
                                               ?.completedSessions + 1}{" "}
                                             /{" "}
@@ -10151,7 +10154,7 @@ export default function SystemDashboard({
                                         onClick={() => setPomodoroActive(false)}
                                         className="w-full py-5 bg-white text-black rounded-[2rem] font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
                                       >
-                                        Pausar Sessí£o
+                                        Pausar Sessão
                                       </button>
                                       <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">
                                         Pressione para sair do mergulho
@@ -10165,7 +10168,7 @@ export default function SystemDashboard({
                             <div className="space-y-3 flex-1 overflow-y-auto max-h-[400px] pr-1 scrollbar-thin mt-6">
                               {pomodoroGroup.length === 0 && (
                                 <p className="text-center py-10 text-white/5 font-black uppercase italic text-[10px]">
-                                  Adicione objetivos para comeí§ar
+                                  Adicione objetivos para começar
                                 </p>
                               )}
                               {pomodoroGroup.map((task, idx) => {
@@ -10300,10 +10303,6 @@ export default function SystemDashboard({
               <FriendsView
                 friends={friendsData}
                 onClose={() => setCurrentView("dashboard")}
-                searchInput={friendSearchInput}
-                setSearchInput={setFriendSearchInput}
-                isSearching={isSearchingFriends}
-                setIsSearching={setIsSearchingFriends}
                 rankingData={rankingData}
                 onAddFriend={addFriend}
                 currentUser={currentUser}
@@ -10396,7 +10395,7 @@ export default function SystemDashboard({
                     >
                       <Crown className="w-3 h-3 text-neon-yellow" />
                       <span className="text-[9px] font-black uppercase tracking-widest text-neon-yellow">
-                        {playerStats.class} â€¢ Nível {playerStats.level}
+                        {playerStats.class} • Nível {playerStats.level}
                       </span>
                     </motion.div>
                   )}
@@ -10764,7 +10763,7 @@ export default function SystemDashboard({
                           {playerStats.class}
                         </span>
                         <span className="text-[10px] font-black text-white/30">
-                          â€¢
+                          •
                         </span>
                         <span className="text-[10px] font-black text-white/60">
                           Nível {playerStats.level}
@@ -10998,7 +10997,7 @@ export default function SystemDashboard({
                   return {
                     ...t,
                     exercises: [...t.exercises, ...training.exercises],
-                    // Tenta somar duraí§íµes se forem níºmeros simples
+                    // Tenta somar duraçõeses se forem números simples
                     duration:
                       parseInt(t.duration) +
                       parseInt(training.duration) +
@@ -11096,12 +11095,12 @@ export default function SystemDashboard({
 // â”€â”€â”€ Global Game Over Overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GameOverOverlay({ onReset }: { onReset: () => void }) {
   const MOTIVATIONAL_PHRASES = [
-    "A derrota não í© o fim. í‰ o comeí§o de uma nova batalha.",
-    "Os guerreiros mais fortes foram construí­dos pelas suas piores derrotas.",
-    "Cada queda í© uma lição. Levante-se mais forte do que antes.",
+    "A derrota não é o fim. í‰ o começo de uma nova batalha.",
+    "Os guerreiros mais fortes foram construídos pelas suas piores derrotas.",
+    "Cada queda é uma lição. Levante-se mais forte do que antes.",
     "O caminho para a vitória passa pelo fracasso. Continue.",
-    "Recomeí§ar do zero í© o privilí©gio dos corajosos. Você í© um.",
-    "Ní£o existe guerreiro invencí­vel â€” existe quem nunca desistiu.",
+    "Recomeçar do zero é o privilégio dos corajosos. Você é um.",
+    "Não existe guerreiro invencível â€” existe quem nunca desistiu.",
   ];
   const phrase =
     MOTIVATIONAL_PHRASES[
@@ -11285,7 +11284,7 @@ function EditTrainingModal({
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ex: Peito & Trí­ceps"
+                    placeholder="Ex: Peito & Tríceps"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                   />
                 </div>
@@ -11308,7 +11307,7 @@ function EditTrainingModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
-                      Exercí­cios
+                      Exercícios
                     </label>
                     <button
                       onClick={addExercise}
@@ -11330,7 +11329,7 @@ function EditTrainingModal({
                             onChange={(e) =>
                               updateExercise(idx, "name", e.target.value)
                             }
-                            placeholder={`Nome do Exercí­cio ${idx + 1}`}
+                            placeholder={`Nome do Exercício ${idx + 1}`}
                             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                           />
                           <button
@@ -11343,7 +11342,7 @@ function EditTrainingModal({
                         <div className="grid grid-cols-3 gap-2">
                           <div>
                             <label className="block text-[8px] font-black uppercase text-white/30 mb-1">
-                              Sí©rie
+                              Série
                             </label>
                             <input
                               type="number"
@@ -11411,7 +11410,7 @@ function EditTrainingModal({
                   className="w-full mt-4 bg-linear-to-r from-neon-yellow to-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl shadow-[0_10px_30px_rgba(253,224,71,0.2)] hover:shadow-[0_10px_40px_rgba(56,242,127,0.4)] transition-all flex justify-center items-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  Salvar Alteraí§íµes no Protocolo
+                  Salvar Alteraçõeses no Protocolo
                 </button>
               </div>
             </div>
@@ -11577,7 +11576,7 @@ function NewsView({
 }) {
   return (
     <FullViewWrapper
-      title="Crí´nicas de Kronos"
+      title="Crônicas de Kronos"
       icon={Newspaper}
       color="border-neon-yellow"
       onClose={onClose}
@@ -11589,7 +11588,7 @@ function NewsView({
             íšltimas do Reino
           </h2>
           <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">
-            Fique por dentro das atualizaí§íµes e lendas
+            Fique por dentro das atualizaçõeses e lendas
           </p>
         </div>
 
@@ -11682,24 +11681,19 @@ function NewsView({
 function FriendsView({
   friends,
   onClose,
-  searchInput,
-  setSearchInput,
-  isSearching,
-  setIsSearching,
   rankingData,
   onAddFriend,
   currentUser,
 }: {
   friends: RankingUser[];
   onClose: () => void;
-  searchInput: string;
-  setSearchInput: (v: string) => void;
-  isSearching: boolean;
-  setIsSearching: (v: boolean) => void;
   rankingData: RankingUser[];
   onAddFriend: (id: string) => void;
   currentUser: any;
 }) {
+  const [searchInput, setSearchInput] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+
   // Search in rankingData for users not already friends
   const searchResults = searchInput.trim()
     ? rankingData.filter(
