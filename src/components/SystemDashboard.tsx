@@ -276,11 +276,13 @@ const CharacterStage = ({
           onClick={onAiChatClick}
         />
         <SideButton icon={Newspaper} onClick={() => setCurrentView("news")} />
-        <SideButton
-          icon={Briefcase}
-          color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
-          onClick={onProjectsClick}
-        />
+        <div className="md:hidden">
+          <SideButton
+            icon={Briefcase}
+            color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
+            onClick={onProjectsClick}
+          />
+        </div>
       </div>
 
       {/* Character/Pet Group */}
@@ -347,7 +349,7 @@ const CharacterStage = ({
 
       {/* Right Action Column (Finance + Friends) */}
       <div
-        className={`absolute right-0 top-0 flex flex-col gap-4 z-30 transition-all ${isMobile ? "pr-2" : "translate-x-12 xl:translate-x-16"}`}
+        className={`absolute right-0 top-0 flex flex-col gap-4 z-30 transition-all md:hidden ${isMobile ? "pr-2" : "translate-x-12 xl:translate-x-16"}`}
       >
         <SideButton
           icon={CircleDollarSign}
@@ -812,8 +814,8 @@ const ArsenalPanel = ({
             className={`flex items-start gap-3 p-3 2xl:p-4 rounded-xl border transition-all ${
               b.unlocked
                 ? b.active
-                  ? "bg-white/[0.04] border-white/20 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.02)]"
-                  : "bg-white/[0.02] border-white/10 cursor-pointer hover:bg-white/[0.04]"
+                  ? "bg-white/4 border-white/20 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.02)]"
+                  : "bg-white/[0.02] border-white/10 cursor-pointer hover:bg-white/4"
                 : "bg-black/40 border-white/5 opacity-40 grayscale cursor-not-allowed"
             }`}
           >
@@ -8106,7 +8108,7 @@ export default function SystemDashboard({
         id: 1,
         name: "Madrugador",
         desc: "Acorda antes das 5AM por 12 dias",
-        icon: "ðŸŒ…",
+        icon: "🌅",
         active: false,
         unlocked: false,
       },
@@ -8114,7 +8116,7 @@ export default function SystemDashboard({
         id: 2,
         name: "Monge Mental",
         desc: "7 dias sem redes sociais",
-        icon: "ðŸ§˜",
+        icon: "🧘",
         active: false,
         unlocked: false,
       },
@@ -8122,7 +8124,7 @@ export default function SystemDashboard({
         id: 3,
         name: "Ferro Puro",
         desc: "Treinou 8 dias seguidos",
-        icon: "âš”ï¸",
+        icon: "⚔️",
         active: false,
         unlocked: false,
       },
@@ -8130,12 +8132,34 @@ export default function SystemDashboard({
         id: 4,
         name: "Dragão Dormindo",
         desc: "Desbloqueie após 30 dias de treino",
-        icon: "ðŸ‰",
+        icon: "🐉",
         active: false,
         unlocked: false,
       },
     ],
   );
+
+  useEffect(() => {
+    if (arsenalBuffs && arsenalBuffs.length > 0) {
+      let changed = false;
+      const fixedBuffs = [...arsenalBuffs];
+      for (const buff of fixedBuffs) {
+        if (
+          typeof buff.icon === "string" &&
+          (buff.icon.includes("ðŸ") || buff.icon.includes("âš"))
+        ) {
+          changed = true;
+          if (buff.id === 1) buff.icon = "🌅";
+          if (buff.id === 2) buff.icon = "🧘";
+          if (buff.id === 3) buff.icon = "⚔️";
+          if (buff.id === 4) buff.icon = "🐉";
+        }
+      }
+      if (changed) {
+        setArsenalBuffs(fixedBuffs);
+      }
+    }
+  }, [arsenalBuffs, setArsenalBuffs]);
 
   const handleDeleteTraining = (index: number) => {
     setWeeklyTrainings((prev) => prev.filter((_, i) => i !== index));
@@ -8394,15 +8418,14 @@ export default function SystemDashboard({
                 <div className="w-16 h-16 sm:w-24 sm:h-24 bg-neon-green/20 backdrop-blur-2xl border border-neon-green/30 rounded-[1.5rem] sm:rounded-[2.5rem] flex items-center justify-center mb-6 sm:mb-8 mx-auto rotate-45 shadow-[0_0_60px_rgba(56,242,127,0.3)]">
                   <Zap className="w-8 h-8 sm:w-12 sm:h-12 text-neon-green fill-current -rotate-45" />
                 </div>
-                <h2 className="text-3xl sm:text-5xl lg:text-7xl font-black font-display uppercase tracking-tight mb-4 sm:mb-6 leading-none">
-                  BEM-VINDO AO
-                  <br />
-                  <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
+                <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black font-display uppercase tracking-tight mb-4 sm:mb-6 leading-[1.3] sm:leading-[1.2] max-w-2xl mx-auto">
+                  <span className="text-white/90">BEM-VINDO AO </span>
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow whitespace-nowrap">
                     COCKPIT KRONOS
                   </span>
                 </h2>
                 <p className="text-white text-xs sm:text-lg font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] opacity-60">
-                  O MUNDO í‰ SUA ARENA. DOMINE.
+                  O MUNDO É SUA ARENA. DOMINE.
                 </p>
               </motion.div>
               <motion.button
@@ -8512,32 +8535,11 @@ export default function SystemDashboard({
                   <Bot className="w-5 h-5 group-hover:text-white transition-colors" />
                 </button>
                 <button
-                  onClick={() => setCurrentView("projects")}
-                  className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center text-gray-400"
-                  title="Projetos"
-                >
-                  <Briefcase className="w-5 h-5 group-hover:text-white transition-colors" />
-                </button>
-                <button
-                  onClick={() => setCurrentView("finance")}
-                  className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center text-emerald-400"
-                  title="Financeiro"
-                >
-                  <CircleDollarSign className="w-5 h-5 group-hover:text-white transition-colors" />
-                </button>
-                <button
                   onClick={() => setCurrentView("news")}
                   className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center"
-                  title="Noticias"
+                  title="Notícias"
                 >
                   <Newspaper className="w-5 h-5 text-white/80 group-hover:text-white transition-colors" />
-                </button>
-                <button
-                  onClick={() => setCurrentView("friends")}
-                  className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95 group relative flex items-center justify-center"
-                  title="Amigos"
-                >
-                  <Friends className="w-5 h-5 text-white/80 group-hover:text-white transition-colors" />
                 </button>
 
                 <button
@@ -11095,7 +11097,7 @@ export default function SystemDashboard({
 // â”€â”€â”€ Global Game Over Overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GameOverOverlay({ onReset }: { onReset: () => void }) {
   const MOTIVATIONAL_PHRASES = [
-    "A derrota não é o fim. í‰ o começo de uma nova batalha.",
+    "A derrota não é o fim. É o começo de uma nova batalha.",
     "Os guerreiros mais fortes foram construídos pelas suas piores derrotas.",
     "Cada queda é uma lição. Levante-se mais forte do que antes.",
     "O caminho para a vitória passa pelo fracasso. Continue.",
@@ -11410,7 +11412,7 @@ function EditTrainingModal({
                   className="w-full mt-4 bg-linear-to-r from-neon-yellow to-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl shadow-[0_10px_30px_rgba(253,224,71,0.2)] hover:shadow-[0_10px_40px_rgba(56,242,127,0.4)] transition-all flex justify-center items-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  Salvar Alteraçõeses no Protocolo
+                  Salvar Alterações no Protocolo
                 </button>
               </div>
             </div>
@@ -11558,7 +11560,7 @@ function SettingsModal({
             onClick={onClose}
             className="w-full py-4 bg-neon-green text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-xl shadow-[0_5px_20px_rgba(56,242,127,0.2)] hover:shadow-[0_8px_30px_rgba(56,242,127,0.4)] hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-3"
           >
-            <Shield className="w-4 h-4" /> SALVAR ALTERAí‡í•ES
+            <Shield className="w-4 h-4" /> SALVAR ALTERAÇÕES
           </button>
         </div>
       </motion.div>
