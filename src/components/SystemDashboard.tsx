@@ -90,7 +90,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { motion, AnimatePresence } from "motion/react";
 
-// â”€â”€â”€ Constants & Assets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Constants & Assets ──────────────────────────────────────────────────────
 const SHOP_CHARACTERS = [
   {
     id: 1,
@@ -177,7 +177,7 @@ const SHOP_PETS = [
   },
 ];
 
-// â”€â”€â”€ Custom Hooks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Custom Hooks ────────────────────────────────────────────────────────────
 export function useLocalStorage<T>(
   key: string,
   initialValue: T,
@@ -211,7 +211,7 @@ export function useLocalStorage<T>(
   return [storedValue, setValue];
 }
 
-// â”€â”€â”€ Optimized Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Optimized Sub-components ────────────────────────────────────────────────
 const CharacterStage = ({
   selectedCharImg,
   selectedPetImg,
@@ -899,7 +899,7 @@ type Training = {
   done: boolean;
 };
 
-// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Types ──────────────────────────────────────────────────────────────────â”€â”€
 interface PlayerStats {
   name: string;
   level: number;
@@ -1103,7 +1103,7 @@ interface Project {
   goal: string;
 }
 
-// â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Sub-components ─────────────────────────────────────────────────────────â”€â”€
 function XPBar({
   current,
   max,
@@ -1303,7 +1303,7 @@ function SkillSlot({
   );
 }
 
-// â”€â”€â”€ Mobile Bottom Sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Mobile Bottom Sheet ──────────────────────────────────────────────────────
 function BottomSheet({
   open,
   onClose,
@@ -1360,7 +1360,7 @@ function BottomSheet({
   );
 }
 
-// â”€â”€â”€ Full View Components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Full View Components ────────────────────────────────────────────────â”€â”€
 function FullViewWrapper({
   title,
   icon: Icon,
@@ -1435,7 +1435,7 @@ function FullViewWrapper({
     </motion.div>
   );
 }
-// â”€â”€â”€ Create Quest Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Create Quest Modal ───────────────────────────────────────────────────
 function CreateQuestModal({
   isOpen,
   onClose,
@@ -1448,7 +1448,7 @@ function CreateQuestModal({
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
-  // 1ï¸âƒ£ Repetição
+  // 1âƒ£ Repetição
   const [repetition, setRepetition] = useState("Diária");
   const [days, setDays] = useState<string[]>([
     "SEG",
@@ -1462,14 +1462,14 @@ function CreateQuestModal({
   const [weeklyDays, setWeeklyDays] = useState<number>(3);
   const [monthlyInterval, setMonthlyInterval] = useState<number>(1);
 
-  // 2ï¸âƒ£ Meta
+  // 2âƒ£ Meta
   const [goalAmount, setGoalAmount] = useState<number | "">("");
   const [goalUnit, setGoalUnit] = useState("Minutos");
   const [goalHours, setGoalHours] = useState<number | "">("");
   const [goalMinutes, setGoalMinutes] = useState<number | "">("");
   const [goalSeconds, setGoalSeconds] = useState<number | "">("");
 
-  // 3ï¸âƒ£ Intervalo de Tempo
+  // 3âƒ£ Intervalo de Tempo
   const [timeInterval, setTimeInterval] = useState("A qualquer momento");
 
   const weekDays = ["SEG", "TER", "QUA", "QUI", "SEX", "SíB", "DOM"];
@@ -1818,7 +1818,7 @@ function CreateQuestModal({
   );
 }
 
-// â”€â”€â”€ Create Habit Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Create Habit Modal ───────────────────────────────────────────────────
 function CreateHabitModal({
   isOpen,
   onClose,
@@ -2017,7 +2017,7 @@ function CreateHabitModal({
   );
 }
 
-// â”€â”€â”€ Ready Habits Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Ready Habits Modal ───────────────────────────────────────────────────
 function ReadyHabitsModal({
   isOpen,
   onClose,
@@ -2529,7 +2529,7 @@ function DetailCard({
   );
 }
 
-// â”€â”€â”€ Board View (with Mobile Column Tabs) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Board View (with Mobile Column Tabs) ────────────────────────────────────â”€
 function BoardView({
   proj,
   projects,
@@ -2705,7 +2705,7 @@ function BoardView({
   );
 }
 
-// â”€â”€â”€ Kanban Column â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Kanban Column ────────────────────────────────────────────────────────────â”€
 function KanbanColumn({
   col,
   proj,
@@ -2895,7 +2895,7 @@ function KanbanColumn({
   );
 }
 
-// â”€â”€â”€ Projects Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Projects Dashboard ──────────────────────────────────────────────────────â”€
 const PROJECT_COLORS = [
   "#3b82f6",
   "#8b5cf6",
@@ -3272,7 +3272,7 @@ function ProjectsDashboard({
               {
                 label: "Total",
                 value: projects.length,
-                icon: "ðŸ“",
+                icon: "📂",
                 c: "blue",
               },
               {
@@ -3440,7 +3440,7 @@ function ProjectsDashboard({
                     {proj.goal && (
                       <div className="p-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-[10px] text-white/70 font-medium">
                         <span className="text-yellow-400 font-black">
-                          ðŸ† META:{" "}
+                          🏆 META:{" "}
                         </span>
                         {proj.goal}
                       </div>
@@ -3531,7 +3531,7 @@ function ProjectsDashboard({
   );
 }
 
-// â”€â”€â”€ AI Chat View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── AI Chat View ────────────────────────────────────────────────────────────â”€â”€
 interface ChatMessage {
   id: string;
   role: "user" | "assistant";
@@ -3641,7 +3641,7 @@ function AIChatView({
     setConversations((prev) => prev.map((c) => (c.id === convId ? fn(c) : c)));
   };
 
-  // â”€â”€ AI Engine â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â”€â”€ AI Engine ────────────────────────────────────────────────────────────â”€â”€
   const generateResponse = async (userMsg: string, convId: string) => {
     try {
       const response = await fetch("/api/chat", {
@@ -3687,7 +3687,7 @@ function AIChatView({
         id: Date.now().toString(),
         role: "assistant",
         content:
-          "âš ï¸ **Ops!** Tive um problema de conexão com meus núcleos de processamento. Tente novamente em alguns instantes.",
+          "⚠️ **Ops!** Tive um problema de conexão com meus núcleos de processamento. Tente novamente em alguns instantes.",
         timestamp: new Date(),
       };
       updateConv(convId, (c) => ({
@@ -3870,7 +3870,7 @@ function AIChatView({
       prompt: "Quais tarefas ainda faltam nos meus projetos?",
     },
     {
-      icon: "ðŸ—“ï¸",
+      icon: "🗓️",
       label: "Plano do dia",
       prompt: "Organize meu dia de hoje",
     },
@@ -4227,7 +4227,7 @@ function NewProjectModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Meta do Projeto ðŸ†
+              Meta do Projeto 🏆
             </label>
             <input
               value={goal}
@@ -4280,7 +4280,7 @@ function NewProjectModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              ícone
+              Ícone
             </label>
             <div className="flex gap-2 mt-1 flex-wrap">
               {PROJECT_ICONS.map((ic) => (
@@ -4563,7 +4563,7 @@ function TaskDetailModal({
                   >
                     {item.done && (
                       <span className="text-black text-[10px] font-black">
-                        âœ“
+                        ✔
                       </span>
                     )}
                   </button>
@@ -4707,7 +4707,7 @@ function TaskDetailModal({
   );
 }
 
-// â”€â”€â”€ Financial Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Financial Dashboard ───────────────────────────────────────────────────â”€â”€
 const EXPENSE_CATEGORIES = [
   { name: "Moradia", color: "#3b82f6" },
   { name: "Alimentação", color: "#f97316" },
@@ -4910,7 +4910,7 @@ function FinancialDashboard({
     const ins: string[] = [];
     if (budgetOver)
       ins.push(
-        `âš ï¸ Orçamento ultrapassado em ${parseBRL(totalSaidas - budget)}!`,
+        `⚠️ Orçamento ultrapassado em ${parseBRL(totalSaidas - budget)}!`,
       );
     if (categoryTotals.length > 0)
       ins.push(
@@ -4976,13 +4976,13 @@ function FinancialDashboard({
                 cls: "orange",
               },
               {
-                emoji: "🗂️",
+                emoji: "💰",
                 label: "Moedas",
                 value: (playerStats.gold || 0).toLocaleString(),
                 cls: "yellow",
               },
               {
-                emoji: "â¤ï¸",
+                emoji: "❤️",
                 label: "Energia",
                 value: Math.floor(playerStats.hp || 0),
                 cls: "red",
@@ -5069,7 +5069,7 @@ function FinancialDashboard({
             >
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">{budgetOver ? "âš ï¸" : "🎯"}</span>
+                  <span className="text-lg">{budgetOver ? "⚠️" : "🎯"}</span>
                   <p className="text-white font-black text-sm">
                     Orçamento Mensal
                   </p>
@@ -5095,7 +5095,7 @@ function FinancialDashboard({
               </div>
               {budgetOver && (
                 <p className="text-red-400 text-[10px] font-black mt-2 uppercase">
-                  âš ï¸ Orçamento ultrapassado!
+                  ⚠️ Orçamento ultrapassado!
                 </p>
               )}
             </div>
@@ -5103,7 +5103,7 @@ function FinancialDashboard({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               <div className="p-5 bg-white/[0.02] border border-white/10 rounded-3xl">
                 <p className="text-white font-black text-sm mb-4 uppercase tracking-widest">
-                  ðŸ• Gastos por Categoria
+                  🥧 Gastos por Categoria
                 </p>
                 {categoryTotals.length === 0 ? (
                   <div className="flex items-center justify-center h-40 text-white/20 text-xs">
@@ -5303,7 +5303,7 @@ function FinancialDashboard({
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  ðŸ† Metas Financeiras
+                  🏆 Metas Financeiras
                 </p>
                 <button
                   onClick={() => setShowGoalModal(true)}
@@ -5630,13 +5630,13 @@ function FinancialTransactionModal({
               onClick={() => setType("entrada")}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase ${type === "entrada" ? "bg-emerald-500/20 border border-emerald-500/30 text-emerald-400" : "bg-white/5 border border-white/10 text-white/40"}`}
             >
-              ðŸ“¥ Entrada
+              📥 Entrada
             </button>
             <button
               onClick={() => setType("saida")}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase ${type === "saida" ? "bg-red-500/20 border border-red-500/30 text-red-400" : "bg-white/5 border border-white/10 text-white/40"}`}
             >
-              ðŸ“¤ Saída
+              📤 Saída
             </button>
           </div>
           <div>
@@ -5899,7 +5899,7 @@ function FinancialGoalModal({
   );
 }
 
-// â”€â”€â”€ Create Training Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Create Training Modal ────────────────────────────────────────────────â”€â”€
 
 function CreateTrainingModal({
   isOpen,
@@ -6137,7 +6137,7 @@ function CreateTrainingModal({
   );
 }
 
-// â”€â”€â”€ KRONOS DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── KRONOS DASHBOARD ──────────────────────────────────────────────────────â”€â”€
 const MonthProgressChart = ({
   habits,
 }: {
@@ -6561,7 +6561,7 @@ const KronosDashboard = ({
   );
 };
 
-// â”€â”€â”€ Mode Selection Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Mode Selection Modal ───────────────────────────────────────────────────â”€â”€
 function ModeSelectionModal({
   isOpen,
   onClose,
@@ -6707,7 +6707,7 @@ function ModeSelectionModal({
   );
 }
 
-// â”€â”€â”€ Validation Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Validation Modal ──────────────────────────────────────────────────────â”€â”€
 function ValidationModal({
   isOpen,
   onClose,
@@ -6759,7 +6759,7 @@ function ValidationModal({
   );
 }
 
-// â”€â”€â”€ Battle View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Battle View ────────────────────────────────────────────────────────────â”€â”€
 function BattleView({
   tasks,
   totalTime,
@@ -7364,7 +7364,7 @@ function BattleView({
   );
 }
 
-// â”€â”€â”€ MAIN COMPONENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── MAIN COMPONENT ─────────────────────────────────────────────────────────â”€â”€
 export default function SystemDashboard({
   onLogout,
   volume,
@@ -7702,7 +7702,7 @@ export default function SystemDashboard({
   const [newPomodoroTaskSessions, setNewPomodoroTaskSessions] = useState(1);
   const [newPomodoroTaskDays, setNewPomodoroTaskDays] = useState(30);
 
-  // â”€â”€â”€ FIREBASE / REAL-TIME DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── FIREBASE / REAL-TIME DATA ──────────────────────────────────────────â”€
   const [currentUser, setCurrentUser] = useState<any>(null); // Keeping any for Firebase User as it might need specific handling
   const [rankingData, setRankingData] = useState<RankingUser[]>([]);
   const [friendsData, setFriendsData] = useState<RankingUser[]>([]);
@@ -7908,7 +7908,7 @@ export default function SystemDashboard({
             if (detoxHabit && detoxHabit.completed.length >= 7)
               return { ...b, unlocked: true };
           }
-          // âš”ï¸ Ferro Puro: Treinou 8 dias seguidos
+          // âš” Ferro Puro: Treinou 8 dias seguidos
           if (i === 2) {
             const trainingStreak = weeklyTrainings.filter((t) => t.done).length;
             if (trainingStreak >= 8) return { ...b, unlocked: true };
@@ -8028,7 +8028,7 @@ export default function SystemDashboard({
   const togglePanel = (id: PanelId) =>
     setMobilePanel((prev) => (prev === id ? null : id));
 
-  // â”€â”€ DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â”€â”€ DATA ───────────────────────────────────────────────────────────────â”€
 
   const [arsenalSkills, setArsenalSkills] = useLocalStorage<Skill[]>(
     "kronos_skills",
@@ -8846,7 +8846,7 @@ export default function SystemDashboard({
                           TREINO ATIVO
                         </p>
                         <h3 className="text-3xl font-black uppercase italic mb-6">
-                          ðŸ‹ï¸ TREINO ALPHA
+                          ðŸ‹ TREINO ALPHA
                         </h3>
 
                         <div className="space-y-4 mb-8">
@@ -9069,7 +9069,7 @@ export default function SystemDashboard({
                         {
                           label: "Treinos Feitos",
                           value: `${weeklyTrainings.filter((t) => t.done).length}`,
-                          icon: "ðŸ‹ï¸",
+                          icon: "ðŸ‹",
                         },
                         {
                           label: "Streak Semanal",
@@ -9084,7 +9084,7 @@ export default function SystemDashboard({
                         {
                           label: "Tempo Total",
                           value: "275 min",
-                          icon: "â±ï¸",
+                          icon: "â±",
                         },
                       ].map((stat, i) => (
                         <div
@@ -9127,7 +9127,7 @@ export default function SystemDashboard({
                           SUA DIVISíƒO
                         </p>
                         <h3 className="text-3xl sm:text-4xl font-black uppercase italic mb-2 tracking-tighter text-white">
-                          â›“ï¸ FERRO IV
+                          â›“ FERRO IV
                         </h3>
                         <p className="text-sm font-black text-neon-green uppercase tracking-widest mb-6 sm:mb-8">
                           TOP 5% GLOBAL
@@ -9241,7 +9241,7 @@ export default function SystemDashboard({
                           name: "CyberWolf",
                           instagram: "cyberwolf_fit",
                           xp: "35.2k",
-                          badge: "ðŸ—¡ï¸",
+                          badge: "ðŸ—¡",
                           division: "PRATA I",
                           status: "OFFLINE",
                         },
@@ -11018,7 +11018,7 @@ export default function SystemDashboard({
                   return {
                     ...t,
                     exercises: [...t.exercises, ...training.exercises],
-                    // Tenta somar duraçõeses se forem números simples
+                    // Tenta somar durações se forem números simples
                     duration:
                       parseInt(t.duration) +
                       parseInt(training.duration) +
@@ -11113,7 +11113,7 @@ export default function SystemDashboard({
   );
 }
 
-// â”€â”€â”€ Global Game Over Overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Global Game Over Overlay ─────────────────────────────────────────────â”€
 function GameOverOverlay({ onReset }: { onReset: () => void }) {
   const MOTIVATIONAL_PHRASES = [
     "A derrota não é o fim. É o começo de uma nova batalha.",
@@ -11198,7 +11198,7 @@ function GameOverOverlay({ onReset }: { onReset: () => void }) {
   );
 }
 
-// â”€â”€â”€ Edit Training Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Edit Training Modal ────────────────────────────────────────────────â”€â”€
 function EditTrainingModal({
   isOpen,
   training,
@@ -11587,7 +11587,7 @@ function SettingsModal({
   );
 }
 
-// â”€â”€â”€ News View Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── News View Component ───────────────────────────────────────────────────
 function NewsView({
   articles,
   onClose,
@@ -11698,7 +11698,7 @@ function NewsView({
   );
 }
 
-// â”€â”€â”€ Friends View Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Friends View Component ────────────────────────────────────────────────
 function FriendsView({
   friends,
   onClose,
@@ -11915,7 +11915,7 @@ function FriendsView({
   );
 }
 
-// â”€â”€â”€ UNIFIED CHARACTER & PET SHOP MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── UNIFIED CHARACTER & PET SHOP MODAL ────────────────────────────────────â”€â”€
 function UnifiedShopModal({
   activeTab,
   onClose,
