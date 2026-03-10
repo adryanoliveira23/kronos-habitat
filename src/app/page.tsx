@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import LoadingScreen from "@/components/LoadingScreen";
 import LoginPage from "@/components/LoginPage";
 import RegisterPage from "@/components/RegisterPage";
@@ -28,6 +30,7 @@ type View = "landing" | "login" | "register" | "plan-select" | "checkout";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [isSystemLoading, setIsSystemLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [view, setView] = useState<View>("landing");
@@ -42,6 +45,19 @@ export default function Home() {
     }
     setView(v);
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setIsAuthChecking(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const goToRegister = () => goTo("register");
   const goToLogin = () => goTo("login");
@@ -76,7 +92,7 @@ export default function Home() {
     <div className="min-h-screen bg-bg-dark selection:bg-neon-yellow selection:text-black">
       <BackgroundMusic volume={globalVolume} />
       <AnimatePresence mode="wait">
-        {isLoading ? (
+        {isLoading || isAuthChecking ? (
           <LoadingScreen onComplete={() => setIsLoading(false)} />
         ) : isSystemLoading ? (
           <LoadingScreen
