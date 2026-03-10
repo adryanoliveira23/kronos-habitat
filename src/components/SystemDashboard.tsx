@@ -141,7 +141,7 @@ const SHOP_PETS = [
     class: "Básico",
     rarity: "COMUM",
     price: 0,
-    img: petImg.src,
+    img: "/pet-1.png",
     color: "from-neon-green to-emerald-600",
     glow: "rgba(56,242,127,0.5)",
   },
@@ -151,7 +151,7 @@ const SHOP_PETS = [
     class: "Rápido",
     rarity: "RARO",
     price: 2000,
-    img: "https://i.ibb.co/HT2cTXfW/Chat-GPT-Image-1-de-mar-de-2026-13-24-02.png",
+    img: "/pet-2.png",
     color: "from-blue-400 to-cyan-600",
     glow: "rgba(0,191,255,0.5)",
   },
@@ -161,7 +161,7 @@ const SHOP_PETS = [
     class: "Fura-Fila",
     rarity: "EPIC",
     price: 6000,
-    img: "https://i.ibb.co/HT2cTXfW/Chat-GPT-Image-1-de-mar-de-2026-13-24-02.png",
+    img: "/pet-3.png",
     color: "from-purple-500 to-indigo-600",
     glow: "rgba(138,43,226,0.5)",
   },
@@ -171,7 +171,7 @@ const SHOP_PETS = [
     class: "Místico",
     rarity: "ULTRA",
     price: 15000,
-    img: "https://i.ibb.co/HT2cTXfW/Chat-GPT-Image-1-de-mar-de-2026-13-24-02.png",
+    img: "/pet-4.png",
     color: "from-red-500 to-orange-600",
     glow: "rgba(255,69,0,0.5)",
   },
@@ -4856,10 +4856,10 @@ function FinancialDashboard({
       .replace(".", "");
     return {
       name: label,
-      Entradas: transactions
+      entradas: transactions
         .filter((t) => t.date.startsWith(key) && t.type === "entrada")
         .reduce((s, t) => s + t.value, 0),
-      Saídas: transactions
+      saidas: transactions
         .filter((t) => t.date.startsWith(key) && t.type === "saida")
         .reduce((s, t) => s + t.value, 0),
     };
@@ -4890,7 +4890,7 @@ function FinancialDashboard({
           ...prev,
           {
             type: "ai",
-            text: `✅ ${parsed.type === "entrada" ? "Receita" : "Despesa"} registrada!\nðŸ“‚ Categoria: ${parsed.category}\n💰 Valor: ${parseBRL(parsed.value)}\n🗂️ +15 moedas ganhas!`,
+            text: `✅ ${parsed.type === "entrada" ? "Receita" : "Despesa"} registrada!\n📂 Categoria: ${parsed.category}\n💰 Valor: ${parseBRL(parsed.value)}\n🗂️ +15 moedas ganhas!`,
             accent: parsed.type === "entrada" ? "emerald" : "orange",
           },
         ]);
@@ -4899,7 +4899,7 @@ function FinancialDashboard({
           ...prev,
           {
             type: "ai",
-            text: 'Não consegui entender ðŸ¤”\nTente: "Gastei 50 no Uber" ou "Recebi 2000 de salário"',
+            text: 'Não consegui entender 🤔\nTente: "Gastei 50 no Uber" ou "Recebi 2000 de salário"',
             accent: "red",
           },
         ]);
@@ -4917,11 +4917,11 @@ function FinancialDashboard({
         `📊 Maior gasto: ${[...categoryTotals].sort((a, b) => b.total - a.total)[0].name}`,
       );
     if (totalSaidas > totalEntradas && totalEntradas > 0)
-      ins.push("ðŸ“‰ Você gastou mais do que recebeu esse mês!");
+      ins.push("📉 Você gastou mais do que recebeu esse mês!");
     if (saldo > 0 && totalEntradas > 0)
       ins.push(`💡 Saldo positivo de ${parseBRL(saldo)} esse mês!`);
     if (ins.length === 0)
-      ins.push("Adicione transaçõeses para ver insights personalizados!");
+      ins.push("Adicione transações para ver insights personalizados!");
     return ins;
   };
 
@@ -5027,13 +5027,13 @@ function FinancialDashboard({
                 {
                   label: "Entradas",
                   value: totalEntradas,
-                  icon: "ðŸ“ˆ",
+                  icon: "📈",
                   c: "emerald",
                 },
                 {
                   label: "Saídas",
                   value: totalSaidas,
-                  icon: "ðŸ“‰",
+                  icon: "📉",
                   c: "red",
                 },
                 {
@@ -5172,7 +5172,7 @@ function FinancialDashboard({
               </div>
               <div className="p-5 bg-white/[0.02] border border-white/10 rounded-3xl">
                 <p className="text-white font-black text-sm mb-4 uppercase tracking-widest">
-                  ðŸ“ˆ Evolução (6 Meses)
+                  📈 Evolução (6 Meses)
                 </p>
                 <div className="h-52">
                   <ResponsiveContainer width="100%" height="100%">
@@ -5203,15 +5203,17 @@ function FinancialDashboard({
                         }}
                       />
                       <Line
+                        name="Entradas"
                         type="monotone"
-                        dataKey="Entradas"
+                        dataKey="entradas"
                         stroke="#34d399"
                         strokeWidth={2.5}
                         dot={{ fill: "#34d399", strokeWidth: 0, r: 4 }}
                       />
                       <Line
+                        name="Saídas"
                         type="monotone"
-                        dataKey="Saídas"
+                        dataKey="saidas"
                         stroke="#f87171"
                         strokeWidth={2.5}
                         dot={{ fill: "#f87171", strokeWidth: 0, r: 4 }}
@@ -5235,7 +5237,7 @@ function FinancialDashboard({
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  ðŸ’³ Faturas de Cartão
+                  💳 Faturas de Cartão
                 </p>
                 <button
                   onClick={() => setShowCardModal(true)}
@@ -5383,7 +5385,7 @@ function FinancialDashboard({
             <div className="mb-2">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  📋 Transaçõeses Recentes
+                  📋 Transações Recentes
                 </p>
                 <button
                   onClick={() => setShowTransactionModal(true)}
@@ -5406,7 +5408,7 @@ function FinancialDashboard({
                       <div
                         className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm ${tx.type === "entrada" ? "bg-emerald-500/10" : "bg-red-500/10"}`}
                       >
-                        {tx.type === "entrada" ? "ðŸ“¥" : "ðŸ“¤"}
+                        {tx.type === "entrada" ? "📥" : "📤"}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-xs font-bold truncate">
@@ -5444,7 +5446,7 @@ function FinancialDashboard({
           <div className="space-y-5">
             <div className="p-5 bg-blue-500/5 border border-blue-500/20 rounded-3xl">
               <p className="text-blue-400 font-black text-sm uppercase tracking-widest mb-3">
-                ðŸ”¬ Análise Inteligente
+                🔍 Análise Inteligente
               </p>
               <div className="space-y-2">
                 {getInsights().map((ins, i) => (
@@ -8233,7 +8235,7 @@ export default function SystemDashboard({
     );
   };
 
-  // â”€â”€â”€ Sub-components extracted for optimization â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Sub-components extracted for optimization ───────────────────────────────
   const ClashHeader = ({
     className = "",
     playerStats,
@@ -11160,7 +11162,7 @@ function GameOverOverlay({ onReset }: { onReset: () => void }) {
         transition={{ type: "spring", bounce: 0.5 }}
         className="mb-8 w-28 h-28 rounded-full border-4 border-red-600 bg-red-950/40 flex items-center justify-center shadow-[0_0_100px_rgba(220,38,38,0.7)]"
       >
-        <span className="text-6xl select-none">ðŸ’€</span>
+        <span className="text-6xl select-none">💀</span>
       </motion.div>
 
       <motion.h1
@@ -11190,7 +11192,7 @@ function GameOverOverlay({ onReset }: { onReset: () => void }) {
         onClick={onReset}
         className="px-12 py-6 bg-linear-to-r from-red-700 to-red-600 text-white font-black text-sm uppercase tracking-[0.3em] rounded-3xl shadow-[0_20px_50px_rgba(220,38,38,0.5)] hover:scale-105 active:scale-95 transition-all border border-red-500/50"
       >
-        REVANCHE (RECOMEí‡AR DO ZERO)
+        REVANCHE (RECOMEÇAR DO ZERO)
       </motion.button>
     </motion.div>
   );

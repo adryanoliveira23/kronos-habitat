@@ -10,14 +10,6 @@ const firebaseAdminConfig = {
       return undefined;
     }
 
-    // Diagnostic logging for build environments (like Vercel)
-    console.log("LOG: FIREBASE_ADMIN_PRIVATE_KEY length:", key.length);
-    console.log("LOG: Starts with:", JSON.stringify(key.substring(0, 20)));
-    console.log(
-      "LOG: Ends with:",
-      JSON.stringify(key.substring(key.length - 20)),
-    );
-
     // 1. Trim surrounding whitespace
     key = key.trim();
 

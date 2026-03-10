@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Funcao auxiliar para verificar se o usuario esta autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Funcao auxiliar para verificar se o documento pertence ao usuario logado
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // --- REGRAS DE COLECAO ---
+
+    // Colecao Users: Apenas o dono pode ler/escrever seu proprio perfil
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      
+      // Subcolecoes dentro do usuario (ajuste conforme sua estrutura real)
+      match /{allSubcollections=**} {
+        allow read, write: if isAuthenticated() && isOwner(userId);
+      }
+    }
+
+    // Rankings Globais: Todos podem ler, ninguem (no front) pode escrever
+    match /rankings/{systemId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Gerenciado apenas via Admin SDK/Cloud Functions
+    }
+
+    // Protecao padrao: Bloqueia tudo que nao foi explicitamente permitido
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

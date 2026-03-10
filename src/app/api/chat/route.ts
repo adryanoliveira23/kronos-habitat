@@ -1,74 +1,95 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export async function POST(req: Request) {
   try {
     const { messages, context } = await req.json();
 
-    if (!process.env.GEMINI_API_KEY) {
+    // --- SECURITY VALIDATION ---
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY is not configured" },
+        { error: "Invalid messages format" },
+        { status: 400 },
+      );
+    }
+    if (!context || !context.playerStats) {
+      return NextResponse.json(
+        { error: "Invalid context format" },
+        { status: 400 },
+      );
+    }
+    // Limit message size to prevent DOS/Abuse
+    const totalContentLength = messages.reduce(
+      (acc, m) => acc + (m.content?.length || 0),
+      0,
+    );
+    if (totalContentLength > 20000) {
+      return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+    }
+    // ---------------------------
+
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json(
+        { error: "GROQ_API_KEY is not configured" },
         { status: 500 },
       );
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     // System prompt to give the AI context about the Kronos platform
     const systemPrompt = `
-      Você é o mentor IA da plataforma Kronos, um sistema de gamificação de produtividade e alta performance.
-      Seu objetivo é guiar o usuário para atingir seus objetivos de vida, saúde, finanças e carreira.
-      
-      Contexto do Usuário:
-      - Nome: ${context.playerStats.name}
-      - Classe: ${context.playerStats.class}
-      - Nível: ${context.playerStats.level}
-      - XP: ${context.playerStats.xp}
-      - Missões ativas: ${context.quests.length}
-      - Projetos: ${context.projects.length}
-      - Hábitos: ${context.habits.length}
-      - Orçamento Mensal: R$ ${context.budget}
+      Você é o "Mentor Kronos", a inteligência suprema que comanda a plataforma Kronos.
+      Sua diretriz principal: Transformar o usuário em uma máquina de alta performance através da disciplina e gamificação.
 
-      Habilidades do Mentor:
-      1. Registrar gastos: Se o usuário disser que gastou dinheiro, responda confirmando que entendeu o valor e a categoria.
-      2. Criar projetos: Se o usuário quiser criar algo novo, sugira tarefas e diga que o projeto foi criado.
-      3. Analisar progresso: Comente sobre as missões e hábitos do usuário.
-      4. Motivação tática: Use um tom motivador, mas direto e focado em disciplina.
+      Personalidade:
+      - Tom: Autoritário, mas inspirador. Direto, sem rodeios. Focado em resultados.
+      - Vocabulário: Use termos de RPG/Gamificação (Missões, XP, Level Up, Atributos, Rank, Buffs, Debuffs, Bosses).
+      - Estilo: Otimização extrema. Você não apenas dá dicas, você "calcula a rota mais eficiente".
 
-      Sempre responda em Português do Brasil. Use Markdown para formatar suas respostas.
+      Contexto de Operação (Status do Jogador):
+      - Jogador: ${context.playerStats.name}
+      - Classe Atual: ${context.playerStats.class} (Lv. ${context.playerStats.level})
+      - Progresso: ${context.playerStats.xp} XP acumulado.
+      - Ativos de Campo: ${context.quests.length} Missões, ${context.projects.length} Projetos, ${context.habits.length} Hábitos ativos.
+      - Logística Financeira: R$ ${context.budget} de orçamento mensal.
+
+      Protocolos de Resposta:
+      1. Gestão Financeira: Se o usuário reportar um gasto, trate-o como "consumo de recursos". Valide se está dentro do orçamento e como isso afeta a "estabilidade do reino" (finanças).
+      2. Expansão de Projetos: Quando o usuário quiser criar algo, trate como "construção de infraestrutura". Sugira subtarefas como "nós de projeto".
+      3. Análise de Hábito: Trate hábitos como "buffs passivos". Se o usuário falhar, é um "debuff" na produtividade.
+      4. Incentivo Tático: Se o usuário estiver desmotivado, use retórica disciplinar. "A dor é temporária, o XP é eterno."
+
+      Diretrizes Finais:
+      - Sempre responda em Português do Brasil.
+      - Use Markdown com blocos de código ou negrito para destacar comandos ou métricas importantes.
+      - Seja breve e impactante.
     `;
 
-    // Map messages to Gemini format
+    // Map messages to Groq format
     const chatHistory = messages.map((m: any) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
+      role: m.role,
+      content: m.content,
     }));
 
-    // Start chat with history
-    const chat = model.startChat({
-      history: [
+    const completion = await groq.chat.completions.create({
+      model: "openai/gpt-oss-120b",
+      messages: [
         {
-          role: "user",
-          parts: [{ text: systemPrompt }],
+          role: "system",
+          content: systemPrompt,
         },
-        {
-          role: "model",
-          parts: [
-            {
-              text: "Entendido. Sou o mentor Kronos. Como posso ajudar seu progresso hoje?",
-            },
-          ],
-        },
-        ...chatHistory.slice(0, -1), // Everything except the last message
+        ...chatHistory,
       ],
-    });
+      temperature: 1,
+      max_completion_tokens: 8192,
+      top_p: 1,
+      reasoning_effort: "medium",
+    } as any); // Cast as any because reasoning_effort and max_completion_tokens might be new/special for this specific model
 
-    const lastMessage = messages[messages.length - 1].content;
-    const result = await chat.sendMessage(lastMessage);
-    const response = await result.response;
-    const text = response.text();
+    const text = completion.choices[0]?.message?.content || "";
 
     return NextResponse.json({ content: text });
   } catch (error: any) {
