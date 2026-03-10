@@ -1573,13 +1573,12 @@ function CreateQuestModal({
             </div>
 
             {/* Scrollable Form Body */}
-            <div className="p-6 overflow-y-auto scrollbar-thin flex-1 space-y-6">
-              <form
-                id="quest-form"
-                onSubmit={handleSubmit}
-                className="space-y-6"
-              >
-                {/* DADOS BíSICOS */}
+            <form
+              onSubmit={handleSubmit}
+              className="flex-1 flex flex-col overflow-hidden"
+            >
+              <div className="p-6 overflow-y-auto scrollbar-thin flex-1 space-y-6">
+                {/* DADOS BÁSICOS */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-neon-green" />
@@ -1684,7 +1683,7 @@ function CreateQuestModal({
                   )}
                 </div>
 
-                {/* 2ï¸âƒ£ META */}
+                {/* 2️⃣ META */}
                 <div className="space-y-4 p-4 rounded-xl bg-white/[0.02] border border-white/5">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-blue-400" />
@@ -1778,7 +1777,7 @@ function CreateQuestModal({
                   </div>
                 </div>
 
-                {/* 3ï¸âƒ£ INTERVALO DE TEMPO */}
+                {/* 3️⃣ INTERVALO DE TEMPO */}
                 <div className="space-y-4 p-4 rounded-xl bg-white/[0.02] border border-white/5">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-purple-400" />
@@ -1799,20 +1798,19 @@ function CreateQuestModal({
                     ))}
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
 
-            {/* Footer Action */}
-            <div className="p-4 border-t border-white/5 bg-black/40">
-              <button
-                form="quest-form"
-                type="submit"
-                className="w-full bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#2fe073] hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(56,242,127,0.3)] hover:shadow-[0_0_30px_rgba(56,242,127,0.5)]"
-              >
-                <Target className="w-5 h-5" />
-                Confirmar Missão
-              </button>
-            </div>
+              {/* Footer Action */}
+              <div className="p-4 border-t border-white/5 bg-black/40">
+                <button
+                  type="submit"
+                  className="w-full bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#2fe073] hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(56,242,127,0.3)] hover:shadow-[0_0_30px_rgba(56,242,127,0.5)]"
+                >
+                  <Target className="w-5 h-5" />
+                  Confirmar Missão
+                </button>
+              </div>
+            </form>
           </motion.div>
         </>
       )}
