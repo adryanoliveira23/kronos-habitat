@@ -29,18 +29,18 @@ export default function Navbar({
             href="#"
             className="hover:text-white transition-colors flex items-center gap-1"
           >
-            All Pages
+            inicial
             <ChevronDown className="w-4 h-4 opacity-50" />
           </a>
           <a
             href="#"
             className="hover:text-white transition-colors flex items-center gap-1"
           >
-            Collection
+            planos
             <ChevronDown className="w-4 h-4 opacity-50" />
           </a>
           <a href="#" className="hover:text-white transition-colors">
-            About
+            como funciona
           </a>
           <a
             href="#"
@@ -87,16 +87,16 @@ export default function Navbar({
               href="#"
               className="text-lg font-bold text-white flex items-center justify-between"
             >
-              All Pages <ChevronDown className="w-5 h-5 opacity-50" />
+              inicial <ChevronDown className="w-5 h-5 opacity-50" />
             </a>
             <a
               href="#"
               className="text-lg font-bold text-white flex items-center justify-between"
             >
-              Collection <ChevronDown className="w-5 h-5 opacity-50" />
+              planos <ChevronDown className="w-5 h-5 opacity-50" />
             </a>
             <a href="#" className="text-lg font-bold text-white">
-              About
+              como funciona
             </a>
             <a
               href="#"

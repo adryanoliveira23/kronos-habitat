@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sword,
   Shield,
@@ -10463,16 +10463,16 @@ export default function SystemDashboard({
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex items-center gap-4 w-full max-w-xs mt-2">
+                <div className="flex items-center gap-3 w-full max-w-xs mt-2">
                   <button
                     onClick={() => setShowModeSelection(true)}
-                    className="flex-1 py-4 bg-neon-green text-black font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-[0_10px_30px_rgba(56,242,127,0.4)] flex items-center justify-center gap-2 active:scale-95 transition-all border-b-4 border-black/20"
+                    className="flex-1 py-2 bg-neon-green text-black font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-[0_10px_30px_rgba(56,242,127,0.4)] flex items-center justify-center gap-2 active:scale-95 transition-all border-b-4 border-black/20"
                   >
                     <Sword className="w-4 h-4" /> Iniciar Rotina
                   </button>
                   <button
                     onClick={() => setCurrentView("kronos")}
-                    className="flex-1 py-4 bg-linear-to-br from-[#FFD700] via-[#FDB931] to-[#9E7E38] border-b-4 border-black/20 text-black font-black text-[10px] uppercase tracking-widest rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all shadow-[0_10px_30px_rgba(253,185,49,0.4)]"
+                    className="flex-1 py-2 bg-linear-to-br from-[#FFD700] via-[#FDB931] to-[#9E7E38] border-b-4 border-black/20 text-black font-black text-[10px] uppercase tracking-widest rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all shadow-[0_10px_30px_rgba(253,185,49,0.4)]"
                   >
                     <Star className="w-4 h-4" /> Kronos
                   </button>
