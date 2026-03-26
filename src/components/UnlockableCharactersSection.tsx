@@ -65,7 +65,7 @@ export default function UnlockableCharactersSection() {
             className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black font-display uppercase mb-6"
           >
             O SEU EGO É O SEU{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-neon-yellow">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
               COMBUSTÍVEL.
             </span>
           </motion.h2>
@@ -105,7 +105,7 @@ export default function UnlockableCharactersSection() {
               </div>
 
               {/* Card Body */}
-              <div className="relative rounded-[32px] overflow-hidden bg-white/[0.03] border border-white/10 p-4 transition-all duration-500 group-hover:border-white/20 group-hover:bg-white/[0.05]">
+              <div className="relative rounded-[32px] overflow-hidden bg-white/3 border border-white/10 p-4 transition-all duration-500 group-hover:border-white/20 group-hover:bg-white/[0.05]">
                 <div className="relative aspect-square rounded-[24px] overflow-hidden bg-black/40 mb-6">
                   <img
                     src={char.image}
@@ -134,7 +134,7 @@ export default function UnlockableCharactersSection() {
                   </div>
 
                   {/* Stats Bar */}
-                  <div className="flex items-center gap-4 bg-white/[0.03] rounded-2xl p-4 border border-white/5 relative overflow-hidden group/btn cursor-pointer overflow-hidden">
+                  <div className="flex items-center gap-4 bg-white/3 rounded-2xl p-4 border border-white/5 relative overflow-hidden group/btn cursor-pointer overflow-hidden">
                     <div className="flex-1">
                       <div className="text-white/30 text-[9px] font-black uppercase tracking-tighter mb-1">
                         Rarity Score:
@@ -152,7 +152,7 @@ export default function UnlockableCharactersSection() {
                     </motion.div>
 
                     {/* Button Glow shadow */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
                   </div>
                 </div>
               </div>

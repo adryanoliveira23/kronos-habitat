@@ -106,7 +106,7 @@ export default function DashboardSection() {
                     initial={{ width: 0 }}
                     whileInView={{ width: "75%" }}
                     transition={{ duration: 1, delay: 0.5 }}
-                    className="h-full bg-gradient-to-r from-neon-green to-emerald-500 shadow-[0_0_15px_rgba(62,255,139,0.5)]"
+                    className="h-full bg-linear-to-r from-neon-green to-emerald-500 shadow-[0_0_15px_rgba(62,255,139,0.5)]"
                   />
                 </div>
 

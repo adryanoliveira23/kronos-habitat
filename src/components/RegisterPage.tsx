@@ -155,7 +155,7 @@ export default function RegisterPage({
           initial={{ opacity: 0, y: 30, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="relative bg-white/[0.03] border border-white/10 rounded-[32px] p-8 sm:p-10 backdrop-blur-xl overflow-hidden"
+          className="relative bg-white/3 border border-white/10 rounded-[32px] p-8 sm:p-10 backdrop-blur-xl overflow-hidden"
         >
           <div className="absolute -top-20 -left-20 w-60 h-60 bg-neon-yellow/10 blur-[60px] rounded-full pointer-events-none" />
 
@@ -185,7 +185,7 @@ export default function RegisterPage({
               )}
               <h1 className="text-2xl sm:text-3xl font-black font-display uppercase leading-tight">
                 Comece sua <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-yellow to-neon-green">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-yellow to-neon-green">
                   Evolução.
                 </span>
               </h1>

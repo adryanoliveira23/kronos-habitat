@@ -32,7 +32,7 @@ export default function ProblemSection() {
             </div>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-display tracking-normal leading-tight mb-6 sm:mb-8 uppercase">
               SUA ROTINA É UMA <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-500 text-[0.98em]">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-orange-400 to-yellow-500 text-[0.98em]">
                 BATALHA E VOCÊ ESTÁ PERDENDO.
               </span>
             </h2>
@@ -67,7 +67,7 @@ export default function ProblemSection() {
             <div className="relative rounded-[24px] sm:rounded-[32px] border border-white/10 bg-[#0B0C10] p-6 sm:p-8 shadow-2xl overflow-hidden flex flex-col justify-center items-center min-h-[400px]">
 
               {/* Background ambient glow */}
-              <div className="absolute inset-0 bg-gradient-to-b from-red-600/10 via-transparent to-neon-green/10" />
+              <div className="absolute inset-0 bg-linear-to-b from-red-600/10 via-transparent to-neon-green/10" />
 
               <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
                 <div className="text-[8px] sm:text-[10px] text-white/40 uppercase font-black tracking-widest">Preview de Batalha Real</div>
@@ -90,7 +90,7 @@ export default function ProblemSection() {
                   </div>
 
                   <div className="w-full sm:w-80 h-4 bg-black/50 border-2 border-white/10 rounded-full mt-2 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 h-full bg-gradient-to-l from-red-600 to-red-400 w-full shadow-[0_0_20px_rgba(239,68,68,0.8)]" />
+                    <div className="absolute top-0 right-0 h-full bg-linear-to-l from-red-600 to-red-400 w-full shadow-[0_0_20px_rgba(239,68,68,0.8)]" />
                   </div>
                   <span className="text-[10px] font-black text-red-400 mr-2">100%</span>
                 </div>
@@ -101,7 +101,7 @@ export default function ProblemSection() {
                     {/* Glow behind VS */}
                     <div className="absolute inset-0 bg-red-500 blur-xl opacity-30 animate-pulse rounded-full" />
                     <div className="w-12 h-12 sm:w-16 sm:h-16 bg-black border-2 border-red-500/50 rounded-full flex flex-col items-center justify-center transform -rotate-12 shadow-[0_0_30px_rgba(239,68,68,0.3)] backdrop-blur-md">
-                      <div className="text-xl sm:text-2xl font-black italic text-transparent bg-clip-text bg-gradient-to-br from-white to-red-500 drop-shadow-md">VS</div>
+                      <div className="text-xl sm:text-2xl font-black italic text-transparent bg-clip-text bg-linear-to-br from-white to-red-500 drop-shadow-md">VS</div>
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export default function ProblemSection() {
                   </div>
 
                   <div className="w-full sm:w-80 h-4 bg-black/50 border-2 border-white/10 rounded-full mt-2 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-neon-green to-emerald-400 w-full shadow-[0_0_20px_rgba(56,242,127,0.8)]" />
+                    <div className="absolute top-0 left-0 h-full bg-linear-to-r from-neon-green to-emerald-400 w-full shadow-[0_0_20px_rgba(56,242,127,0.8)]" />
                   </div>
                   <span className="text-[10px] font-black text-neon-green ml-2">100%</span>
                 </div>

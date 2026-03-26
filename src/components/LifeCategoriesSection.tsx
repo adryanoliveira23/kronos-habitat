@@ -69,7 +69,7 @@ export default function LifeCategoriesSection() {
           >
             {t.rich("title", {
               highlight: (chunks) => (
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-emerald-400">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-emerald-400">
                   {chunks}
                 </span>
               ),
@@ -80,7 +80,7 @@ export default function LifeCategoriesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-white/50 text-sm sm:text-base max-w-[500px] mx-auto leading-relaxed"
+            className="text-white/40 text-sm sm:text-lg max-w-[600px] mx-auto font-medium"
           >
             {t("description")}
           </motion.p>
@@ -98,14 +98,14 @@ export default function LifeCategoriesSection() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 className={cn(
-                  "relative group rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 glass-card border transition-all duration-300 cursor-default hover:bg-white/[0.02]",
+                  "relative group rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 glass-card border transition-all duration-300 cursor-default hover:bg-white/2",
                   cat.borderColor,
                 )}
               >
                 {/* Subtle glow on hover */}
                 <div
                   className={cn(
-                    "absolute -top-10 -right-10 w-32 h-32 blur-[40px] rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500 pointer-events-none",
+                    "absolute -top-10 -right-10 w-32 h-32 blur-2xl rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500 pointer-events-none",
                     cat.glowColor,
                   )}
                 />

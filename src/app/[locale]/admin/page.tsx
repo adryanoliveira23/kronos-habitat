@@ -292,7 +292,7 @@ export default function AdminPage() {
                   ].map((stat) => (
                     <div
                       key={stat.label}
-                      className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl hover:border-white/10 transition-colors group"
+                      className="p-6 bg-white/3 border border-white/5 rounded-3xl hover:border-white/10 transition-colors group"
                     >
                       <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4">
                         {stat.label}
@@ -328,7 +328,7 @@ export default function AdminPage() {
                         {realUsers.slice(0, 5).map((user, i) => (
                           <div
                             key={user.id || i}
-                            className="flex items-center gap-4 p-4 hover:bg-white/[0.02] rounded-2xl transition-colors group border border-transparent hover:border-white/5"
+                            className="flex items-center gap-4 p-4 hover:bg-white/2 rounded-2xl transition-colors group border border-transparent hover:border-white/5"
                           >
                             <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 font-black text-[10px] uppercase">
                               {user.name?.charAt(0) || "U"}
@@ -455,7 +455,7 @@ export default function AdminPage() {
                         filteredUsers.map((user, idx) => (
                           <tr
                             key={user.id || idx}
-                            className="group hover:bg-white/[0.01]"
+                            className="group hover:bg-white/1"
                           >
                             <td className="py-4">
                               <div className="flex items-center gap-3">

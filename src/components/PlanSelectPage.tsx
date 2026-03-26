@@ -138,7 +138,7 @@ export default function PlanSelectPage({
           </p>
           <h1 className="text-3xl sm:text-5xl font-black font-display uppercase leading-tight">
             Qual é o seu <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-neon-yellow">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
               comprometimento?
             </span>
           </h1>
@@ -156,7 +156,7 @@ export default function PlanSelectPage({
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + i * 0.1 }}
-              className={`relative bg-white/[0.03] border rounded-[28px] p-7 transition-all duration-300 group cursor-pointer flex flex-col ${plan.color}`}
+              className={`relative bg-white/3 border rounded-[28px] p-7 transition-all duration-300 group cursor-pointer flex flex-col ${plan.color}`}
               onClick={() => onSelectPlan(plan.id)}
             >
               {/* Popular tag */}

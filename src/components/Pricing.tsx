@@ -298,7 +298,7 @@ export default function Pricing({
               </div>
 
               {/* Benefits */}
-              <div className="mb-8 p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+              <div className="mb-8 p-4 rounded-2xl bg-white/3 border border-white/5">
                 <p className="text-xs text-white/80 font-bold uppercase tracking-widest mb-4">
                   Você recebe tudo do plano, MAIS BRINDE:
                 </p>

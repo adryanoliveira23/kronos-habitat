@@ -50,10 +50,10 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] xl:text-[64px] font-black font-display tracking-normal leading-[1.1] mb-6 uppercase"
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-white/70">
               {t("titlePrefix")}
             </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-neon-yellow">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
               {t("titleSuffix")}
             </span>
           </motion.h1>

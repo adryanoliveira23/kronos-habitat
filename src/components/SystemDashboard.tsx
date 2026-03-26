@@ -1552,7 +1552,7 @@ function CreateQuestModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl z-2001 overflow-hidden max-h-[90vh] flex flex-col"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-green to-neon-yellow z-10" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-neon-green to-neon-yellow z-10" />
 
             {/* Banner & Header */}
             <div className="p-6 pb-4 border-b border-white/5 relative bg-black/40">
@@ -1608,7 +1608,7 @@ function CreateQuestModal({
                 </div>
 
                 {/* 1️⃣ REPETIÇÃO */}
-                <div className="space-y-4 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <div className="space-y-4 p-4 rounded-xl bg-white/2 border border-white/5">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-neon-yellow" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-neon-yellow">
@@ -1684,7 +1684,7 @@ function CreateQuestModal({
                 </div>
 
                 {/* 2️⃣ META */}
-                <div className="space-y-4 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <div className="space-y-4 p-4 rounded-xl bg-white/2 border border-white/5">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-blue-400" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">
@@ -1778,7 +1778,7 @@ function CreateQuestModal({
                 </div>
 
                 {/* 3️⃣ INTERVALO DE TEMPO */}
-                <div className="space-y-4 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <div className="space-y-4 p-4 rounded-xl bg-white/2 border border-white/5">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-purple-400" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-purple-400">
@@ -1891,7 +1891,7 @@ function CreateHabitModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl z-2001 overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-green to-neon-yellow" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-neon-green to-neon-yellow" />
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black uppercase italic">
@@ -2146,7 +2146,7 @@ function ReadyHabitsModal({
                 {readyHabits.map((hb, i) => (
                   <div
                     key={i}
-                    className="group p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-neon-yellow/30 transition-all"
+                    className="group p-5 bg-white/2 border border-white/5 rounded-2xl hover:bg-white/5 hover:border-neon-yellow/30 transition-all"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-lg font-black uppercase italic group-hover:text-neon-yellow transition-colors">
@@ -2228,7 +2228,7 @@ function HabitTasksModal({
             exit={{ opacity: 0, scale: 0.9, y: 30 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-[2rem] z-[4001] overflow-hidden shadow-2xl"
           >
-            <div className={`h-1.5 w-full bg-gradient-to-r ${habit.color}`} />
+            <div className={`h-1.5 w-full bg-linear-to-r ${habit.color}`} />
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
@@ -2318,7 +2318,7 @@ function ProgressReportModal({
             exit={{ opacity: 0, scale: 0.9, y: 50 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-5xl h-[90vh] bg-[#050505] border border-white/10 rounded-[3rem] z-[10001] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(56,242,127,0.1)]"
           >
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-neon-green via-neon-yellow to-neon-green" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-neon-green via-neon-yellow to-neon-green" />
 
             <div className="p-8 md:p-12 overflow-y-auto scrollbar-none flex-1">
               <div className="flex justify-between items-center mb-12">
@@ -7034,7 +7034,7 @@ function BattleView({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="max-w-md text-center mb-8 px-6 py-4 bg-white/[0.03] border border-white/10 rounded-2xl"
+          className="max-w-md text-center mb-8 px-6 py-4 bg-white/3 border border-white/10 rounded-2xl"
         >
           <p className="text-white/70 text-sm sm:text-base font-medium italic leading-relaxed">
             "{phrase}"
@@ -7080,7 +7080,7 @@ function BattleView({
               onFullReset();
               onExit();
             }}
-            className="flex-1 py-5 bg-gradient-to-r from-red-700 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_40px_rgba(220,38,38,0.4)] hover:shadow-[0_10px_60px_rgba(220,38,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border border-red-500/30"
+            className="flex-1 py-5 bg-linear-to-r from-red-700 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_40px_rgba(220,38,38,0.4)] hover:shadow-[0_10px_60px_rgba(220,38,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border border-red-500/30"
           >
             <span className="text-lg">🔄</span> RECOMEÇAR DO ZERO
           </button>
@@ -7109,7 +7109,7 @@ function BattleView({
           className="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none"
           style={{ backgroundImage: "url('/medieval-battle.png')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/60 pointer-events-none" />
 
         {/* Header Gameplay */}
         <div className="absolute top-3 left-3 right-3 sm:top-6 sm:left-6 sm:right-6 flex justify-between items-center z-20">
@@ -7142,7 +7142,7 @@ function BattleView({
             <div className="w-full relative h-5 sm:h-6 bg-black/60 rounded-full border border-white/20 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
               <motion.div
                 animate={{ width: `${enemyHP}%` }}
-                className="h-full bg-gradient-to-r from-red-800 to-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                className="h-full bg-linear-to-r from-red-800 to-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]"
               />
               <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-black text-white uppercase tracking-widest">
                 {Math.max(0, enemyHP)}%
@@ -7204,7 +7204,7 @@ function BattleView({
             <div className="w-full relative h-5 sm:h-6 bg-black/60 rounded-full border border-white/20 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
               <motion.div
                 animate={{ width: `${playerHP}%` }}
-                className="h-full bg-gradient-to-r from-emerald-800 to-neon-green shadow-[0_0_20px_rgba(56,242,127,0.5)]"
+                className="h-full bg-linear-to-r from-emerald-800 to-neon-green shadow-[0_0_20px_rgba(56,242,127,0.5)]"
               />
               <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-black text-white uppercase tracking-widest">
                 {Math.max(0, playerHP)}%
@@ -11954,8 +11954,8 @@ function UnifiedShopModal({
         className="relative w-full max-w-4xl bg-black/60 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)]"
       >
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-10 border-b border-white/5 bg-white/[0.02] gap-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-yellow/50 to-transparent" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-10 border-b border-white/5 bg-white/2 gap-8 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-neon-yellow/50 to-transparent" />
 
           <div className="flex flex-col items-center sm:items-start w-full sm:w-auto">
             <h2 className="text-2xl sm:text-4xl font-black italic tracking-tighter text-white uppercase leading-none text-center sm:text-left">
@@ -12020,17 +12020,17 @@ function UnifiedShopModal({
               <motion.div
                 key={item.id}
                 whileHover={{ y: -10 }}
-                className={`bg-black/40 border ${isSelected ? "border-neon-yellow shadow-[0_0_30px_rgba(255,242,0,0.2)]" : "border-white/10"} rounded-[2.5rem] p-6 flex flex-col items-center gap-6 group transition-all hover:bg-white/[0.04] hover:border-white/20 relative overflow-hidden`}
+                className={`bg-black/40 border ${isSelected ? "border-neon-yellow shadow-[0_0_30px_rgba(255,242,0,0.2)]" : "border-white/10"} rounded-[2.5rem] p-6 flex flex-col items-center gap-6 group transition-all hover:bg-white/4 hover:border-white/20 relative overflow-hidden`}
               >
                 <div
-                  className={`absolute inset-0 bg-gradient-to-b ${item.color} opacity-0 group-hover:opacity-1 transition-opacity pointer-events-none`}
+                  className={`absolute inset-0 bg-linear-to-b ${item.color} opacity-0 group-hover:opacity-1 transition-opacity pointer-events-none`}
                 />
 
                 <div
                   className={`absolute top-4 left-6 z-20 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10 text-[8px] font-black tracking-widest uppercase`}
                 >
                   <span
-                    className={`bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}
+                    className={`bg-linear-to-r ${item.color} bg-clip-text text-transparent`}
                   >
                     {item.rarity}
                   </span>
@@ -12054,7 +12054,7 @@ function UnifiedShopModal({
                   <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 4, repeat: Infinity }}
-                    className={`absolute inset-0 rounded-full bg-gradient-to-r ${item.color} blur-[40px] scale-50 opacity-10 group-hover:opacity-40 transition-opacity`}
+                    className={`absolute inset-0 rounded-full bg-linear-to-r ${item.color} blur-2xl scale-50 opacity-10 group-hover:opacity-40 transition-opacity`}
                   />
 
                   <img
@@ -12089,7 +12089,7 @@ function UnifiedShopModal({
                   className={`w-full py-4 rounded-2xl text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden ${isSelected ? "bg-neon-yellow text-black cursor-default" : isOwned ? "bg-white/10 text-white hover:bg-white/20" : "bg-neon-yellow text-black hover:scale-105 active:scale-95 shadow-[0_5px_20px_rgba(255,242,0,0.3)]"}`}
                 >
                   {!isOwned && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   )}
                   {isSelected
                     ? "Selecionado"
