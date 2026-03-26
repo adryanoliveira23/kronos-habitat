@@ -1,0 +1,54 @@
+{
+  "LifeCategories": {
+    "title": "Domine todas as {highlight}",
+    "highlight": "Áreas da Vida",
+    "description": "De treinos a finanças. Um sistema completo de evolução pessoal gamificado.",
+    "categories": {
+      "body": {
+        "title": "Corpo de Ferro",
+        "description": "Treinos, nutrição, jejum e água. Forje sua carcaça com disciplina diária.",
+        "tags": ["Treinos", "Alimentação", "Jejum"]
+      },
+      "finance": {
+        "title": "Arsenal Financeiro",
+        "description": "Controle de gastos gamificado. Transforme economia em XP e conquistas.",
+        "tags": ["Finanças", "Metas"]
+      },
+      "mind": {
+        "title": "Mente Afiada",
+        "description": "Estudos, foco Pomodoro, leitura e retenção de conhecimento.",
+        "tags": ["Estudos", "Foco"]
+      },
+      "battlemap": {
+        "title": "Mapa de Batalha",
+        "description": "Mapas mentais para metas de longo prazo e planejamento semanal estratégico.",
+        "tags": ["Mapa Mental", "Planejamento"]
+      }
+    }
+  },
+  "System": {
+    "loading": "INICIANDO SISTEMA INTERNO"
+  },
+  "Navbar": {
+    "home": "inicial",
+    "plans": "planos",
+    "howItWorks": "como funciona",
+    "blog": "Blog",
+    "activate": "Ativar Sistema",
+    "login": "Logar"
+  },
+  "Hero": {
+    "titlePrefix": "HACKEIE ",
+    "titleSuffix": "SUA MENTE.",
+    "description": "A procrastinação vence quando a força de vontade acaba. Transforme a disciplina no seu maior vício com o método de gamificação que recompensa cada tarefa concluída.",
+    "activate": "Ativar Sistema",
+    "conquerPet": "CONQUISTE SEU PET",
+    "petDescription": "Você desbloqueia novos companheiros ao dominar sua disciplina.",
+    "rarityScore": "Rarity Score",
+    "coins": "Moedas Kronos",
+    "level": "NÍVEL 200",
+    "levelDescription": "O seu nível aumenta conforme sua consistência.",
+    "ranking": "Top 6.5%",
+    "rankingDescription": "No ranking globo"
+  }
+}

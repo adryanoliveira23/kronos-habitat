@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { useTranslations } from "next-intl";
 import LoadingScreen from "@/components/LoadingScreen";
 import LoginPage from "@/components/LoginPage";
 import RegisterPage from "@/components/RegisterPage";
@@ -29,6 +30,7 @@ import CommunitySection from "@/components/CommunitySection";
 type View = "landing" | "login" | "register" | "plan-select" | "checkout";
 
 export default function Home() {
+  const t = useTranslations("System");
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [isSystemLoading, setIsSystemLoading] = useState(false);
@@ -96,7 +98,7 @@ export default function Home() {
           <LoadingScreen onComplete={() => setIsLoading(false)} />
         ) : isSystemLoading ? (
           <LoadingScreen
-            label="INICIANDO SISTEMA INTERNO"
+            label={t("loading")}
             onComplete={() => {}}
           />
         ) : isAuthenticated ? (

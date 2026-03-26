@@ -1,0 +1,54 @@
+{
+  "LifeCategories": {
+    "title": "Master all {highlight}",
+    "highlight": "Life Areas",
+    "description": "From workouts to finances. A complete gamified personal evolution system.",
+    "categories": {
+      "body": {
+        "title": "Iron Body",
+        "description": "Workouts, nutrition, fasting, and water. Forge your shell with daily discipline.",
+        "tags": ["Workouts", "Nutrition", "Fasting"]
+      },
+      "finance": {
+        "title": "Financial Arsenal",
+        "description": "Gamified expense tracking. Transform savings into XP and achievements.",
+        "tags": ["Finances", "Goals"]
+      },
+      "mind": {
+        "title": "Sharp Mind",
+        "description": "Studies, Pomodoro focus, reading, and knowledge retention.",
+        "tags": ["Studies", "Focus"]
+      },
+      "battlemap": {
+        "title": "Battle Map",
+        "description": "Mind maps for long-term goals and strategic weekly planning.",
+        "tags": ["Mind Map", "Planning"]
+      }
+    }
+  },
+  "System": {
+    "loading": "INITIALIZING INTERNAL SYSTEM"
+  },
+  "Navbar": {
+    "home": "home",
+    "plans": "plans",
+    "howItWorks": "how it works",
+    "blog": "Blog",
+    "activate": "Activate System",
+    "login": "Login"
+  },
+  "Hero": {
+    "titlePrefix": "HACK ",
+    "titleSuffix": "YOUR MIND.",
+    "description": "Procrastination wins when willpower ends. Turn discipline into your greatest addiction with the gamification method that rewards every completed task.",
+    "activate": "Activate System",
+    "conquerPet": "CONQUER YOUR PET",
+    "petDescription": "You unlock new companions as you master your discipline.",
+    "rarityScore": "Rarity Score",
+    "coins": "Kronos Coins",
+    "level": "LEVEL 200",
+    "levelDescription": "Your level increases according to your consistency.",
+    "ranking": "Top 6.5%",
+    "rankingDescription": "In global ranking"
+  }
+}

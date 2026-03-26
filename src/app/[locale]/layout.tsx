@@ -1,18 +1,37 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: "Kronos Habitat",
   description: "Transforme seus hábitos em uma jornada épica.",
 };
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'pt' }];
+}
+
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+
+  // Validate that the incoming `locale` parameter is valid
+  if (!['en', 'pt'].includes(locale)) {
+    notFound();
+  }
+
+  // Receiving messages provided in `i18n.ts`
+  const messages = await getMessages();
+
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Sora:wght@100..800&display=swap"
@@ -77,7 +96,9 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="antialiased" suppressHydrationWarning>
-        {children}
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

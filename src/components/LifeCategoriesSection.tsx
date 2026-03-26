@@ -1,54 +1,58 @@
 import { motion } from "motion/react";
 import { BrainCircuit, Wallet, Map, Dumbbell } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const categories = [
-  {
-    title: "Corpo de Ferro",
-    description:
-      "Treinos, nutrição, jejum e água. Forje sua carcaça com disciplina diária.",
-    icon: Dumbbell,
-    iconColor: "text-red-400",
-    borderColor: "border-red-500/20 hover:border-red-500/40",
-    glowColor: "bg-red-500/10",
-    badgeColor: "bg-red-500/10 text-red-400 border-red-500/20",
-    tags: ["Treinos", "Alimentação", "Jejum"],
-  },
-  {
-    title: "Arsenal Financeiro",
-    description:
-      "Controle de gastos gamificado. Transforme economia em XP e conquistas.",
-    icon: Wallet,
-    iconColor: "text-emerald-400",
-    borderColor: "border-emerald-500/20 hover:border-emerald-500/40",
-    glowColor: "bg-emerald-500/10",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    tags: ["Finanças", "Metas"],
-  },
-  {
-    title: "Mente Afiada",
-    description: "Estudos, foco Pomodoro, leitura e retenção de conhecimento.",
-    icon: BrainCircuit,
-    iconColor: "text-blue-400",
-    borderColor: "border-blue-500/20 hover:border-blue-500/40",
-    glowColor: "bg-blue-500/10",
-    badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-    tags: ["Estudos", "Foco"],
-  },
-  {
-    title: "Mapa de Batalha",
-    description:
-      "Mapas mentais para metas de longo prazo e planejamento semanal estratégico.",
-    icon: Map,
-    iconColor: "text-purple-400",
-    borderColor: "border-purple-500/20 hover:border-purple-500/40",
-    glowColor: "bg-purple-500/10",
-    badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-    tags: ["Mapa Mental", "Planejamento"],
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function LifeCategoriesSection() {
+  const t = useTranslations("LifeCategories");
+
+  const categories = [
+    {
+      title: t("categories.body.title"),
+      description: t("categories.body.description"),
+      icon: Dumbbell,
+      iconColor: "text-red-400",
+      borderColor: "border-red-500/20 hover:border-red-500/40",
+      glowColor: "bg-red-500/10",
+      badgeColor: "bg-red-500/10 text-red-400 border-red-500/20",
+      tags: [
+        t("categories.body.tags.0"),
+        t("categories.body.tags.1"),
+        t("categories.body.tags.2"),
+      ],
+    },
+    {
+      title: t("categories.finance.title"),
+      description: t("categories.finance.description"),
+      icon: Wallet,
+      iconColor: "text-emerald-400",
+      borderColor: "border-emerald-500/20 hover:border-emerald-500/40",
+      glowColor: "bg-emerald-500/10",
+      badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      tags: [t("categories.finance.tags.0"), t("categories.finance.tags.1")],
+    },
+    {
+      title: t("categories.mind.title"),
+      description: t("categories.mind.description"),
+      icon: BrainCircuit,
+      iconColor: "text-blue-400",
+      borderColor: "border-blue-500/20 hover:border-blue-500/40",
+      glowColor: "bg-blue-500/10",
+      badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+      tags: [t("categories.mind.tags.0"), t("categories.mind.tags.1")],
+    },
+    {
+      title: t("categories.battlemap.title"),
+      description: t("categories.battlemap.description"),
+      icon: Map,
+      iconColor: "text-purple-400",
+      borderColor: "border-purple-500/20 hover:border-purple-500/40",
+      glowColor: "bg-purple-500/10",
+      badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+      tags: [t("categories.battlemap.tags.0"), t("categories.battlemap.tags.1")],
+    },
+  ];
+
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden bg-bg-dark border-t border-white/5">
       {/* Background glow */}
@@ -63,10 +67,13 @@ export default function LifeCategoriesSection() {
             viewport={{ once: true }}
             className="text-3xl sm:text-5xl font-black font-display uppercase mb-6"
           >
-            Domine todas as{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-emerald-400">
-              Áreas da Vida
-            </span>
+            {t.rich("title", {
+              highlight: (chunks) => (
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-emerald-400">
+                  {chunks}
+                </span>
+              ),
+            })}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -75,8 +82,7 @@ export default function LifeCategoriesSection() {
             transition={{ delay: 0.1 }}
             className="text-white/50 text-sm sm:text-base max-w-[500px] mx-auto leading-relaxed"
           >
-            De treinos a finanças. Um sistema completo de evolução pessoal
-            gamificado.
+            {t("description")}
           </motion.p>
         </div>
 

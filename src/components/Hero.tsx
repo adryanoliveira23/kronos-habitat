@@ -2,8 +2,11 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import petImg from "@/lib/pet.png";
 import personagemImg from "@/lib/personagem.png";
+import { useTranslations } from "next-intl";
 
 export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
+  const t = useTranslations("Hero");
+
   return (
     <section className="relative min-h-[90vh] sm:min-h-screen xl:min-h-[110vh] hero-bg-gradient overflow-hidden pt-32 sm:pt-40 lg:pt-32 xl:pt-48 pb-12 sm:pb-20 xl:pb-32 px-4 sm:px-8">
       {/* Background Layers */}
@@ -48,10 +51,10 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
             className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] xl:text-[64px] font-black font-display tracking-normal leading-[1.1] mb-6 uppercase"
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">
-              HACKEIE{" "}
+              {t("titlePrefix")}
             </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-neon-yellow">
-              SUA MENTE.
+              {t("titleSuffix")}
             </span>
           </motion.h1>
 
@@ -61,9 +64,7 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
             transition={{ delay: 0.1 }}
             className="max-w-[500px] mx-auto text-white/80 text-sm sm:text-lg mb-8 px-4 font-medium"
           >
-            A procrastinação vence quando a força de vontade acaba. Transforme a
-            disciplina no seu maior vício com o método de gamificação que
-            recompensa cada tarefa concluída.
+            {t("description")}
           </motion.p>
 
           <motion.button
@@ -73,7 +74,7 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
             onClick={onGoToPricing}
             className="bg-neon-yellow text-black px-7 py-3.5 rounded-[14px] font-black text-sm uppercase tracking-wider neon-shadow-green hover:scale-105 transition-transform"
           >
-            Ativar Sistema
+            {t("activate")}
           </motion.button>
         </div>
 
@@ -98,7 +99,7 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
               <div className="flex justify-between items-center px-1">
                 <div className="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
                   <div className="text-[7px] text-white/40 uppercase font-black tracking-wider">
-                    Rarity Score
+                    {t("rarityScore")}
                   </div>
                   <div className="text-xs font-black text-white">8.7/10</div>
                 </div>
@@ -112,11 +113,11 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-2.5 h-2.5 bg-neon-green rotate-45 shadow-[0_0_10px_rgba(0,255,102,0.5)]" />
                 <span className="font-black font-sans text-sm uppercase tracking-tight text-white">
-                  CONQUISTE SEU PET
+                  {t("conquerPet")}
                 </span>
               </div>
               <p className="text-[10px] text-white/50 leading-relaxed uppercase font-bold max-w-[200px] tracking-wide">
-                Você desbloqueia novos companheiros ao dominar sua disciplina.
+                {t("petDescription")}
               </p>
             </div>
           </motion.div>
@@ -150,23 +151,23 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
                 12.000+
               </div>
               <div className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] leading-relaxed">
-                Moedas Kronos
+                {t("coins")}
               </div>
             </div>
             <div className="group cursor-default">
               <div className="text-3xl sm:text-4xl lg:text-3xl xl:text-5xl font-black font-sans mb-1 xl:mb-2 uppercase text-white group-hover:text-neon-green transition-colors">
-                NÍVEL 200
+                {t("level")}
               </div>
               <div className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] rounded-md px-1 py-0.5 leading-relaxed">
-                O seu nível aumenta conforme sua consistência.
+                {t("levelDescription")}
               </div>
             </div>
             <div className="group cursor-default">
               <div className="text-3xl sm:text-4xl lg:text-3xl xl:text-5xl font-black font-sans mb-1 xl:mb-2 text-white group-hover:text-neon-green transition-colors">
-                Top 6.5%
+                {t("ranking")}
               </div>
               <div className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] leading-relaxed">
-                No ranking globo
+                {t("rankingDescription")}
               </div>
             </div>
           </motion.div>
