@@ -35,8 +35,8 @@ export default function MissionsRewardsSection() {
       id="conquistas"
       className="py-16 sm:py-24 bg-section-3 relative overflow-hidden section-bg-glow"
     >
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-neon-yellow/5 to-transparent pointer-events-none -z-10" />
-      <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-neon-green/10 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-neon-yellow/5 to-transparent pointer-events-none -z-10" />
+      <div className="absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-neon-green/10 to-transparent pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">

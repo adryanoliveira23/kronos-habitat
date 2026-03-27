@@ -86,7 +86,7 @@ export default function Pricing({
       id="precos"
       className="py-16 sm:py-24 bg-section-2 relative overflow-hidden section-bg-glow"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent via-neon-green/5 to-transparent pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-linear-to-b from-transparent via-neon-green/5 to-transparent pointer-events-none -z-10" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-[10px] font-black text-neon-green uppercase tracking-[0.3em] mb-4">

@@ -479,13 +479,13 @@ const CharacterStage = ({
       >
         <SideButton
           icon={Bot}
-          color="bg-gradient-to-b from-blue-600/40 to-blue-900/40"
+          color="bg-linear-to-b from-blue-600/40 to-blue-900/40"
           onClick={onAiChatClick}
         />
         <SideButton icon={Newspaper} onClick={() => setCurrentView("news")} />
         <SideButton
           icon={Briefcase}
-          color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
+          color="bg-linear-to-b from-gray-600/40 to-gray-900/40"
           onClick={onProjectsClick}
         />
       </div>
@@ -1845,6 +1845,7 @@ function CreateHabitModal({
   onClose: () => void;
   onSave: (habit: Omit<Habit, "id" | "streak">) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [title, setTitle] = useState("");
   const [frequency, setFrequency] = useState("Diário");
   const [time, setTime] = useState("");
@@ -2181,7 +2182,7 @@ function HabitTasksModal({
             initial={{ opacity: 0, scale: 0.9, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-[2rem] z-[4001] overflow-hidden shadow-2xl"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-4xl z-[4001] overflow-hidden shadow-2xl"
           >
             <div className={`h-1.5 w-full bg-linear-to-r ${habit.color}`} />
             <div className="p-6">
@@ -2300,7 +2301,7 @@ function ProgressReportModal({
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                 {/* Character Profile Card */}
-                <div className="p-8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 rounded-[2.5rem] flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                <div className="p-8 bg-linear-to-br from-white/[0.03] to-white/[0.01] border border-white/10 rounded-[2.5rem] flex flex-col items-center justify-center text-center relative overflow-hidden group">
                   <div className="absolute inset-0 bg-neon-green/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="w-32 h-32 rounded-full bg-neon-green/10 border-4 border-neon-green/20 flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(56,242,127,0.2)]">
                     <Crown className="w-16 h-16 text-neon-yellow" />
@@ -3530,6 +3531,7 @@ function AIChatView({
   setProjects: (fn: (p: Project[]) => Project[]) => void;
   setQuests: (fn: (q: Quest[]) => Quest[]) => void;
 }) {
+  const locale = useLocale();
   const [conversations, setConversations] = useLocalStorage<ChatConversation[]>(
     "kronos_ai_conversations",
     [],
@@ -4852,7 +4854,7 @@ function FinancialDashboard({
             type: "ai",
             text: t("modals.finance.ai.success", {
               type: parsed.type === "entrada" ? t("modals.finance.ai.income") : t("modals.finance.ai.expense"),
-              category: tl(`modals.tasks.columns.${parsed.category}`), // Assuming categories match column keys or similar
+              category: t(`modals.tasks.columns.${parsed.category}`), // Assuming categories match column keys or similar
               amount: parseBRL(parsed.value),
             }),
             accent: parsed.type === "entrada" ? "emerald" : "orange",
@@ -8970,7 +8972,7 @@ export default function SystemDashboard({
                           </p>
 
                           <div className="space-y-3">
-                            {t.exercises.map((ex, j) => (
+                            {training.exercises.map((ex, j) => (
                               <div
                                 key={j}
                                 onClick={() => toggleExercise(i, j)}
@@ -9270,7 +9272,7 @@ export default function SystemDashboard({
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.05 }}
-                          className={`flex items-center gap-3 sm:gap-6 p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border-2 transition-all group overflow-hidden relative
+                          className={`flex items-center gap-3 sm:gap-6 p-4 sm:p-5 rounded-[1.5rem] sm:rounded-4xl border-2 transition-all group overflow-hidden relative
                                                             ${
                                                               r.isMe
                                                                 ? "bg-neon-green/10 border-neon-green/30 shadow-[0_0_20px_rgba(56,242,127,0.1)]"
@@ -9932,7 +9934,7 @@ export default function SystemDashboard({
                           </div>
 
                           {/* Group Tasks Section */}
-                          <div className="lg:col-span-2 p-6 bg-[#0a0a0a] border border-white/10 rounded-[2rem] flex flex-col">
+                          <div className="lg:col-span-2 p-6 bg-[#0a0a0a] border border-white/10 rounded-4xl flex flex-col">
                             <div className="flex items-center justify-between mb-6">
                               <h3 className="text-lg font-black uppercase italic text-white/60">
                                 {t("panels.checklist.pomodoro.objectiveTitle")}
@@ -10155,7 +10157,7 @@ export default function SystemDashboard({
                                     <div className="flex flex-col gap-4">
                                       <button
                                         onClick={() => setPomodoroActive(false)}
-                                        className="w-full py-5 bg-white text-black rounded-[2rem] font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
+                                        className="w-full py-5 bg-white text-black rounded-4xl font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
                                       >
                                         {t("modals.pomodoro.labels.pauseSession")}
                                       </button>
@@ -10434,12 +10436,12 @@ export default function SystemDashboard({
                     <XPBar
                       current={playerStats.xp}
                       max={playerStats.xpMax}
-                      label="Progresso de Experiência"
+                      type="xp"
                     />
                     <XPBar
                       current={playerStats.hp}
                       max={playerStats.hpMax}
-                      label="Vida"
+                      type="hp"
                     />
                   </div>
                 </div>
@@ -11151,7 +11153,7 @@ function GameOverOverlay({ onReset }: { onReset: () => void }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="max-w-md text-center mb-10 px-8 py-5 bg-white/3 border border-white/10 rounded-[2rem] backdrop-blur-md"
+        className="max-w-md text-center mb-10 px-8 py-5 bg-white/3 border border-white/10 rounded-4xl backdrop-blur-md"
       >
         <p className="text-white/80 text-lg font-medium italic leading-relaxed">
           "{phrase}"
@@ -11442,12 +11444,12 @@ function SettingsModal({
         exit={{ scale: 0.8, opacity: 0, y: 50, rotateX: 20 }}
         transition={{ type: "spring", damping: 20, stiffness: 150 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-visible bg-[#0a0a0a] border-2 sm:border-4 border-white/10 rounded-3xl sm:rounded-[2rem] shadow-[20px_20px_60px_rgba(0,0,0,0.8)] relative z-20 cursor-default scrollbar-none"
+        className="w-full max-w-xl max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-visible bg-[#0a0a0a] border-2 sm:border-4 border-white/10 rounded-3xl sm:rounded-4xl shadow-[20px_20px_60px_rgba(0,0,0,0.8)] relative z-20 cursor-default scrollbar-none"
       >
-        <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-neon-yellow rounded-tl-[2rem] -translate-x-1 -translate-y-1 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-neon-green rounded-tr-[2rem] translate-x-1 -translate-y-1 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-neon-green rounded-bl-[2rem] -translate-x-1 translate-y-1 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-neon-yellow rounded-br-[2rem] translate-x-1 translate-y-1 pointer-events-none" />
+        <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-neon-yellow rounded-tl-4xl -translate-x-1 -translate-y-1 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-neon-green rounded-tr-4xl translate-x-1 -translate-y-1 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-neon-green rounded-bl-4xl -translate-x-1 translate-y-1 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-neon-yellow rounded-br-4xl translate-x-1 translate-y-1 pointer-events-none" />
 
         <div className="p-5 sm:p-8 border-b border-white/5 flex items-center justify-between bg-black/40">
           <div className="flex items-center gap-4 sm:gap-5">
@@ -11602,7 +11604,7 @@ function NewsView({
             >
               {/* Article Image Container */}
               <div className="h-48 overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent z-10" />
                 <img
                   src={article.image}
                   alt={article.title}
@@ -11690,7 +11692,6 @@ function FriendsView({
 }) {
   const t = useTranslations("Dashboard");
   const [searchInput, setSearchInput] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
 
   // Search in rankingData for users not already friends
   const searchResults = searchInput.trim()
@@ -11723,7 +11724,6 @@ function FriendsView({
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              onFocus={() => setIsSearching(true)}
               placeholder={t("panels.friends.searchPlaceholder")}
               className="w-full bg-transparent px-4 py-4 text-sm font-bold text-white outline-none placeholder:text-white/10"
             />
@@ -11839,7 +11839,7 @@ function FriendsView({
                     <motion.div
                       key={friend.id}
                       whileHover={{ y: -5 }}
-                      className="p-5 bg-black/40 border border-white/5 rounded-[2rem] flex items-center justify-between group hover:border-white/20 transition-all relative overflow-hidden"
+                      className="p-5 bg-black/40 border border-white/5 rounded-4xl flex items-center justify-between group hover:border-white/20 transition-all relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="w-1.5 h-1.5 rounded-full bg-neon-green animate-pulse shadow-[0_0_10px_rgba(56,242,127,1)]" />
@@ -11847,7 +11847,7 @@ function FriendsView({
 
                       <div className="flex items-center gap-5 relative z-10">
                         <div className="w-14 h-14 relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-neon-green/20 to-transparent rounded-2xl blur-md scale-75" />
+                          <div className="absolute inset-0 bg-linear-to-br from-neon-green/20 to-transparent rounded-2xl blur-md scale-75" />
                           <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-black p-1.5 relative z-10">
                             <img
                               src={friend.photoURL}

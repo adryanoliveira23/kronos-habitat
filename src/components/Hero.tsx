@@ -13,7 +13,7 @@ export default function Hero({ onGoToPricing }: { onGoToPricing: () => void }) {
       <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
 
       {/* Neon Glow Layer */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-neon-green/5 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-linear-to-b from-neon-green/5 via-transparent to-transparent pointer-events-none" />
 
       {/* Radial Glow behind character - adjusted for mobile */}
       <div className="absolute top-[35%] sm:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[600px] md:h-[600px] radial-glow opacity-30 blur-[50px] md:blur-[80px] rounded-full pointer-events-none" />
