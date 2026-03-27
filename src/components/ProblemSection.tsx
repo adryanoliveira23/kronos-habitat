@@ -1,18 +1,10 @@
 import { motion } from "motion/react";
-import { AlertCircle, CheckCircle2, Zap, TrendingUp, Brain, Target } from "lucide-react";
-import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
-
-const data = [
-  { name: "Seg", value: 40 },
-  { name: "Ter", value: 30 },
-  { name: "Qua", value: 65 },
-  { name: "Qui", value: 45 },
-  { name: "Sex", value: 85 },
-  { name: "Sáb", value: 70 },
-  { name: "Dom", value: 95 },
-];
+import { AlertCircle, Zap, Brain, Target } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function ProblemSection() {
+  const t = useTranslations("ProblemSection");
+
   return (
     <section id="sistema" className="py-16 sm:py-24 bg-section-1 relative overflow-hidden section-bg-glow">
       {/* Background Accents */}
@@ -31,28 +23,32 @@ export default function ProblemSection() {
               <Brain className="h-6 w-6 text-neon-green" />
             </div>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-display tracking-normal leading-tight mb-6 sm:mb-8 uppercase">
-              SUA ROTINA É UMA <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-orange-400 to-yellow-500 text-[0.98em]">
-                BATALHA E VOCÊ ESTÁ PERDENDO.
-              </span>
+              {t.rich("title", {
+                br: () => <br />,
+                highlight: (chunks) => (
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-orange-400 to-yellow-500 text-[0.98em]">
+                    {chunks}
+                  </span>
+                )
+              })}
             </h2>
             <div className="space-y-4 sm:space-y-6 text-base sm:text-lg text-white font-medium max-w-xl">
+              <p>{t("p1")}</p>
               <p>
-                A procrastinação não é preguiça, é o seu cérebro fugindo do desconforto. Tentar vencer no grito, confiando apenas na força de vontade, é como ir para a guerra sem armadura. A força de vontade acaba.
-              </p>
-              <p>
-                O <span className="text-neon-green font-bold">Kronos Habit</span> não pede mais esforço. Ele hackeia seu cérebro criando uma estrutura externa: cumprir o planejado te dá recompensas imediatas, transformando disciplina em vício.
+                {t.rich("p2", {
+                  highlight: (chunks) => <span className="text-neon-green font-bold">{chunks}</span>
+                })}
               </p>
             </div>
 
             <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div className="p-5 sm:p-6 rounded-2xl glass-card border-red-500/20 group hover:border-red-500/40 transition-colors">
-                <div className="text-[10px] text-red-500 uppercase font-black mb-2 tracking-widest flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> A Vida Real</div>
-                <div className="text-sm font-medium text-white/80">Fadiga mental, estagnação, culpa por sempre deixar para o amanhã o que importa.</div>
+                <div className="text-[10px] text-red-500 uppercase font-black mb-2 tracking-widest flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> {t("realLife.label")}</div>
+                <div className="text-sm font-medium text-white/80">{t("realLife.description")}</div>
               </div>
               <div className="p-5 sm:p-6 rounded-2xl glass-card border-neon-green/20 group hover:border-neon-green/40 transition-colors">
-                <div className="text-[10px] text-neon-green uppercase font-black mb-2 tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3" /> O Jogo (Kronos)</div>
-                <div className="text-sm font-medium text-white/80">Experiência, Ouro, Nível alto e a dopamina imediata de ser implacável todos os dias.</div>
+                <div className="text-[10px] text-neon-green uppercase font-black mb-2 tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3" /> {t("theGame.label")}</div>
+                <div className="text-sm font-medium text-white/80">{t("theGame.description")}</div>
               </div>
             </div>
           </motion.div>
@@ -70,10 +66,10 @@ export default function ProblemSection() {
               <div className="absolute inset-0 bg-linear-to-b from-red-600/10 via-transparent to-neon-green/10" />
 
               <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
-                <div className="text-[8px] sm:text-[10px] text-white/40 uppercase font-black tracking-widest">Preview de Batalha Real</div>
+                <div className="text-[8px] sm:text-[10px] text-white/40 uppercase font-black tracking-widest">{t("battlePreview.label")}</div>
                 <div className="flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full border border-red-500/30 animate-pulse">
                   <Target className="w-3 h-3 text-red-400" />
-                  <span className="text-[8px] sm:text-[10px] text-red-400 font-black uppercase tracking-wider">Boss Fight</span>
+                  <span className="text-[8px] sm:text-[10px] text-red-400 font-black uppercase tracking-wider">{t("battlePreview.bossFight")}</span>
                 </div>
               </div>
 
@@ -84,8 +80,8 @@ export default function ProblemSection() {
                 <div className="flex flex-col items-end gap-2 text-right">
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col">
-                      <span className="text-xl sm:text-2xl font-black italic text-red-500 uppercase tracking-tighter drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">Rei das Trevas</span>
-                      <span className="text-[10px] text-white/50 uppercase font-black tracking-widest">Inimigo (Procrastinação) • Nv 99</span>
+                      <span className="text-xl sm:text-2xl font-black italic text-red-500 uppercase tracking-tighter drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">{t("battlePreview.enemy.name")}</span>
+                      <span className="text-[10px] text-white/50 uppercase font-black tracking-widest">{t("battlePreview.enemy.subtitle")}</span>
                     </div>
                   </div>
 
@@ -110,10 +106,10 @@ export default function ProblemSection() {
                 <div className="flex flex-col items-start gap-2 text-left">
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col">
-                      <span className="text-xl sm:text-2xl font-black italic text-neon-green uppercase tracking-tighter drop-shadow-[0_0_15px_rgba(56,242,127,0.5)]">VOCÊ</span>
+                      <span className="text-xl sm:text-2xl font-black italic text-neon-green uppercase tracking-tighter drop-shadow-[0_0_15px_rgba(56,242,127,0.5)]">{t("battlePreview.player.name")}</span>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="bg-neon-green/20 text-neon-green border border-neon-green/30 px-2 py-0.5 rounded text-[8px] uppercase font-black">Status Alpha</span>
-                        <span className="text-[10px] text-white/50 uppercase font-black tracking-widest">Player</span>
+                        <span className="bg-neon-green/20 text-neon-green border border-neon-green/30 px-2 py-0.5 rounded text-[8px] uppercase font-black">{t("battlePreview.player.status")}</span>
+                        <span className="text-[10px] text-white/50 uppercase font-black tracking-widest">{t("battlePreview.player.subtitle")}</span>
                       </div>
                     </div>
                   </div>

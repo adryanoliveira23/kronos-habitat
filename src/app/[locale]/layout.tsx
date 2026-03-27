@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
@@ -26,6 +26,9 @@ export default async function RootLayout({
   if (!['en', 'pt'].includes(locale)) {
     notFound();
   }
+
+  // Set the locale for server components
+  setRequestLocale(locale);
 
   // Receiving messages provided in `i18n.ts`
   const messages = await getMessages();

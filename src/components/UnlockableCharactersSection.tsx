@@ -1,47 +1,50 @@
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const characters = [
-  {
-    id: "0001",
-    name: "Cyborg Aprendiz",
-    rank: "NÍVEL 1-10",
-    image:
-      "https://i.ibb.co/Mm8fkMz/Chat-GPT-Image-1-de-mar-de-2026-21-15-22.png",
-    score: "4.2/10",
-    color: "from-yellow-400 to-orange-500",
-    badge: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-    tag: "Iniciante",
-    subtitle: "O TERROR da procrastiinação",
-  },
-  {
-    id: "0666",
-    name: "Ninja Esmeralda",
-    rank: "NÍVEL 11-50",
-    image:
-      "https://i.ibb.co/jXgP91m/Chat-GPT-Image-1-de-mar-de-2026-21-15-18.png",
-    score: "8.7/10",
-    color: "from-neon-green to-emerald-600",
-    badge: "bg-neon-green/10 text-neon-green border-neon-green/20",
-    tag: "Elite",
-    subtitle: "O Disciiplinado",
-  },
-  {
-    id: "7777",
-    name: "Comandante Áureo",
-    rank: "NÍVEL 50+",
-    image:
-      "https://i.ibb.co/8g808TTc/Chat-GPT-Image-1-de-mar-de-2026-21-15-10.png",
-    score: "9.9/10",
-    color: "from-amber-400 to-yellow-600",
-    badge: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-    tag: "Lendário",
-    subtitle: "O Poderoso",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function UnlockableCharactersSection() {
+  const t = useTranslations("UnlockableCharacters");
+
+  const characters = [
+    {
+      id: "0001",
+      name: t("characters.0001.name"),
+      rank: t("characters.0001.rank"),
+      image:
+        "https://i.ibb.co/Mm8fkMz/Chat-GPT-Image-1-de-mar- de-2026-21-15-22.png",
+      score: "4.2/10",
+      color: "from-yellow-400 to-orange-500",
+      badge: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+      tag: t("characters.0001.tag"),
+      subtitle: t("characters.0001.subtitle"),
+    },
+    {
+      id: "0666",
+      name: t("characters.0666.name"),
+      rank: t("characters.0666.rank"),
+      image:
+        "https://i.ibb.co/jXgP91m/Chat-GPT-Image-1-de-mar- de-2026-21-15-18.png",
+      score: "8.7/10",
+      color: "from-neon-green to-emerald-600",
+      badge: "bg-neon-green/10 text-neon-green border-neon-green/20",
+      tag: t("characters.0666.tag"),
+      subtitle: t("characters.0666.subtitle"),
+    },
+    {
+      id: "7777",
+      name: t("characters.7777.name"),
+      rank: t("characters.7777.rank"),
+      image:
+        "https://i.ibb.co/8g808TTc/Chat-GPT-Image-1-de-mar- de-2026-21-15-10.png",
+      score: "9.9/10",
+      color: "from-amber-400 to-yellow-600",
+      badge: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+      tag: t("characters.7777.tag"),
+      subtitle: t("characters.7777.subtitle"),
+    },
+  ];
+
   return (
     <section className="py-16 sm:py-24 xl:py-32 relative overflow-hidden bg-black border-t border-white/5">
       {/* Background patterns */}
@@ -56,7 +59,7 @@ export default function UnlockableCharactersSection() {
             viewport={{ once: true }}
             className="text-neon-green text-[10px] sm:text-xs font-black uppercase tracking-[0.4em] mb-4"
           >
-            Coleção de Guerreiros
+            {t("subtitle")}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -64,10 +67,13 @@ export default function UnlockableCharactersSection() {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black font-display uppercase mb-6"
           >
-            O SEU EGO É O SEU{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
-              COMBUSTÍVEL.
-            </span>
+            {t.rich("title", {
+              highlight: (chunks) => (
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-neon-yellow">
+                  {chunks}
+                </span>
+              )
+            })}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -76,7 +82,7 @@ export default function UnlockableCharactersSection() {
             transition={{ delay: 0.1 }}
             className="text-white/40 text-sm sm:text-lg max-w-[600px] mx-auto font-medium"
           >
-            Apenas os disciplinados consegue COINS para evoluir seus avatares.
+            {t("description")}
           </motion.p>
         </div>
 
@@ -137,7 +143,7 @@ export default function UnlockableCharactersSection() {
                   <div className="flex items-center gap-4 bg-white/3 rounded-2xl p-4 border border-white/5 relative overflow-hidden group/btn cursor-pointer overflow-hidden">
                     <div className="flex-1">
                       <div className="text-white/30 text-[9px] font-black uppercase tracking-tighter mb-1">
-                        Rarity Score:
+                        {t("rarityScore")}
                       </div>
                       <div className="text-white font-black text-lg">
                         {char.score}
@@ -193,8 +199,9 @@ export default function UnlockableCharactersSection() {
               ))}
             </div>
             <p className="text-white/40 text-[11px] font-bold uppercase tracking-wider">
-              <span className="text-white">+2.450 alunos</span> já desbloquearam
-              personagens lendários
+              {t.rich("studentsCount", {
+                highlight: (chunks) => <span className="text-white">{chunks}</span>
+              })}
             </p>
           </div>
         </motion.div>

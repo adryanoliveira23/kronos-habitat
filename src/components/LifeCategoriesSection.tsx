@@ -67,13 +67,15 @@ export default function LifeCategoriesSection() {
             viewport={{ once: true }}
             className="text-3xl sm:text-5xl font-black font-display uppercase mb-6"
           >
-            {t.rich("title", {
-              highlight: (chunks) => (
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-emerald-400">
-                  {chunks}
-                </span>
-              ),
-            })}
+            <span className="text-white">
+              {t.rich("title", {
+                highlight: (chunks) => (
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-neon-green to-emerald-400">
+                    {chunks}
+                  </span>
+                ),
+              })}
+            </span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

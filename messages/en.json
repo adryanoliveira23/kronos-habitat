@@ -50,5 +50,712 @@
     "levelDescription": "Your level increases according to your consistency.",
     "ranking": "Top 6.5%",
     "rankingDescription": "In global ranking"
+  },
+  "Dashboard": {
+    "missions": "MISSIONS",
+    "newMission": "NEW MISSION",
+    "habits": "HABITS",
+    "new": "NEW",
+    "ready": "READY",
+    "combatSchedule": "COMBAT SCHEDULE",
+    "rank": "RANK",
+    "xp": "XP",
+    "cash": "CASH",
+    "back": "BACK",
+    "seeMore": "See More",
+    "loading": "LOADING SYSTEM",
+    "logout": "Logout",
+    "settings": "Settings",
+    "inventory": "Inventory",
+    "shop": "Shop",
+    "battle": "Battle",
+    "finance": "Finance",
+    "projects": "Projects",
+    "news": "News",
+    "friends": "Friends",
+    "panels": {
+      "quests": {
+        "title": "Daily Quests",
+        "tab": "Routine",
+        "subtitle": "Action Protocols",
+        "newQuest": "New Quest",
+        "startRoutine": "Start Routine",
+        "kronos": "Kronos"
+      },
+      "habits": {
+        "title": "Habit Core",
+        "tab": "Habits",
+        "subtitle": "Routine Sync",
+        "newHabit": "New Habit",
+        "readyHabits": "Ready Habits"
+      },
+      "training": {
+        "title": "Training Center",
+        "tab": "Training",
+        "subtitle": "Physical Enhancement",
+        "newTraining": "New Training",
+        "createTraining": "Create New Training",
+        "weeklyProgress": "Weekly Progress",
+        "trainingsCount": "{count} {count, plural, one {Training} other {Trainings}}",
+        "exercises": "{count} {count, plural, one {exercise} other {exercises}}",
+        "series": "{count} {count, plural, one {series} other {series}}",
+        "done": "Done",
+        "pending": "Pending",
+        "exercise": "Exercise",
+        "weight": "KG",
+        "reps": "Reps",
+        "stats": {
+          "completed": "Trainings Done",
+          "streak": "Weekly Streak",
+          "totalExercises": "Total Exercises",
+          "totalTime": "Total Time"
+        }
+      },
+      "ranking": {
+        "title": "Global Ranking",
+        "tab": "Rank",
+        "subtitle": "Kronos Elite",
+        "yourDivision": "YOUR DIVISION",
+        "topGlobal": "TOP {percent}% GLOBAL",
+        "currentRank": "CURRENT RANK",
+        "nextRankXp": "{xp} more for Rank #{rank}",
+        "focusRate": "Focus Rate",
+        "dailyEvolution": "Daily Evolution",
+        "positions": "{count, plural, one {+1 POSITION} other {+{count} POSITIONS}}",
+        "globalRank": "GLOBAL RANK",
+        "season": "SEASON {number}",
+        "endsIn": "Ends in: {time}",
+        "you": "(YOU)",
+        "totalXp": "TOTAL XP",
+        "elite": "🏆 Olympus Elite",
+        "mainDivision": "⚡ Main Division"
+      },
+      "checklist": {
+        "title": "Checklist",
+        "tabs": {
+          "today": "TODAY",
+          "tasks": "Tasks",
+          "pomodoro": "Pomodoro",
+          "calendar": "Calendar"
+        },
+        "subtitles": {
+          "today": "Your Tasks For Today",
+          "tasks": "Traditional System",
+          "pomodoro": "Scientific Method"
+        },
+        "placeholders": {
+          "newTask": "What are you going to do?",
+          "taskName": "Task Name",
+          "priority": "Priority"
+        },
+        "actions": {
+          "saveTask": "Save Task"
+        },
+        "messages": {
+          "noTasks": "No tasks for today"
+        },
+        "personalTasks": {
+          "title": "Tasks",
+          "nameLabel": "Task Name",
+          "placeholder": "What needs to be done?",
+          "priorityLabel": "Priority",
+          "dateLabel": "Date",
+          "saveAction": "Save Task"
+        },
+        "pomodoro": {
+          "activeTaskPrefix": "FOCUS ON: ",
+          "noTargetMessage": "SET A TARGET",
+          "subtitle": "Deep Dive into Focus",
+          "addGoalMessage": "Add a Goal",
+          "pauseAction": "Pause",
+          "startAction": "Start Focus",
+          "resetAction": "Reset",
+          "objectiveTitle": "Objective",
+          "mainTaskLabel": "Main Task",
+          "mainTaskPlaceholder": "What shall we focus on?"
+        }
+      },
+      "settings": {
+        "title": "Settings",
+        "systemVersion": "KRONOS SYSTEM v.1.0_",
+        "tuningControl": "TUNING CONTROL",
+        "masterVolume": "MASTER_VOLUME",
+        "percentage": "PERCENTAGE",
+        "visualPerformance": "VISUAL PERFORMANCE",
+        "postProcessing": "Post-Processing",
+        "nativeResolution": "Native Resolution Enabled",
+        "ultra": "ULTRA",
+        "saveChanges": "SAVE CHANGES"
+      },
+      "arsenal": {
+        "title": "Arsenal of Power",
+        "skills": "Equipped Skills",
+        "buffs": "Earned Buffs",
+        "empty": "Empty Arsenal",
+        "emptyDesc": "Equip items in the Power Center",
+        "blocked": "Locked",
+        "nextEvolution": "Next Evolution",
+        "level": "Level"
+      },
+      "news": {
+        "title": "Kronos Chronicles",
+        "subtitle": "Latest from the Realm",
+        "description": "Stay up to date with updates and legends",
+        "readTime": "{minutes} min read",
+        "readAction": "Read Chronicle",
+        "footer": "End of Current Chronicles"
+      },
+      "friends": {
+        "title": "Alliance Center",
+        "searchPlaceholder": "Search warriors by name...",
+        "searchResults": "Search Results",
+        "noResults": "No warriors found",
+        "stats": {
+          "total": "Total Friends",
+          "synced": "Synced"
+        },
+        "alliesTitle": "Your Allies",
+        "level": "Level {level}",
+        "allySynced": "Synced Ally",
+        "noFriends": "No allies at the moment",
+        "addAction": "Add"
+      },
+      "shop": {
+        "title": "POWER {highlight}",
+        "power": "Center",
+        "tabs": {
+          "warriors": "Warriors",
+          "companions": "Companions"
+        },
+        "yourBalance": "Your Balance",
+        "currency": "CASH",
+        "actions": {
+          "selected": "Selected",
+          "select": "Select"
+        },
+        "sync": "Purchase Sync"
+      }
+    },
+    "stats": {
+      "life": "Life"
+    },
+    "messages": {
+      "noActiveProtocol": "No active protocol",
+      "trainingTip": "Tip: Plan your weekly schedule to maximize XP gains."
+    },
+    "common": {
+      "environment": "HIGH PERFORMANCE ENVIRONMENT",
+      "systemModule": "KRONOS SYSTEM // SPECIFIC_MODULE",
+      "priorities": {
+        "normal": "Normal",
+        "attention": "Attention",
+        "urgent": "Urgent"
+      }
+    },
+    "modals": {
+      "createQuest": {
+        "title": "New Mission",
+        "primaryTarget": "Primary Target",
+        "placeholderTitle": "Mission Title (Ex: Strength Training)",
+        "placeholderDesc": "Description / Tactical Context (Optional)",
+        "repetition": {
+          "title": "1. Repetition",
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "daysPerWeek": "Days per Week",
+          "everyXMonths": "Every {count} months"
+        },
+        "goal": {
+          "title": "2. Mandatory Goal",
+          "amount": "Quantity",
+          "hours": "Hours",
+          "minutes": "Minutes",
+          "seconds": "Seconds"
+        },
+        "interval": {
+          "title": "3. Time Interval",
+          "anytime": "Anytime",
+          "morning": "Morning",
+          "afternoon": "Afternoon",
+          "night": "Night"
+        },
+        "confirm": "Confirm Mission"
+      },
+      "createHabit": {
+        "title": "New Habit",
+        "name": "Habit Name",
+        "placeholderName": "Ex: Morning Reading",
+        "frequency": "Frequency",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "time": "Time (Optional)",
+        "goal": "Goal (Days)",
+        "placeholderItem": "Habit {number}",
+        "confirm": "Confirm Habit"
+      },
+      "gameOver": {
+        "title": "GAME OVER",
+        "phrases": [
+          "Defeat is not the end. It's the beginning of a new battle.",
+          "The strongest warriors were built by their worst defeats.",
+          "Every fall is a lesson. Rise stronger than before.",
+          "The path to victory goes through failure. Keep going.",
+          "Starting from scratch is the privilege of the brave. You are one.",
+          "There is no invincible warrior — there is only the one who never gave up."
+        ],
+        "action": "REVENGE (RESTART FROM ZERO)"
+      },
+      "editTraining": {
+        "title": "Edit Training",
+        "day": "Day of the Week",
+        "name": "Training Name",
+        "duration": "Duration",
+        "exercises": "Exercises",
+        "add": "Add",
+        "placeholderExercise": "Exercise Name {number}",
+        "series": "Series",
+        "kg": "Lbs/KG",
+        "reps": "Reps",
+        "save": "Save Changes to Protocol"
+      },
+      "finance": {
+        "title": "{highlight} Center",
+        "highlight": "Financial",
+        "subtitle": "Strategic Wealth Management",
+        "tabs": {
+          "overview": "📊 Overview",
+          "ai": "🤖 Financial IA"
+        },
+        "summary": {
+          "income": "Income",
+          "expense": "Expense",
+          "balance": "Balance",
+          "thisMonth": "This month"
+        },
+        "budget": {
+          "title": "Monthly Budget",
+          "limitExceeded": "⚠️ Budget exceeded!"
+        },
+        "charts": {
+          "expensesByCategory": "🥧 Expenses by Category",
+          "noExpenses": "No expenses this month",
+          "evolution": "📈 Evolution (6 Months)"
+        },
+        "cards": {
+          "title": "💳 Card Statements",
+          "add": "Add",
+          "noCards": "No cards registered",
+          "dueDate": "Due on day {date}",
+          "paid": "Paid",
+          "pending": "Pending"
+        },
+        "goals": {
+          "title": "🏆 Financial Goals",
+          "new": "New Goal",
+          "noGoals": "No goals defined",
+          "completed": "{percent}% completed"
+        },
+        "transactions": {
+          "title": "📋 Recent Transactions",
+          "new": "New",
+          "noTransactions": "No transactions. Use the button below or IA!"
+        },
+        "insights": {
+          "overBudget": "⚠️ Budget exceeded by {amount}!",
+          "highestExpense": "📊 Highest expense: {category}",
+          "spentMore": "📉 You spent more than you received this month!",
+          "positiveBalance": "💡 Positive balance of {amount} this month!",
+          "noTransactions": "Add transactions to see personalized insights!"
+        },
+        "ai": {
+          "success": "✅ {type} registered!\n📂 Category: {category}\n💰 Value: {amount}\n🗂️ +15 coins earned!",
+          "income": "Income",
+          "expense": "Expense",
+          "error": "I couldn't understand 🤔\nTry: \"Spent 50 on Uber\" or \"Got 2000 salary\"",
+          "title": "AI Financial Assistant",
+          "subtitle": "Interprets natural language",
+          "analysis": "🔍 Smart Analysis"
+        }
+      },
+      "report": {
+        "title": "PROXIMITY {highlight}",
+        "highlight": "RELIQUARY",
+        "subtitle": "Tactical Report • Alpha-9 Protocol",
+        "charProfile": {
+          "level": "Level {level}",
+          "xp": "TOTAL XP",
+          "rank": "RANK"
+        },
+        "performance": {
+          "title": "Performance Flow",
+          "last7Days": "Last 7 Days"
+        },
+        "details": {
+          "quests": "Quests Completed",
+          "habits": "Habits Completed",
+          "trainings": "Trainings Done",
+          "victories": "Victories",
+          "defeats": "Defeats"
+        },
+        "achievements": {
+          "recent": "Recent Achievement",
+          "legendary": "Legendary of Shadows"
+        },
+        "confirm": "Confirm and Return"
+      },
+      "projects": {
+        "new": "New Project",
+        "name": "Project Name",
+        "placeholderName": "Ex: Create Productivity SaaS",
+        "desc": "Description",
+        "placeholderDesc": "Describe the project...",
+        "goal": "Project Goal 🏆",
+        "placeholderGoal": "Ex: Launch by day 30",
+        "deadline": "Final Deadline",
+        "priority": "Priority",
+        "color": "Color",
+        "icon": "Icon",
+        "create": "Create Project",
+        "priorities": {
+          "Baixa": "Low",
+          "Média": "Medium",
+          "Alta": "High",
+          "Urgente": "Urgent"
+        }
+      },
+      "tasks": {
+        "new": "New Task",
+        "edit": "Edit Task",
+        "title": "Title",
+        "desc": "Description",
+        "priority": "Priority",
+        "deadline": "Deadline",
+        "save": "Save Task",
+        "delete": "Delete Task",
+        "columns": {
+          "Ideias": "Ideas",
+          "A Fazer": "To Do",
+          "Em Progresso": "In Progress",
+          "Em Revisão": "In Review",
+          "Concluído": "Completed"
+        },
+        "iaSuggest": "AI Suggest"
+      },
+      "training": {
+        "new": "Training Protocol",
+        "day": "Training Day",
+        "duration": "Duration Estimate",
+        "placeholderDuration": "Ex: 60 min",
+        "identification": "Training Identification",
+        "placeholderName": "Ex: Hypertrophy Protocol A",
+        "exercises": "Exercise Set",
+        "add": "Add",
+        "placeholderExercise": "Exercise {number}",
+        "series": "Series",
+        "kg": "Lbs/KG",
+        "reps": "Reps",
+        "finish": "Finish Training Protocol"
+      },
+      "kronos": {
+        "title": "Kronos Dashboard",
+        "dailyTasks": "Daily habituation Goal",
+        "dailyDesc": "Monitoring Consistency Neural",
+        "activeSystem": "Active Monitoring System",
+        "performance": "Month Performance",
+        "biologicalProtocol": "Biological Data Protocol",
+        "habitsCircle": "Habits Circle",
+        "matrix": "Temporal Progress Matrix",
+        "acquisition": "Routine Acquisition",
+        "placeholderHabit": "Habit or Protocol...",
+        "save": "Save"
+      },
+      "readyHabits": {
+        "title": "Elite Habits",
+        "protocol": "KRONOS PROTOCOL",
+        "install": "Install",
+        "locked": "Locked",
+        "duration": "DURATION",
+        "days": "DAYS",
+        "frequency": "FREQUENCY",
+        "activeProtocolError": "Active Protocol: You already have habits in progress. Complete the current battle to install a new protocol.",
+        "list": [
+          {
+            "id": "ironDawn",
+            "title": "Iron Dawn",
+            "desc": "Wake up at 05:00 AM to dominate the day with maximum focus.",
+            "max": 30,
+            "frequency": "Daily",
+            "time": "05:00 AM",
+            "tasks": ["Wake up 05:00", "Cold Shower", "Reading"]
+          },
+          {
+            "id": "digitalMonk",
+            "title": "Digital Monk",
+            "desc": "Zero social media and distractions until noon.",
+            "max": 21,
+            "frequency": "Daily",
+            "time": "08:00 AM",
+            "tasks": ["Total Focus", "No Social Media", "Deep Work"]
+          },
+          {
+            "id": "armoredBody",
+            "title": "Armored Body",
+            "desc": "High-intensity training session.",
+            "max": 30,
+            "frequency": "Daily",
+            "time": "06:00 PM",
+            "tasks": ["Weightlifting", "Running", "Protein"]
+          },
+          {
+            "id": "steelMind",
+            "title": "Steel Mind",
+            "desc": "30 minutes of deep meditation or technical reading.",
+            "max": 21,
+            "frequency": "Daily",
+            "time": "10:00 PM",
+            "tasks": ["Meditation", "Journaling", "Study"]
+          },
+          {
+            "id": "iceRite",
+            "title": "Ice Rite",
+            "desc": "Cold shower upon waking for regenerative thermal shock.",
+            "max": 15,
+            "frequency": "Daily",
+            "time": "06:30 AM",
+            "tasks": ["Breathing", "Immersion", "Drying"]
+          }
+        ]
+      },
+      "habitTasks": {
+        "title": "Package Items",
+        "close": "Close Protocol"
+      },
+      "pomodoro": {
+        "title": "Pomodoro Focus",
+        "labels": {
+          "mainTask": "Main Task",
+          "focusPlaceholder": "What are we focusing on?",
+          "priority": "Priority",
+          "targetSessions": "Target (Sessions)",
+          "targetDays": "Deadline (Days)",
+          "saveObjective": "Save Objective",
+          "inFocus": "In Focus Now",
+          "session": "Session",
+          "pauseSession": "Pause Session",
+          "exitDiving": "Press to exit the dive",
+          "emptyState": "Add objectives to start",
+          "days": "Days",
+          "sessions": "Sessions"
+        },
+        "priorities": {
+          "Normal": "Normal",
+          "Attention": "Attention",
+          "Urgent": "Urgent"
+        }
+      },
+      "battle": {
+        "chooseMode": "CHOOSE YOUR CHALLENGE",
+        "selectBattle": "Select battle mode",
+        "play": "BATTLE",
+        "villains": {
+          "shadow": "Shadow of Chaos",
+          "darkKing": "Dark King",
+          "corruptLord": "Corrupt Lord",
+          "darkDragon": "Dark Dragon"
+        },
+        "status": {
+          "end": "END",
+          "victory": "VICTORY",
+          "defeat": "DEFEAT"
+        },
+        "modes": {
+          "rotina": {
+            "label": "Routine",
+            "desc": "Complete your daily missions"
+          },
+          "habitos": {
+            "label": "Habits",
+            "desc": "Strengthen your habits"
+          },
+          "treinos": {
+            "label": "Training",
+            "desc": "Master your training of the day"
+          }
+        },
+        "validation": {
+          "unavailable": "Wars Unavailable",
+          "understood": "UNDERSTOOD"
+        },
+        "result": {
+          "victory": "VICTORY",
+          "defeat": "DEFEAT",
+          "defeatedMsg": "You have been defeated",
+          "restart": "RESTART FROM ZERO",
+          "lossWarning": "All progress will be permanently lost"
+        },
+        "labels": {
+          "enemy": "Enemy",
+          "activeMode": "Active Combat Mode",
+          "level": "Level",
+          "xp": "XP",
+          "coins": "Coins",
+          "achievements": "Achievements",
+          "ready": "Templates"
+        }
+      }
+    },
+    "days": {
+      "seg": "MON",
+      "ter": "TUE",
+      "qua": "WED",
+      "qui": "THU",
+      "sex": "FRI",
+      "sab": "SAT",
+      "dom": "SUN"
+    }
+  },
+  "Features": {
+    "subtitle": "How It Works",
+    "title": "The 3 Pillars of Evolution",
+    "dailyMissions": {
+      "title": "Daily Missions",
+      "description": "Your tasks are no longer boring obligations. They are missions that yield XP, gold, and real progress on your journey.",
+      "items": ["Tasks turn into missions", "Gamified daily check-in", "XP for instant completion"]
+    },
+    "xpSystem": {
+      "title": "XP and Level System",
+      "description": "Every positive action generates XP. Level up to unlock new features and show your dominance in the system.",
+      "items": ["Levels unlock badges", "Themes and customization", "Social status in the community"]
+    },
+    "ai": {
+      "title": "Artificial Intelligence",
+      "description": "An AI engine analyzes your patterns and adjusts the system to ensure you never get stuck or overwhelmed.",
+      "items": ["Dynamic goal adjustment", "Improvement suggestions", "Performance drop detection"]
+    }
+  },
+  "UnlockableCharacters": {
+    "subtitle": "Warrior Collection",
+    "title": "YOUR EGO IS YOUR {highlight}",
+    "highlight": "FUEL.",
+    "description": "Only the disciplined get COINS to evolve their avatars.",
+    "rarityScore": "Rarity Score:",
+    "studentsCount": "<highlight>+2,450 students</highlight> have already unlocked legendary characters",
+    "characters": {
+      "0001": {
+        "name": "Apprentice Cyborg",
+        "rank": "LEVEL 1-10",
+        "tag": "Beginner",
+        "subtitle": "The TERROR of procrastination"
+      },
+      "0666": {
+        "name": "Emerald Ninja",
+        "rank": "LEVEL 11-50",
+        "tag": "Elite",
+        "subtitle": "The Disciplined"
+      },
+      "7777": {
+        "name": "Golden Commander",
+        "rank": "LEVEL 50+",
+        "tag": "Legendary",
+        "subtitle": "The Powerful"
+      }
+    }
+  },
+  "ProblemSection": {
+    "title": "YOUR ROUTINE IS A <br /> {highlight}",
+    "highlight": "BATTLE AND YOU ARE LOSING.",
+    "p1": "Procrastination is not laziness, it's your brain escaping discomfort. Trying to win by shouting, relying only on willpower, is like going to war without armor. Willpower runs out.",
+    "p2": "<highlight>Kronos Habit</highlight> doesn't ask for more effort. It hacks your brain by creating an external structure: fulfilling what's planned gives you immediate rewards, turning discipline into an addiction.",
+    "realLife": {
+      "label": "Real Life",
+      "description": "Mental fatigue, stagnation, guilt for always leaving for tomorrow what matters."
+    },
+    "theGame": {
+      "label": "The Game (Kronos)",
+      "description": "Experience, Gold, High level, and the immediate dopamine of being relentless every day."
+    },
+    "battlePreview": {
+      "label": "Real Battle Preview",
+      "bossFight": "Boss Fight",
+      "enemy": {
+        "name": "Dark King",
+        "subtitle": "Enemy (Procrastination) • Lv 99"
+      },
+      "player": {
+        "name": "YOU",
+        "status": "Alpha Status",
+        "subtitle": "Player"
+      }
+    }
+  },
+  "DashboardSection": {
+    "subtitle": "Elite Interface",
+    "title": "Your Personal <br /> {highlight}",
+    "highlight": "Command Center",
+    "description": "The Kronos Dashboard is not just a to-do list. It's a performance cockpit that monitors every aspect of your evolution in real-time.",
+    "features": {
+      "progressBar": {
+        "title": "Progress Bar",
+        "desc": "Clear visualization of your daily journey."
+      },
+      "xpLevel": {
+        "title": "XP & Level",
+        "desc": "Deep gamification with immediate feedback."
+      },
+      "streakSystem": {
+        "title": "Streak System",
+        "desc": "Maintain the sacred fire of consistency."
+      },
+      "globalRanking": {
+        "title": "Global Ranking",
+        "desc": "Your position among the best in the world."
+      }
+    },
+    "mockup": {
+      "status": "System Status",
+      "level": "LEVEL 42",
+      "master": "Master",
+      "streak": "15 Days",
+      "xpTotal": "Total XP",
+      "ranking": "Ranking",
+      "missions": "Missions",
+      "activeMissions": "Active Missions",
+      "strengthTraining": "Strength Training",
+      "deepReading": "Deep Reading"
+    }
+  },
+  "HabitSystem": {
+    "mockup": {
+      "title": "Habit Engineering",
+      "newHabit": "New Habit",
+      "meditation": "Morning Meditation",
+      "frequencyLabel": "Frequency",
+      "daily": "Daily",
+      "timeLabel": "Time",
+      "timeValue": "07:00 AM",
+      "difficultyLabel": "Difficulty",
+      "legendary": "Legendary",
+      "xpRewardLabel": "XP Reward"
+    },
+    "subtitle": "Routine Architecture",
+    "title": "Design Your <br /> {highlight}",
+    "highlight": "Own Evolution",
+    "description": "Create habits with surgical precision. Define frequency, times, and difficulty. The greater the challenge, the greater the reward in XP and status.",
+    "features": {
+      "smartFrequency": {
+        "title": "Smart Frequency",
+        "desc": "Daily, weekly, or custom patterns."
+      },
+      "strategicScheduling": {
+        "title": "Strategic Scheduling",
+        "desc": "Sync habits with your energy peaks."
+      },
+      "dynamicDifficulty": {
+        "title": "Dynamic Difficulty",
+        "desc": "Adjust challenge level as you evolve."
+      }
+    }
   }
 }

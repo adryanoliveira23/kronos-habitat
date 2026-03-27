@@ -1,35 +1,50 @@
 import { motion } from "motion/react";
 import { Swords, TrendingUp, Cpu } from "lucide-react";
-
-const features = [
-  {
-    icon: Swords,
-    title: "Missões Diárias",
-    description: "Suas tarefas não são mais obrigações chatas. Elas são missões que rendem XP, ouro e progresso real na sua jornada.",
-    items: ["Tarefas viram missões", "Check-in diário gamificado", "XP por conclusão imediata"]
-  },
-  {
-    icon: TrendingUp,
-    title: "Sistema de XP e Level",
-    description: "Cada ação positiva gera XP. Suba de nível para desbloquear novos recursos e mostrar sua dominância no sistema.",
-    items: ["Levels desbloqueiam medalhas", "Temas e customização", "Status social na comunidade"]
-  },
-  {
-    icon: Cpu,
-    title: "Inteligência Artificial",
-    description: "Um motor de IA analisa seus padrões e ajusta o sistema para garantir que você nunca fique estagnado ou sobrecarregado.",
-    items: ["Ajuste dinâmico de metas", "Sugestões de melhoria", "Detecção de queda de desempenho"]
-  }
-];
+import { useTranslations } from "next-intl";
 
 export default function Features() {
+  const t = useTranslations("Features");
+
+  const features = [
+    {
+      icon: Swords,
+      title: t("dailyMissions.title"),
+      description: t("dailyMissions.description"),
+      items: [
+        t("dailyMissions.items.0"),
+        t("dailyMissions.items.1"),
+        t("dailyMissions.items.2")
+      ]
+    },
+    {
+      icon: TrendingUp,
+      title: t("xpSystem.title"),
+      description: t("xpSystem.description"),
+      items: [
+        t("xpSystem.items.0"),
+        t("xpSystem.items.1"),
+        t("xpSystem.items.2")
+      ]
+    },
+    {
+      icon: Cpu,
+      title: t("ai.title"),
+      description: t("ai.description"),
+      items: [
+        t("ai.items.0"),
+        t("ai.items.1"),
+        t("ai.items.2")
+      ]
+    }
+  ];
+
   return (
     <section id="pilares" className="py-24 bg-section-1 relative overflow-hidden section-bg-glow">
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-neon-green/5 to-transparent pointer-events-none -z-10" />
+      <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-neon-green/5 to-transparent pointer-events-none -z-10" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-[10px] font-black text-neon-green uppercase tracking-[0.3em] mb-4">Como Funciona</h2>
-          <p className="text-4xl md:text-5xl font-black font-sans tracking-tighter uppercase">Os 3 Pilares da Evolução</p>
+          <h2 className="text-[10px] font-black text-neon-green uppercase tracking-[0.3em] mb-4">{t("subtitle")}</h2>
+          <p className="text-4xl md:text-5xl font-black font-sans tracking-tighter uppercase">{t("title")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

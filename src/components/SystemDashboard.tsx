@@ -89,817 +89,9 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { motion, AnimatePresence } from "motion/react";
+import { useTranslations, useLocale } from "next-intl";
 
-// ─── Constants & Assets ──────────────────────────────────────────────────────
-const SHOP_CHARACTERS = [
-  {
-    id: 1,
-    name: "Guerreiro Supremo",
-    class: "Guerreiro",
-    rarity: "LENDíRIO",
-    price: 0,
-    img: personagemImg.src,
-    color: "from-neon-green to-emerald-600",
-    glow: "rgba(56,242,127,0.5)",
-  },
-  {
-    id: 2,
-    name: "Cyborg Aprendiz",
-    class: "Cyborg",
-    rarity: "INICIANTE",
-    price: 5000,
-    img: "https://i.ibb.co/Mm8fkMz/Chat-GPT-Image-1-de-mar-de-2026-21-15-22.png",
-    color: "from-yellow-400 to-orange-500",
-    glow: "rgba(255,165,0,0.5)",
-  },
-  {
-    id: 3,
-    name: "Ninja Esmeralda",
-    class: "Elite",
-    rarity: "EPIC",
-    price: 8000,
-    img: "https://i.ibb.co/jXgP91m/Chat-GPT-Image-1-de-mar-de-2026-21-15-18.png",
-    color: "from-neon-green to-emerald-600",
-    glow: "rgba(56,242,127,0.5)",
-  },
-  {
-    id: 4,
-    name: "Comandante íureo",
-    class: "Lendário",
-    rarity: "ULTRA",
-    price: 12000,
-    img: "https://i.ibb.co/8g808TTc/Chat-GPT-Image-1-de-mar-de-2026-21-15-10.png",
-    color: "from-amber-400 to-yellow-600",
-    glow: "rgba(255,215,0,0.5)",
-  },
-];
-
-const SHOP_PETS = [
-  {
-    id: 1,
-    name: "Robo-Pet T01",
-    class: "Básico",
-    rarity: "COMUM",
-    price: 0,
-    img: "/pet-1.png",
-    color: "from-neon-green to-emerald-600",
-    glow: "rgba(56,242,127,0.5)",
-  },
-  {
-    id: 2,
-    name: "Drone de Vigília",
-    class: "Rápido",
-    rarity: "RARO",
-    price: 2000,
-    img: "/pet-2.png",
-    color: "from-blue-400 to-cyan-600",
-    glow: "rgba(0,191,255,0.5)",
-  },
-  {
-    id: 3,
-    name: "Pantera Neon",
-    class: "Fura-Fila",
-    rarity: "EPIC",
-    price: 6000,
-    img: "/pet-3.png",
-    color: "from-purple-500 to-indigo-600",
-    glow: "rgba(138,43,226,0.5)",
-  },
-  {
-    id: 4,
-    name: "Dragão de Dados",
-    class: "Místico",
-    rarity: "ULTRA",
-    price: 15000,
-    img: "/pet-4.png",
-    color: "from-red-500 to-orange-600",
-    glow: "rgba(255,69,0,0.5)",
-  },
-];
-
-// ─── Custom Hooks ────────────────────────────────────────────────────────────
-export function useLocalStorage<T>(
-  key: string,
-  initialValue: T,
-): [T, (value: T | ((val: T) => T)) => void] {
-  const [storedValue, setStoredValue] = useState<T>(initialValue);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const item = window.localStorage.getItem(key);
-        if (item) {
-          setStoredValue(JSON.parse(item));
-        }
-      } catch (error) {
-        console.warn(`Error reading localStorage key "${key}":`, error);
-      }
-    }
-  }, [key]);
-
-  const setValue = (value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      console.warn(`Error setting localStorage key "${key}":`, error);
-    }
-  };
-
-  return [storedValue, setValue];
-}
-
-// ─── Optimized Sub-components ────────────────────────────────────────────────
-const CharacterStage = ({
-  selectedCharImg,
-  selectedPetImg,
-  isMobile = false,
-  isTouch = false,
-  charAnim,
-  setCurrentView,
-  setActiveShopTab,
-  setShowNamePlate,
-  showNamePlate,
-  Friends,
-  Newspaper,
-  onCrownClick,
-  onFinanceClick,
-  onAiChatClick,
-  onProjectsClick,
-  Bot,
-  Briefcase,
-  CircleDollarSign,
-}: {
-  selectedCharImg: string;
-  selectedPetImg: string;
-  isMobile?: boolean;
-  isTouch?: boolean;
-  charAnim: boolean;
-  setCurrentView: (v: ViewId) => void;
-  setActiveShopTab: React.Dispatch<
-    React.SetStateAction<"characters" | "pets" | null>
-  >;
-  setShowNamePlate: (v: boolean) => void;
-  showNamePlate: boolean;
-  Friends: React.ElementType;
-  Newspaper: React.ElementType;
-  onCrownClick: () => void;
-  onFinanceClick: () => void;
-  onAiChatClick: () => void;
-  onProjectsClick: () => void;
-  Bot: React.ElementType;
-  Briefcase: React.ElementType;
-  CircleDollarSign: React.ElementType;
-}) => (
-  <motion.div
-    initial={{ y: 60, opacity: 0, scale: 0.9 }}
-    animate={charAnim ? { y: 0, opacity: 1, scale: 0.9 } : {}}
-    transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
-    className={`relative z-10 flex flex-col items-center w-full ${isMobile ? "px-1" : "h-full justify-center"}`}
-  >
-    <div
-      className={`w-full relative flex flex-col items-center justify-center`}
-      style={{
-        minHeight: isMobile ? "min(350px, 40dvh)" : "450px",
-        paddingTop: isMobile ? "min(45%, 15dvh)" : undefined,
-      }}
-    >
-      {/* Left Action Column (IA + News + Projects) */}
-      <div
-        className={`absolute left-0 top-0 flex flex-col lg:flex-row items-center gap-4 z-30 transition-all md:hidden ${isMobile ? "pl-2" : "-translate-x-32 xl:-translate-x-44"}`}
-      >
-        <SideButton
-          icon={Bot}
-          color="bg-gradient-to-b from-blue-600/40 to-blue-900/40"
-          onClick={onAiChatClick}
-        />
-        <SideButton icon={Newspaper} onClick={() => setCurrentView("news")} />
-        <SideButton
-          icon={Briefcase}
-          color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
-          onClick={onProjectsClick}
-        />
-      </div>
-
-      {/* Character/Pet Group */}
-      <div className="flex items-end gap-3 sm:gap-4 relative z-10 mt-6 md:mt-0">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{
-            scaleX: 1.2,
-            scaleY: 0.8,
-            y: 10,
-            transition: { type: "spring", stiffness: 1000, damping: 10 },
-          }}
-          animate={{
-            y: [0, -5, 0],
-            scale: [1, 1.02, 1],
-            transition: {
-              y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-              scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-            },
-          }}
-          className="relative mb-2 sm:mb-4 self-end cursor-pointer group w-fit h-fit"
-          onClick={() => setActiveShopTab("pets")}
-        >
-          <img
-            src={selectedPetImg}
-            alt="Pet"
-            className={`object-contain drop-shadow-[0_8px_20px_rgba(56,242,127,0.5)] transition-filter pointer-events-auto w-[100px] h-[100px] sm:w-40 sm:h-40 lg:w-56 lg:h-56 xl:w-64 xl:h-64 2xl:w-80 2xl:h-80`}
-            style={
-              isMobile ? { maxHeight: "18dvh", maxWidth: "18dvh" } : undefined
-            }
-            referrerPolicy="no-referrer"
-          />
-        </motion.div>
-
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{
-            scaleX: 1.1,
-            scaleY: 0.9,
-            y: 5,
-            transition: { type: "spring", stiffness: 1000, damping: 10 },
-          }}
-          animate={{
-            y: [0, -8, 0],
-            scale: [1, 1.01, 1],
-            transition: {
-              y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-              scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-            },
-          }}
-          className="relative w-fit h-fit"
-        >
-          <img
-            src={selectedCharImg}
-            alt="Personagem"
-            className={`object-contain drop-shadow-[0_20px_60px_rgba(56,242,127,0.4)] relative z-10 pointer-events-auto w-[180px] h-[180px] sm:w-72 sm:h-72 lg:w-[340px] lg:h-[340px] xl:w-[420px] xl:h-[420px] 2xl:w-[520px] 2xl:h-[520px]`}
-            style={
-              isMobile ? { maxHeight: "35dvh", maxWidth: "35dvh" } : undefined
-            }
-            referrerPolicy="no-referrer"
-          />
-        </motion.div>
-      </div>
-
-      {/* Right Action Column (Finance + Friends) */}
-      <div
-        className={`absolute right-0 top-0 flex flex-col gap-4 z-30 transition-all md:hidden ${isMobile ? "pr-2" : "translate-x-12 xl:translate-x-16"}`}
-      >
-        <SideButton
-          icon={CircleDollarSign}
-          color="bg-linear-to-b from-emerald-600/40 to-emerald-900/40"
-          onClick={onFinanceClick}
-        />
-        <SideButton icon={Friends} onClick={() => setCurrentView("friends")} />
-      </div>
-    </div>
-  </motion.div>
-);
-const SideButton = ({
-  icon: Icon,
-  color = "bg-linear-to-b from-[#2d4b7c] to-[#1a2e4d]",
-  onClick,
-}: {
-  icon: any;
-  color?: string;
-  onClick?: () => void;
-}) => (
-  <button
-    onClick={onClick}
-    className={`w-12 h-12 ${color} rounded-2xl border-2 border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-center text-white relative overflow-hidden active:scale-95 transition-all`}
-  >
-    <Icon className="w-6 h-6 z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
-    <div className="absolute top-0 left-0 right-0 h-[40%] bg-white/10 rounded-t-2xl pointer-events-none" />
-  </button>
-);
-
-const QuestsPanel = ({
-  quests,
-  setQuests,
-  setCurrentView,
-  setIsCreateQuestModalOpen,
-  onToggleQuest,
-}: {
-  quests: Quest[];
-  setQuests: React.Dispatch<React.SetStateAction<Quest[]>>;
-  setCurrentView: (v: ViewId) => void;
-  setIsCreateQuestModalOpen: (o: boolean) => void;
-  onToggleQuest: (i: number) => void;
-}) => (
-  <>
-    <div className="flex items-center justify-between mb-2 shrink-0">
-      <span className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
-        <Target className="w-3 h-3 xl:w-4 xl:h-4 text-neon-green" /> MISSÕES
-      </span>
-      <button
-        onClick={() => setCurrentView("quests")}
-        className="flex items-center gap-1 text-[8px] xl:text-[9px] 2xl:text-[10px] font-black text-neon-green uppercase tracking-widest hover:text-white transition-colors"
-      >
-        Ver Mais <ChevronRight className="w-2.5 h-2.5 xl:w-3 xl:h-3" />
-      </button>
-    </div>
-    <button
-      onClick={() => setIsCreateQuestModalOpen(true)}
-      className="w-full mb-6 flex items-center justify-center gap-3 p-4 bg-neon-green/30 border border-neon-green/40 rounded-2xl hover:bg-neon-green/40 transition-all active:scale-95 flex-shrink-0 shadow-[0_8px_25px_rgba(56,242,127,0.2)]"
-    >
-      <Plus className="w-5 h-5 text-neon-green group-hover:scale-110 transition-transform" />
-      <span className="text-[12px] sm:text-[14px] font-black text-neon-green uppercase tracking-widest">
-        + NOVA MISSÃO
-      </span>
-    </button>
-    <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-neon-green/20 hover:scrollbar-thumb-neon-green/40">
-      {quests.map((q, i) => (
-        <QuestCard
-          key={i}
-          quest={q}
-          index={i}
-          onToggle={() => {
-            const newQuests = [...quests];
-            const target = newQuests[i];
-            const wasDone = target.done;
-            target.done = !wasDone;
-            setQuests(newQuests);
-            if (!wasDone) {
-              // @ts-ignore
-              onToggleQuest(i);
-            }
-          }}
-          onDelete={() => setQuests(quests.filter((_, idx) => idx !== i))}
-        />
-      ))}
-    </div>
-  </>
-);
-
-const HabitsPanel = ({
-  habits,
-  setHabits,
-  setCurrentView,
-  setIsCreateHabitModalOpen,
-  setIsReadyHabitsModalOpen,
-  setSelectedHabitForTasks,
-  setIsHabitTasksModalOpen,
-}: {
-  habits: Habit[];
-  setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
-  setCurrentView: (v: ViewId) => void;
-  setIsCreateHabitModalOpen: (o: boolean) => void;
-  setIsReadyHabitsModalOpen: (o: boolean) => void;
-  setSelectedHabitForTasks: (h: Habit | null) => void;
-  setIsHabitTasksModalOpen: (o: boolean) => void;
-}) => (
-  <>
-    <div className="flex items-center justify-between mb-3 shrink-0">
-      <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
-        <Flame className="w-3 h-3 xl:w-4 xl:h-4 text-orange-400" /> HíBITOS
-      </p>
-      <button
-        onClick={() => setCurrentView("habits")}
-        className="flex items-center gap-1 text-[8px] xl:text-[9px] 2xl:text-[10px] font-black text-orange-400 uppercase tracking-widest hover:text-white transition-colors"
-      >
-        Ver Mais <ChevronRight className="w-2.5 h-2.5 xl:w-3 xl:h-3" />
-      </button>
-    </div>
-    <div className="grid grid-cols-2 gap-3 mb-6 flex-shrink-0">
-      <button
-        onClick={() => setIsCreateHabitModalOpen(true)}
-        className="flex-1 flex items-center justify-center gap-2.5 p-4 bg-orange-500/30 border border-orange-400/50 rounded-2xl hover:bg-orange-500/40 transition-all active:scale-95 flex-shrink-0 shadow-[0_8px_20px_rgba(251,146,60,0.2)]"
-      >
-        <Plus className="w-5 h-5 text-orange-400 group-hover:scale-110 transition-transform" />
-        <span className="text-[12px] sm:text-[14px] font-black text-orange-400 uppercase tracking-widest">
-          + NOVO
-        </span>
-      </button>
-      <button
-        onClick={() => setIsReadyHabitsModalOpen(true)}
-        className="flex-1 flex items-center justify-center gap-2.5 p-4 bg-neon-yellow/30 border border-neon-yellow/50 rounded-2xl hover:bg-neon-yellow/40 transition-all active:scale-95 flex-shrink-0 shadow-[0_8px_20px_rgba(253,224,71,0.2)]"
-      >
-        <Eye className="w-5 h-5 text-neon-yellow group-hover:scale-110 transition-transform" />
-        <span className="text-[12px] sm:text-[14px] font-black text-neon-yellow uppercase tracking-widest">
-          PRONTOS
-        </span>
-      </button>
-    </div>
-    <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-orange-400/20 hover:scrollbar-thumb-orange-400/40">
-      {habits.map((h, i) => (
-        <div
-          key={h.id}
-          className="p-3 2xl:p-4 bg-white/5 border border-white/10 rounded-xl group/habit"
-        >
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-[10px] xl:text-[11px] 2xl:text-[12px] font-black uppercase text-white/80">
-              {h.title}
-            </span>
-            <div className="flex items-center gap-2">
-              {h.tasks && h.tasks.length > 0 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedHabitForTasks(h);
-                    setIsHabitTasksModalOpen(true);
-                  }}
-                  className="p-1 hover:bg-white/10 rounded transition-colors"
-                >
-                  <Eye className="w-3 h-3 2xl:w-4 2xl:h-4 text-neon-yellow" />
-                </button>
-              )}
-              <div className="flex items-center gap-1">
-                <Flame className="w-2.5 h-2.5 2xl:w-3 2xl:h-3 text-orange-400" />
-                <span className="text-[10px] 2xl:text-[11px] font-black text-orange-400">
-                  {h.streak}d
-                </span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setHabits(habits.filter((habit) => habit.id !== h.id));
-                }}
-                className="text-white/20 hover:text-red-500 transition-colors opacity-0 group-hover/habit:opacity-100"
-              >
-                <Trash2 className="w-3 h-3 2xl:w-4 2xl:h-4" />
-              </button>
-            </div>
-          </div>
-          <div className="h-1 2xl:h-1.5 bg-white/5 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${(h.streak / h.max) * 100}%` }}
-              className={`h-full bg-linear-to-r ${h.color}`}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  </>
-);
-
-const TrainingPanel = ({
-  weeklyTrainings,
-  setCurrentView,
-  handleEditTraining,
-  handleDeleteTraining,
-}: {
-  weeklyTrainings: any[];
-  setCurrentView: (v: any) => void;
-  handleEditTraining: (i: number) => void;
-  handleDeleteTraining: (i: number) => void;
-}) => {
-  const completedCount = weeklyTrainings.filter((t) => t.done).length;
-  const daysOrder = ["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"];
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-4 shrink-0 px-1">
-        <p className="text-[11px] xl:text-[12px] 2xl:text-[14px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
-          <Swords className="w-4 h-4 text-neon-green" /> CRONOGRAMA DE COMBATE
-        </p>
-        <button
-          onClick={() => setCurrentView("training")}
-          className="flex items-center gap-1 text-[9px] font-black text-neon-green uppercase tracking-widest hover:text-white transition-colors"
-        >
-          Expandir <ChevronRight className="w-3 h-3" />
-        </button>
-      </div>
-
-      <button
-        onClick={() => setCurrentView("training")}
-        className="w-full mb-4 flex items-center justify-center gap-2 p-4 bg-neon-green/10 border border-neon-green/30 rounded-[1.5rem] hover:bg-neon-green/20 transition-all group shrink-0 shadow-[0_4px_15px_rgba(56,242,127,0.1)]"
-      >
-        <Plus className="w-4 h-4 text-neon-green group-hover:scale-110 transition-transform" />
-        <span className="text-[11px] font-black text-neon-green uppercase tracking-widest">
-          + CRIAR NOVO TREINO
-        </span>
-      </button>
-
-      <div className="p-4 bg-neon-green/5 border border-neon-green/20 rounded-2xl mb-4 shrink-0">
-        <div className="flex justify-between items-center mb-2">
-          <p className="text-[10px] font-black text-neon-green uppercase tracking-widest">
-            Evolução Semanal
-          </p>
-          <span className="text-[10px] font-black text-neon-green">
-            {completedCount}/{weeklyTrainings.length}
-          </span>
-        </div>
-        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{
-              width:
-                weeklyTrainings.length > 0
-                  ? `${(completedCount / weeklyTrainings.length) * 100}%`
-                  : "0%",
-            }}
-            transition={{ duration: 1 }}
-            className="h-full bg-linear-to-r from-neon-green to-neon-yellow rounded-full shadow-[0_0_12px_rgba(56,242,127,0.5)]"
-          />
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto pr-1 space-y-6 scrollbar-thin scrollbar-thumb-neon-green/10 hover:scrollbar-thumb-neon-green/30">
-        {daysOrder.map((dayCode) => {
-          const dayTrainings = weeklyTrainings.filter((t) => t.day === dayCode);
-          if (dayTrainings.length === 0) return null;
-
-          return (
-            <div key={dayCode} className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] font-mono">
-                  {dayCode}
-                </span>
-                <div className="h-px flex-1 bg-white/5" />
-              </div>
-
-              {dayTrainings.map((t) => {
-                const realIndex = weeklyTrainings.findIndex((wt) => wt === t);
-                const totalSeries = t.exercises.reduce(
-                  (acc: number, ex: any) => acc + (ex.series || 0),
-                  0,
-                );
-                return (
-                  <div
-                    key={realIndex}
-                    className={`p-4 rounded-2xl border transition-all group/card ${t.done ? "bg-neon-green/5 border-neon-green/30" : "bg-white/3 border-white/5 hover:border-white/10"}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p
-                            className={`text-xs font-black uppercase truncate ${t.done ? "text-neon-green" : "text-white/90"}`}
-                          >
-                            {t.name}
-                          </p>
-                          {t.done && (
-                            <CheckCircle2 className="w-3 h-3 text-neon-green" />
-                          )}
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1 text-[9px] text-white/30 font-bold">
-                            <Clock className="w-2.5 h-2.5" /> {t.duration}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="px-1.5 py-0.5 rounded-md bg-white/5 text-[8px] font-black text-white/40 uppercase">
-                              {t.exercises.length} EXERCíCIOS
-                            </span>
-                            <span className="text-[8px] font-black text-neon-green/60 uppercase">
-                              {totalSeries} SÉRIES TOTAIS
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1 opacity-10 sm:group-hover/card:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => handleEditTraining(realIndex)}
-                          className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-neon-yellow"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteTraining(realIndex)}
-                          className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-red-500"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-
-        {weeklyTrainings.length === 0 && (
-          <div className="py-12 flex flex-col items-center justify-center text-center px-6">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
-              <Swords className="w-8 h-8 text-white/10" />
-            </div>
-            <p className="text-xs font-bold text-white/20 uppercase tracking-widest">
-              Nenhum protocolo ativo
-            </p>
-            <p className="text-[10px] text-white/10 mt-2 italic">
-              Dica: Planeje seu cronograma semanal para maximizar ganhos de XP.
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const RankingPanel = ({
-  setCurrentView,
-  rankingData,
-  playerStats,
-}: {
-  setCurrentView: (v: ViewId) => void;
-  rankingData: RankingUser[];
-  playerStats: PlayerStats;
-}) => {
-  const myRank =
-    rankingData.findIndex((r) => r.id === auth.currentUser?.uid) + 1;
-  const myXp = playerStats.xp;
-
-  return (
-    <>
-      <div className="flex items-center justify-between mb-3 shrink-0">
-        <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
-          <Trophy className="w-3 h-3 xl:w-4 xl:h-4 text-neon-yellow" /> RANK
-        </p>
-        <button
-          onClick={() => setCurrentView("ranking")}
-          className="flex items-center gap-1 text-[8px] xl:text-[9px] 2xl:text-[10px] font-black text-neon-yellow uppercase tracking-widest hover:text-white transition-colors"
-        >
-          Ver Mais <ChevronRight className="w-2.5 h-2.5 xl:w-3 xl:h-3" />
-        </button>
-      </div>
-      <div className="text-center p-4 2xl:p-6 bg-linear-to-b from-neon-yellow/10 to-transparent border border-neon-yellow/20 rounded-2xl mb-3 shrink-0">
-        <div className="text-3xl 2xl:text-4xl font-black text-neon-yellow">
-          #{myRank > 0 ? myRank : "?"}
-        </div>
-        <p className="text-[9px] xl:text-[10px] 2xl:text-[12px] font-black text-white/40 uppercase tracking-widest">
-          Seu Rank Global
-        </p>
-        <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black text-neon-green mt-1">
-          {myRank > 0 && myRank <= 3
-            ? "ðŸ† Elite do Olimpo"
-            : "⚡ Divisão Principal"}
-        </p>
-      </div>
-      <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-neon-yellow/20 hover:scrollbar-thumb-neon-yellow/40">
-        {rankingData.slice(0, 10).map((r, i) => {
-          const isMe = r.id === auth.currentUser?.uid;
-          const rankNum = i + 1;
-          let badge = "";
-          if (rankNum === 1) badge = "👑";
-          else if (rankNum === 2) badge = "⚡";
-          else if (rankNum === 3) badge = "🔥";
-          else if (isMe) badge = "🎯";
-
-          return (
-            <div
-              key={r.id}
-              className={`flex items-center gap-3 px-3 py-2 2xl:px-4 2xl:py-3 rounded-xl border ${isMe ? "border-neon-green/30 bg-neon-green/5" : rankNum <= 3 ? "border-neon-yellow/20 bg-neon-yellow/5" : "border-white/5"}`}
-            >
-              <span
-                className={`text-[10px] xl:text-[11px] 2xl:text-xs font-black w-6 ${rankNum <= 3 ? "text-neon-yellow" : isMe ? "text-neon-green" : "text-white/20"}`}
-              >
-                #{rankNum}
-              </span>
-              <span className="text-base 2xl:text-lg leading-none">
-                {badge}
-              </span>
-              <span
-                className={`flex-1 text-[10px] xl:text-[11px] 2xl:text-[12px] font-black uppercase ${isMe ? "text-neon-green" : ""}`}
-              >
-                {r.name}
-              </span>
-              <span className="text-[9px] xl:text-[10px] 2xl:text-[11px] text-white/40">
-                {(r.xp / 1000).toFixed(1)}k XP
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-};
-
-const ArsenalPanel = ({
-  arsenalSkills,
-  toggleSkill,
-  arsenalBuffs,
-  toggleBuff,
-  playerStats,
-}: {
-  arsenalSkills: Skill[];
-  toggleSkill: (i: number) => void;
-  arsenalBuffs: Buff[];
-  toggleBuff: (i: number) => void;
-  playerStats: PlayerStats;
-}) => (
-  <>
-    <div className="mb-4">
-      <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase tracking-widest text-white/70 mb-3 flex items-center gap-1.5">
-        <Zap className="w-2.5 h-2.5 xl:w-3 xl:h-3 text-neon-yellow" />{" "}
-        Habilidades Equipadas
-      </p>
-      <div className="grid grid-cols-4 gap-2 2xl:gap-3">
-        {arsenalSkills.map((s, i) => (
-          <SkillSlot
-            key={i}
-            skill={s}
-            index={i}
-            onClick={() => toggleSkill(i)}
-          />
-        ))}
-      </div>
-    </div>
-    <div className="mb-4">
-      <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase tracking-widest text-white/70 mb-3 flex items-center gap-1.5">
-        <Sparkles className="w-2.5 h-2.5 xl:w-3 xl:h-3 text-blue-400" /> Buffs
-        Conquistados
-      </p>
-      <div className="space-y-2 2xl:space-y-3">
-        {arsenalBuffs.map((b, i) => (
-          <div
-            key={i}
-            onClick={() => b.unlocked && toggleBuff(i)}
-            className={`flex items-start gap-3 p-3 2xl:p-4 rounded-xl border transition-all ${
-              b.unlocked
-                ? b.active
-                  ? "bg-white/4 border-white/20 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.02)]"
-                  : "bg-white/[0.02] border-white/10 cursor-pointer hover:bg-white/4"
-                : "bg-black/40 border-white/5 opacity-40 grayscale cursor-not-allowed"
-            }`}
-          >
-            <span
-              className={`text-xl 2xl:text-2xl leading-none ${!b.unlocked ? "opacity-30" : ""}`}
-            >
-              {typeof b.icon === "string" ? (
-                b.icon
-              ) : (
-                <b.icon className="w-6 h-6" />
-              )}
-            </span>
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <p
-                  className={`text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase ${b.unlocked ? "text-white" : "text-white/50"}`}
-                >
-                  {b.name}
-                </p>
-                {!b.unlocked && <Lock className="w-2.5 h-2.5 text-white/40" />}
-              </div>
-              <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] text-white/50 mt-0.5">
-                {b.desc}
-              </p>
-            </div>
-            {b.unlocked && b.active && (
-              <div className="w-2 h-2 2xl:w-2.5 2xl:h-2.5 rounded-full bg-neon-green mt-1 shadow-[0_0_10px_rgba(56,242,127,0.8)] animate-pulse" />
-            )}
-            {!b.unlocked && (
-              <div className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10">
-                <span className="text-[7px] font-black text-white/50 uppercase tracking-tighter">
-                  Bloqueado
-                </span>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-    <div className="p-3 2xl:p-4 bg-neon-yellow/5 border border-neon-yellow/20 rounded-xl">
-      <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase text-neon-yellow/60 mb-2 flex items-center gap-1">
-        <Crown className="w-2.5 h-2.5 xl:w-3 xl:h-3" /> Próxima Evolução
-      </p>
-      <div className="flex items-center gap-3">
-        <span className="text-2xl 2xl:text-3xl">⚡</span>
-        <div className="flex-1">
-          <p className="text-[10px] xl:text-[12px] 2xl:text-[14px] font-black text-neon-yellow uppercase">
-            Nível {playerStats.level + 1}
-          </p>
-          <div className="flex items-center gap-1.5 mt-1 2xl:mt-2">
-            <div className="flex-1 h-1 2xl:h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{
-                  width: `${(playerStats.xp / playerStats.xpMax) * 100}%`,
-                }}
-                transition={{ duration: 1.2, delay: 0.5 }}
-                className="h-full bg-neon-yellow rounded-full"
-              />
-            </div>
-            <span className="text-[7px] xl:text-[8px] 2xl:text-[9px] text-neon-yellow/60">
-              {Math.floor(playerStats.xp)}/{playerStats.xpMax} XP
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </>
-);
-
-type Exercise = {
-  name: string;
-  series: number;
-  kg: number;
-  reps: number;
-  done: boolean;
-};
-type Training = {
-  day: string;
-  name: string;
-  exercises: Exercise[];
-  duration: string;
-  done: boolean;
-};
-
-// ─── Types ──────────────────────────────────────────────────────────────────â”€â”€
+// ─── Types ──────────────────────────────────────────────────────────────────
 interface PlayerStats {
   name: string;
   level: number;
@@ -1103,22 +295,850 @@ interface Project {
   goal: string;
 }
 
-// ─── Sub-components ─────────────────────────────────────────────────────────â”€â”€
+// ─── Constants & Assets ──────────────────────────────────────────────────────
+const SHOP_CHARACTERS = [
+  {
+    id: 1,
+    name: "Guerreiro Supremo",
+    class: "Guerreiro",
+    rarity: "LENDíRIO",
+    price: 0,
+    img: personagemImg.src,
+    color: "from-neon-green to-emerald-600",
+    glow: "rgba(56,242,127,0.5)",
+  },
+  {
+    id: 2,
+    name: "Cyborg Aprendiz",
+    class: "Cyborg",
+    rarity: "INICIANTE",
+    price: 5000,
+    img: "https://i.ibb.co/Mm8fkMz/Chat-GPT-Image-1-de-mar-de-2026-21-15-22.png",
+    color: "from-yellow-400 to-orange-500",
+    glow: "rgba(255,165,0,0.5)",
+  },
+  {
+    id: 3,
+    name: "Ninja Esmeralda",
+    class: "Elite",
+    rarity: "EPIC",
+    price: 8000,
+    img: "https://i.ibb.co/jXgP91m/Chat-GPT-Image-1-de-mar-de-2026-21-15-18.png",
+    color: "from-neon-green to-emerald-600",
+    glow: "rgba(56,242,127,0.5)",
+  },
+  {
+    id: 4,
+    name: "Comandante íureo",
+    class: "Lendário",
+    rarity: "ULTRA",
+    price: 12000,
+    img: "https://i.ibb.co/8g808TTc/Chat-GPT-Image-1-de-mar-de-2026-21-15-10.png",
+    color: "from-amber-400 to-yellow-600",
+    glow: "rgba(255,215,0,0.5)",
+  },
+];
+
+const SHOP_PETS = [
+  {
+    id: 1,
+    name: "Robo-Pet T01",
+    class: "Básico",
+    rarity: "COMUM",
+    price: 0,
+    img: "/pet-1.png",
+    color: "from-neon-green to-emerald-600",
+    glow: "rgba(56,242,127,0.5)",
+  },
+  {
+    id: 2,
+    name: "Drone de Vigília",
+    class: "Rápido",
+    rarity: "RARO",
+    price: 2000,
+    img: "/pet-2.png",
+    color: "from-blue-400 to-cyan-600",
+    glow: "rgba(0,191,255,0.5)",
+  },
+  {
+    id: 3,
+    name: "Pantera Neon",
+    class: "Fura-Fila",
+    rarity: "EPIC",
+    price: 6000,
+    img: "/pet-3.png",
+    color: "from-purple-500 to-indigo-600",
+    glow: "rgba(138,43,226,0.5)",
+  },
+  {
+    id: 4,
+    name: "Dragão de Dados",
+    class: "Místico",
+    rarity: "ULTRA",
+    price: 15000,
+    img: "/pet-4.png",
+    color: "from-red-500 to-orange-600",
+    glow: "rgba(255,69,0,0.5)",
+  },
+];
+
+// ─── Custom Hooks ────────────────────────────────────────────────────────────
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T,
+): [T, (value: T | ((val: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const item = window.localStorage.getItem(key);
+        if (item) {
+          setStoredValue(JSON.parse(item));
+        }
+      } catch (error) {
+        console.warn(`Error reading localStorage key "${key}":`, error);
+      }
+    }
+  }, [key]);
+
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.warn(`Error setting localStorage key "${key}":`, error);
+    }
+  };
+
+  return [storedValue, setValue];
+}
+
+// ─── Optimized Sub-components ────────────────────────────────────────────────
+const CharacterStage = ({
+  selectedCharImg,
+  selectedPetImg,
+  isMobile = false,
+  isTouch = false,
+  charAnim,
+  setCurrentView,
+  setActiveShopTab,
+  setShowNamePlate,
+  showNamePlate,
+  Friends,
+  Newspaper,
+  onCrownClick,
+  onFinanceClick,
+  onAiChatClick,
+  onProjectsClick,
+  Bot,
+  Briefcase,
+  CircleDollarSign,
+}: {
+  selectedCharImg: string;
+  selectedPetImg: string;
+  isMobile?: boolean;
+  isTouch?: boolean;
+  charAnim: boolean;
+  setCurrentView: (v: ViewId) => void;
+  setActiveShopTab: React.Dispatch<
+    React.SetStateAction<"characters" | "pets" | null>
+  >;
+  setShowNamePlate: (v: boolean) => void;
+  showNamePlate: boolean;
+  Friends: React.ElementType;
+  Newspaper: React.ElementType;
+  onCrownClick: () => void;
+  onFinanceClick: () => void;
+  onAiChatClick: () => void;
+  onProjectsClick: () => void;
+  Bot: React.ElementType;
+  Briefcase: React.ElementType;
+  CircleDollarSign: React.ElementType;
+}) => {
+  const t = useTranslations("Dashboard");
+  return (
+  <motion.div
+    initial={{ y: 60, opacity: 0, scale: 0.9 }}
+    animate={charAnim ? { y: 0, opacity: 1, scale: 0.9 } : {}}
+    transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
+    className={`relative z-10 flex flex-col items-center w-full ${isMobile ? "px-1" : "h-full justify-center"}`}
+  >
+    <div
+      className={`w-full relative flex flex-col items-center justify-center`}
+      style={{
+        minHeight: isMobile ? "min(350px, 40dvh)" : "450px",
+        paddingTop: isMobile ? "min(45%, 15dvh)" : undefined,
+      }}
+    >
+      {/* Left Action Column (IA + News + Projects) */}
+      <div
+        className={`absolute left-0 top-0 flex flex-col lg:flex-row items-center gap-4 z-30 transition-all md:hidden ${isMobile ? "pl-2" : "-translate-x-32 xl:-translate-x-44"}`}
+      >
+        <SideButton
+          icon={Bot}
+          color="bg-gradient-to-b from-blue-600/40 to-blue-900/40"
+          onClick={onAiChatClick}
+        />
+        <SideButton icon={Newspaper} onClick={() => setCurrentView("news")} />
+        <SideButton
+          icon={Briefcase}
+          color="bg-gradient-to-b from-gray-600/40 to-gray-900/40"
+          onClick={onProjectsClick}
+        />
+      </div>
+
+      {/* Character/Pet Group */}
+      <div className="flex items-end gap-3 sm:gap-4 relative z-10 mt-6 md:mt-0">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{
+            scaleX: 1.2,
+            scaleY: 0.8,
+            y: 10,
+            transition: { type: "spring", stiffness: 1000, damping: 10 },
+          }}
+          animate={{
+            y: [0, -5, 0],
+            scale: [1, 1.02, 1],
+            transition: {
+              y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+              scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+            },
+          }}
+          className="relative mb-2 sm:mb-4 self-end cursor-pointer group w-fit h-fit"
+          onClick={() => setActiveShopTab("pets")}
+        >
+          <img
+            src={selectedPetImg}
+            alt="Pet"
+            className={`object-contain drop-shadow-[0_8px_20px_rgba(56,242,127,0.5)] transition-filter pointer-events-auto w-[100px] h-[100px] sm:w-40 sm:h-40 lg:w-56 lg:h-56 xl:w-64 xl:h-64 2xl:w-80 2xl:h-80`}
+            style={
+              isMobile ? { maxHeight: "18dvh", maxWidth: "18dvh" } : undefined
+            }
+            referrerPolicy="no-referrer"
+          />
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{
+            scaleX: 1.1,
+            scaleY: 0.9,
+            y: 5,
+            transition: { type: "spring", stiffness: 1000, damping: 10 },
+          }}
+          animate={{
+            y: [0, -8, 0],
+            scale: [1, 1.01, 1],
+            transition: {
+              y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+              scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+            },
+          }}
+          className="relative w-fit h-fit"
+        >
+          <img
+            src={selectedCharImg}
+            alt="Personagem"
+            className={`object-contain drop-shadow-[0_20px_60px_rgba(56,242,127,0.4)] relative z-10 pointer-events-auto w-[180px] h-[180px] sm:w-72 sm:h-72 lg:w-[340px] lg:h-[340px] xl:w-[420px] xl:h-[420px] 2xl:w-[520px] 2xl:h-[520px]`}
+            style={
+              isMobile ? { maxHeight: "35dvh", maxWidth: "35dvh" } : undefined
+            }
+            referrerPolicy="no-referrer"
+          />
+        </motion.div>
+      </div>
+
+      {/* Right Action Column (Finance + Friends) */}
+      <div
+        className={`absolute right-0 top-0 flex flex-col gap-4 z-30 transition-all md:hidden ${isMobile ? "pr-2" : "translate-x-12 xl:translate-x-16"}`}
+      >
+        <SideButton
+          icon={CircleDollarSign}
+          color="bg-linear-to-b from-emerald-600/40 to-emerald-900/40"
+          onClick={onFinanceClick}
+        />
+        <SideButton icon={Friends} onClick={() => setCurrentView("friends")} />
+      </div>
+    </div>
+    </motion.div>
+  );
+};
+
+const SideButton = ({
+  icon: Icon,
+  color = "bg-linear-to-b from-[#2d4b7c] to-[#1a2e4d]",
+  onClick,
+}: {
+  icon: any;
+  color?: string;
+  onClick?: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`w-12 h-12 ${color} rounded-2xl border-2 border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-center text-white relative overflow-hidden active:scale-95 transition-all`}
+  >
+    <Icon className="w-6 h-6 z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+    <div className="absolute top-0 left-0 right-0 h-[40%] bg-white/10 rounded-t-2xl pointer-events-none" />
+  </button>
+);
+
+const QuestsPanel = ({
+  quests,
+  setQuests,
+  setCurrentView,
+  setIsCreateQuestModalOpen,
+  onToggleQuest,
+}: {
+  quests: Quest[];
+  setQuests: React.Dispatch<React.SetStateAction<Quest[]>>;
+  setCurrentView: (v: ViewId) => void;
+  setIsCreateQuestModalOpen: (o: boolean) => void;
+  onToggleQuest: (i: number) => void;
+}) => {
+  const t = useTranslations("Dashboard");
+  return (
+    <>
+      <div className="flex items-center justify-between mb-2 shrink-0">
+        <span className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
+          <Target className="w-3 h-3 xl:w-4 xl:h-4 text-neon-green" /> {t("missions")}
+        </span>
+        <button
+          onClick={() => setCurrentView("quests")}
+          className="flex items-center gap-1 text-[8px] xl:text-[9px] 2xl:text-[10px] font-black text-neon-green uppercase tracking-widest hover:text-white transition-colors"
+        >
+          {t("seeMore")} <ChevronRight className="w-2.5 h-2.5 xl:w-3 xl:h-3" />
+        </button>
+      </div>
+      <button
+        onClick={() => setIsCreateQuestModalOpen(true)}
+        className="w-full mb-6 flex items-center justify-center gap-3 p-4 bg-neon-green/30 border border-neon-green/40 rounded-2xl hover:bg-neon-green/40 transition-all active:scale-95 shrink-0 shadow-[0_8px_25px_rgba(56,242,127,0.2)]"
+      >
+        <Plus className="w-5 h-5 text-neon-green group-hover:scale-110 transition-transform" />
+        <span className="text-[12px] sm:text-[14px] font-black text-neon-green uppercase tracking-widest">
+          {t("newMission")}
+        </span>
+      </button>
+      <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-neon-green/20 hover:scrollbar-thumb-neon-green/40">
+        {quests.map((q, i) => (
+          <QuestCard
+            key={i}
+            quest={q}
+            index={i}
+            onToggle={() => {
+              const newQuests = [...quests];
+              const target = newQuests[i];
+              const wasDone = target.done;
+              target.done = !wasDone;
+              setQuests(newQuests);
+              if (!wasDone) {
+                // @ts-ignore
+                onToggleQuest(i);
+              }
+            }}
+            onDelete={() => setQuests(quests.filter((_, idx) => idx !== i))}
+          />
+        ))}
+      </div>
+    </>
+  );
+};
+
+const HabitsPanel = ({
+  habits,
+  setHabits,
+  setCurrentView,
+  setIsCreateHabitModalOpen,
+  setIsReadyHabitsModalOpen,
+  setSelectedHabitForTasks,
+  setIsHabitTasksModalOpen,
+}: {
+  habits: Habit[];
+  setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
+  setCurrentView: (v: ViewId) => void;
+  setIsCreateHabitModalOpen: (o: boolean) => void;
+  setIsReadyHabitsModalOpen: (o: boolean) => void;
+  setSelectedHabitForTasks: (h: Habit | null) => void;
+  setIsHabitTasksModalOpen: (o: boolean) => void;
+}) => {
+  const t = useTranslations("Dashboard");
+  return (
+    <>
+      <div className="flex items-center justify-between mb-3 shrink-0">
+        <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
+          <Flame className="w-3 h-3 xl:w-4 xl:h-4 text-orange-400" /> {t("panels.habits.title")}
+        </p>
+        <button
+          onClick={() => setCurrentView("habits")}
+          className="flex items-center gap-1 text-[8px] xl:text-[9px] 2xl:text-[10px] font-black text-orange-400 uppercase tracking-widest hover:text-white transition-colors"
+        >
+          {t("seeMore")} <ChevronRight className="w-2.5 h-2.5 xl:w-3 xl:h-3" />
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-3 mb-6 shrink-0">
+        <button
+          onClick={() => setIsCreateHabitModalOpen(true)}
+          className="flex-1 flex items-center justify-center gap-2.5 p-4 bg-orange-500/30 border border-orange-400/50 rounded-2xl hover:bg-orange-500/40 transition-all active:scale-95 shrink-0 shadow-[0_8px_20px_rgba(251,146,60,0.2)]"
+        >
+          <Plus className="w-5 h-5 text-orange-400 group-hover:scale-110 transition-transform" />
+          <span className="text-[12px] sm:text-[14px] font-black text-orange-400 uppercase tracking-widest">
+            {t("new")}
+          </span>
+        </button>
+        <button
+          onClick={() => setIsReadyHabitsModalOpen(true)}
+          className="flex-1 flex items-center justify-center gap-2.5 p-4 bg-neon-yellow/30 border border-neon-yellow/50 rounded-2xl hover:bg-neon-yellow/40 transition-all active:scale-95 shrink-0 shadow-[0_8px_20px_rgba(253,224,71,0.2)]"
+        >
+          <Eye className="w-5 h-5 text-neon-yellow group-hover:scale-110 transition-transform" />
+          <span className="text-[12px] sm:text-[14px] font-black text-neon-yellow uppercase tracking-widest">
+            {t("ready")}
+          </span>
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-orange-400/20 hover:scrollbar-thumb-orange-400/40">
+        {habits.map((h, i) => (
+          <div
+            key={h.id}
+            className="p-3 2xl:p-4 bg-white/5 border border-white/10 rounded-xl group/habit"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[10px] xl:text-[11px] 2xl:text-[12px] font-black uppercase text-white/80">
+                {h.title}
+              </span>
+              <div className="flex items-center gap-2">
+                {h.tasks && h.tasks.length > 0 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedHabitForTasks(h);
+                      setIsHabitTasksModalOpen(true);
+                    }}
+                    className="p-1 hover:bg-white/10 rounded transition-colors"
+                  >
+                    <Eye className="w-3 h-3 2xl:w-4 2xl:h-4 text-neon-yellow" />
+                  </button>
+                )}
+                <div className="flex items-center gap-1">
+                  <Flame className="w-2.5 h-2.5 2xl:w-3 2xl:h-3 text-orange-400" />
+                  <span className="text-[10px] 2xl:text-[11px] font-black text-orange-400">
+                    {h.streak}d
+                  </span>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setHabits(habits.filter((habit) => habit.id !== h.id));
+                  }}
+                  className="text-white/20 hover:text-red-500 transition-colors opacity-0 group-hover/habit:opacity-100"
+                >
+                  <Trash2 className="w-3 h-3 2xl:w-4 2xl:h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="h-1 2xl:h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${(h.streak / h.max) * 100}%` }}
+                className={`h-full bg-linear-to-r ${h.color}`}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
+
+const TrainingPanel = ({
+  weeklyTrainings,
+  setCurrentView,
+  handleEditTraining,
+  handleDeleteTraining,
+}: {
+  weeklyTrainings: any[];
+  setCurrentView: (v: any) => void;
+  handleEditTraining: (i: number) => void;
+  handleDeleteTraining: (i: number) => void;
+}) => {
+  const t = useTranslations("Dashboard");
+  const completedCount = weeklyTrainings.filter((t) => t.done).length;
+  const daysOrder = ["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"];
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex items-center justify-between mb-4 shrink-0 px-1">
+        <p className="text-[11px] xl:text-[12px] 2xl:text-[14px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
+          <Swords className="w-4 h-4 text-neon-green" /> {t("panels.training.title")}
+        </p>
+        <button
+          onClick={() => setCurrentView("training")}
+          className="flex items-center gap-1 text-[9px] font-black text-neon-green uppercase tracking-widest hover:text-white transition-colors"
+        >
+          {t("panels.training.expand")} <ChevronRight className="w-3 h-3" />
+        </button>
+      </div>
+
+      <button
+        onClick={() => setCurrentView("training")}
+        className="w-full mb-4 flex items-center justify-center gap-2 p-4 bg-neon-green/10 border border-neon-green/30 rounded-[1.5rem] hover:bg-neon-green/20 transition-all group shrink-0 shadow-[0_4px_15px_rgba(56,242,127,0.1)]"
+      >
+        <Plus className="w-4 h-4 text-neon-green group-hover:scale-110 transition-transform" />
+        <span className="text-[11px] font-black text-neon-green uppercase tracking-widest">
+          {t("panels.training.new")}
+        </span>
+      </button>
+
+      <div className="p-4 bg-neon-green/5 border border-neon-green/20 rounded-2xl mb-4 shrink-0">
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-[10px] font-black text-neon-green uppercase tracking-widest">
+            {t("panels.training.evolution")}
+          </p>
+          <span className="text-[10px] font-black text-neon-green">
+            {completedCount}/{weeklyTrainings.length}
+          </span>
+        </div>
+        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{
+              width:
+                weeklyTrainings.length > 0
+                  ? `${(completedCount / weeklyTrainings.length) * 100}%`
+                  : "0%",
+            }}
+            transition={{ duration: 1 }}
+            className="h-full bg-linear-to-r from-neon-green to-neon-yellow rounded-full shadow-[0_0_12px_rgba(56,242,127,0.5)]"
+          />
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pr-1 space-y-6 scrollbar-thin scrollbar-thumb-neon-green/10 hover:scrollbar-thumb-neon-green/30">
+        {daysOrder.map((dayCode) => {
+          const dayTrainings = weeklyTrainings.filter((t) => t.day === dayCode);
+          if (dayTrainings.length === 0) return null;
+
+          return (
+            <div key={dayCode} className="space-y-3">
+              <div className="flex items-center gap-3">
+                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] font-mono">
+                  {dayCode}
+                </span>
+                <div className="h-px flex-1 bg-white/5" />
+              </div>
+
+              {dayTrainings.map((training) => {
+                const realIndex = weeklyTrainings.findIndex((wt) => wt === training);
+                const totalSeries = training.exercises.reduce(
+                  (acc: number, ex: any) => acc + (ex.series || 0),
+                  0,
+                );
+                return (
+                  <div
+                    key={realIndex}
+                    className={`p-4 rounded-2xl border transition-all group/card ${training.done ? "bg-neon-green/5 border-neon-green/30" : "bg-white/3 border-white/5 hover:border-white/10"}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p
+                            className={`text-xs font-black uppercase truncate ${training.done ? "text-neon-green" : "text-white/90"}`}
+                          >
+                            {training.name}
+                          </p>
+                          {training.done && (
+                            <CheckCircle2 className="w-3 h-3 text-neon-green" />
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1 text-[9px] text-white/30 font-bold">
+                            <Clock className="w-2.5 h-2.5" /> {training.duration}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="px-1.5 py-0.5 rounded-md bg-white/5 text-[8px] font-black text-white/40 uppercase">
+                              {t.rich("panels.training.exercises", { count: training.exercises.length })}
+                            </span>
+                            <span className="text-[8px] font-black text-neon-green/60 uppercase">
+                              {t.rich("panels.training.series", { count: totalSeries })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 opacity-10 sm:group-hover/card:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => handleEditTraining(realIndex)}
+                          className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-neon-yellow"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTraining(realIndex)}
+                          className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-red-500"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+
+        {weeklyTrainings.length === 0 && (
+          <div className="py-12 flex flex-col items-center justify-center text-center px-6">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+              <Swords className="w-8 h-8 text-white/10" />
+            </div>
+            <p className="text-xs font-bold text-white/20 uppercase tracking-widest">
+              {t("messages.noActiveProtocol")}
+            </p>
+            <p className="text-[10px] text-white/10 mt-2 italic">
+              {t("messages.trainingTip")}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const RankingPanel = ({
+  setCurrentView,
+  rankingData,
+  playerStats,
+}: {
+  setCurrentView: (v: ViewId) => void;
+  rankingData: RankingUser[];
+  playerStats: PlayerStats;
+}) => {
+  const t = useTranslations("Dashboard");
+  const myRank =
+    rankingData.findIndex((r) => r.id === auth.currentUser?.uid) + 1;
+
+  return (
+    <>
+      <div className="flex items-center justify-between mb-3 shrink-0">
+        <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
+          <Trophy className="w-3 h-3 xl:w-4 xl:h-4 text-neon-yellow" />{" "}
+          {t("panels.ranking.title")}
+        </p>
+        <button
+          onClick={() => setCurrentView("ranking")}
+          className="flex items-center gap-1 text-[8px] xl:text-[9px] 2xl:text-[10px] font-black text-neon-yellow uppercase tracking-widest hover:text-white transition-colors"
+        >
+          {t("seeMore")} <ChevronRight className="w-2.5 h-2.5 xl:w-3 xl:h-3" />
+        </button>
+      </div>
+      <div className="text-center p-4 2xl:p-6 bg-linear-to-b from-neon-yellow/10 to-transparent border border-neon-yellow/20 rounded-2xl mb-3 shrink-0">
+        <div className="text-3xl 2xl:text-4xl font-black text-neon-yellow">
+          #{myRank > 0 ? myRank : "?"}
+        </div>
+        <p className="text-[9px] xl:text-[10px] 2xl:text-[12px] font-black text-white/40 uppercase tracking-widest">
+          {t("panels.ranking.globalRank")}
+        </p>
+        <p className="text-[10px] xl:text-[11px] 2xl:text-[13px] font-black text-neon-green mt-1">
+          {myRank > 0 && myRank <= 3
+            ? t("panels.ranking.elite")
+            : t("panels.ranking.mainDivision")}
+        </p>
+      </div>
+      <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-neon-yellow/20 hover:scrollbar-thumb-neon-yellow/40">
+        {rankingData.slice(0, 10).map((r, i) => {
+          const isMe = r.id === auth.currentUser?.uid;
+          const rankNum = i + 1;
+          let badge = "";
+          if (rankNum === 1) badge = "👑";
+          else if (rankNum === 2) badge = "⚡";
+          else if (rankNum === 3) badge = "🔥";
+          else if (isMe) badge = "🎯";
+
+          return (
+            <div
+              key={r.id}
+              className={`flex items-center gap-3 px-3 py-2 2xl:px-4 2xl:py-3 rounded-xl border ${isMe ? "border-neon-green/30 bg-neon-green/5" : rankNum <= 3 ? "border-neon-yellow/20 bg-neon-yellow/5" : "border-white/5"}`}
+            >
+              <span
+                className={`text-[10px] xl:text-[11px] 2xl:text-xs font-black w-6 ${rankNum <= 3 ? "text-neon-yellow" : isMe ? "text-neon-green" : "text-white/20"}`}
+              >
+                #{rankNum}
+              </span>
+              <span className="text-base 2xl:text-lg leading-none">
+                {badge}
+              </span>
+              <span
+                className={`flex-1 text-[10px] xl:text-[11px] 2xl:text-[12px] font-black uppercase ${isMe ? "text-neon-green" : ""}`}
+              >
+                {r.name}
+              </span>
+              <span className="text-[9px] xl:text-[10px] 2xl:text-[11px] text-white/40">
+                {(r.xp / 1000).toFixed(1)}k XP
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+const ArsenalPanel = ({
+  arsenalSkills,
+  toggleSkill,
+  arsenalBuffs,
+  toggleBuff,
+  playerStats,
+}: {
+  arsenalSkills: Skill[];
+  toggleSkill: (i: number) => void;
+  arsenalBuffs: Buff[];
+  toggleBuff: (i: number) => void;
+  playerStats: PlayerStats;
+}) => {
+  const t = useTranslations("Dashboard");
+  return (
+    <>
+      <div className="mb-4">
+        <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase tracking-widest text-white/70 mb-3 flex items-center gap-1.5">
+          <Zap className="w-2.5 h-2.5 xl:w-3 xl:h-3 text-neon-yellow" />{" "}
+          {t("panels.arsenal.skills")}
+        </p>
+        <div className="grid grid-cols-4 gap-2 2xl:gap-3">
+          {arsenalSkills.map((s, i) => (
+            <SkillSlot
+              key={i}
+              skill={s}
+              index={i}
+              onClick={() => toggleSkill(i)}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="mb-4">
+        <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase tracking-widest text-white/70 mb-3 flex items-center gap-1.5">
+          <Sparkles className="w-2.5 h-2.5 xl:w-3 xl:h-3 text-blue-400" /> {t("panels.arsenal.buffs")}
+        </p>
+        <div className="space-y-2 2xl:space-y-3">
+          {arsenalBuffs.map((b, i) => (
+            <div
+              key={i}
+              onClick={() => b.unlocked && toggleBuff(i)}
+              className={`flex items-start gap-3 p-3 2xl:p-4 rounded-xl border transition-all ${
+                b.unlocked
+                  ? b.active
+                    ? "bg-white/4 border-white/20 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.02)]"
+                    : "bg-white/2 border-white/10 cursor-pointer hover:bg-white/4"
+                  : "bg-black/40 border-white/5 opacity-40 grayscale cursor-not-allowed"
+              }`}
+            >
+              <span
+                className={`text-xl 2xl:text-2xl leading-none ${!b.unlocked ? "opacity-30" : ""}`}
+              >
+                {typeof b.icon === "string" ? (
+                  b.icon
+                ) : (
+                  <b.icon className="w-6 h-6" />
+                )}
+              </span>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <p
+                    className={`text-[10px] xl:text-[11px] 2xl:text-[13px] font-black uppercase ${b.unlocked ? "text-white" : "text-white/50"}`}
+                  >
+                    {b.name}
+                  </p>
+                  {!b.unlocked && <Lock className="w-2.5 h-2.5 text-white/40" />}
+                </div>
+                <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] text-white/50 mt-0.5">
+                  {b.desc}
+                </p>
+              </div>
+              {b.unlocked && b.active && (
+                <div className="w-2 h-2 2xl:w-2.5 2xl:h-2.5 rounded-full bg-neon-green mt-1 shadow-[0_0_10px_rgba(56,242,127,0.8)] animate-pulse" />
+              )}
+              {!b.unlocked && (
+                <div className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10">
+                  <span className="text-[7px] font-black text-white/50 uppercase tracking-tighter">
+                    {t("panels.arsenal.blocked")}
+                  </span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="p-3 2xl:p-4 bg-neon-yellow/5 border border-neon-yellow/20 rounded-xl">
+        <p className="text-[8px] xl:text-[9px] 2xl:text-[10px] font-black uppercase text-neon-yellow/60 mb-2 flex items-center gap-1">
+          <Crown className="w-2.5 h-2.5 xl:w-3 xl:h-3" /> {t("panels.arsenal.nextEvolution")}
+        </p>
+        <div className="flex items-center gap-3">
+          <span className="text-2xl 2xl:text-3xl">⚡</span>
+          <div className="flex-1">
+            <p className="text-[10px] xl:text-[12px] 2xl:text-[14px] font-black text-neon-yellow uppercase">
+              {t("panels.arsenal.level")} {playerStats.level + 1}
+            </p>
+            <div className="flex items-center gap-1.5 mt-1 2xl:mt-2">
+              <div className="flex-1 h-1 2xl:h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{
+                    width: `${(playerStats.xp / playerStats.xpMax) * 100}%`,
+                  }}
+                  transition={{ duration: 1.2, delay: 0.5 }}
+                  className="h-full bg-neon-yellow rounded-full"
+                />
+              </div>
+              <span className="text-[7px] xl:text-[8px] 2xl:text-[9px] text-neon-yellow/60">
+                {Math.floor(playerStats.xp)}/{playerStats.xpMax} XP
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+type Exercise = {
+  name: string;
+  series: number;
+  kg: number;
+  reps: number;
+  done: boolean;
+};
+type Training = {
+  day: string;
+  name: string;
+  exercises: Exercise[];
+  duration: string;
+  done: boolean;
+};
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
 function XPBar({
   current,
   max,
-  label,
+  type,
 }: {
   current: number;
   max: number;
-  label: string;
+  type: "xp" | "hp";
 }) {
+  const t = useTranslations("Dashboard");
   const pct = Math.min((current / max) * 100, 100);
+  const isHp = type === "hp";
+  const label = isHp ? t("stats.life") : t("stats.experience");
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-1">
         <div className="flex items-center gap-1.5">
-          {label === "Vida" && (
+          {isHp && (
             <Heart className="w-2.5 h-2.5 text-red-500 fill-red-500/20" />
           )}
           <span className="text-[9px] font-black uppercase tracking-widest text-white/40">
@@ -1131,11 +1151,11 @@ function XPBar({
         </span>
       </div>
       <div
-        className={`bg-white/5 rounded-full overflow-hidden border border-white/5 ${label === "Vida" ? "h-3" : "h-2"}`}
+        className={`bg-white/5 rounded-full overflow-hidden border border-white/5 ${isHp ? "h-3" : "h-2"}`}
       >
         <div
           style={{ width: `${pct}%` }}
-          className={`h-full rounded-full bg-linear-to-r ${label === "Vida" ? "from-red-500 to-pink-400 shadow-[0_0_12px_rgba(239,68,68,0.5)]" : "from-neon-green to-neon-yellow shadow-[0_0_8px_rgba(56,242,127,0.6)]"}`}
+          className={`h-full rounded-full bg-linear-to-r ${isHp ? "from-red-500 to-pink-400 shadow-[0_0_12px_rgba(239,68,68,0.5)]" : "from-neon-green to-neon-yellow shadow-[0_0_8px_rgba(56,242,127,0.6)]"}`}
         />
       </div>
     </div>
@@ -1161,11 +1181,11 @@ function QuestCard({
       animate={{ x: 0, opacity: 1 }}
       transition={{ delay: 0.07 * index }}
       onClick={onToggle}
-      className={`p-3 2xl:p-4 rounded-xl border cursor-pointer transition-all ${done ? "bg-neon-green/5 border-neon-green/20" : "bg-white/3 border-white/5 active:bg-white/[0.06]"}`}
+      className={`p-3 2xl:p-4 rounded-xl border cursor-pointer transition-all ${done ? "bg-neon-green/5 border-neon-green/20" : "bg-white/3 border-white/5 active:bg-white/6"}`}
     >
       <div className="flex items-start gap-3">
         <div
-          className={`mt-0.5 w-4 h-4 2xl:w-5 2xl:h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${done ? "bg-neon-green border-neon-green shadow-[0_0_10px_rgba(56,242,127,0.6)]" : "border-white bg-black/40 group-hover:border-neon-green/50"}`}
+          className={`mt-0.5 w-4 h-4 2xl:w-5 2xl:h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${done ? "bg-neon-green border-neon-green shadow-[0_0_10px_rgba(56,242,127,0.6)]" : "border-white bg-black/40 group-hover:border-neon-green/50"}`}
         >
           {done && (
             <motion.div
@@ -1185,7 +1205,7 @@ function QuestCard({
             {quest.desc}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-1 flex-shrink-0">
+        <div className="flex flex-col items-end gap-1 shrink-0">
           <span className="text-[9px] xl:text-[10px] 2xl:text-[12px] font-black text-neon-yellow">
             +{quest.xp} XP
           </span>
@@ -1266,7 +1286,7 @@ function SkillSlot({
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.05 * index, type: "spring" }}
       onClick={onClick}
-      className={`relative aspect-square rounded-xl border flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${skill.unlocked ? `bg-linear-to-br from-white/5 to-white/[0.02] ${skill.color} ${skill.active ? "border-opacity-100 shadow-[0_0_15px_rgba(255,255,255,0.1)] scale-105" : "border-opacity-30"} hover:scale-105 active:scale-95` : "bg-white/[0.02] border-white/5 opacity-30"}`}
+      className={`relative aspect-square rounded-xl border flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${skill.unlocked ? `bg-linear-to-br from-white/5 to-white/[0.02] ${skill.color} ${skill.active ? "border-opacity-100 shadow-[0_0_15px_rgba(255,255,255,0.1)] scale-105" : "border-opacity-30"} hover:scale-105 active:scale-95` : "bg-white/2 border-white/5 opacity-30"}`}
     >
       {skill.unlocked && (
         <div
@@ -1445,16 +1465,13 @@ function CreateQuestModal({
   onClose: () => void;
   onSave: (quest: Omit<Quest, "done">) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
   // 1âƒ£ Repetição
   const [repetition, setRepetition] = useState("Diária");
   const [days, setDays] = useState<string[]>([
-    "SEG",
-    "TER",
-    "QUA",
-    "QUI",
     "SEX",
     "SíB",
     "DOM",
@@ -1561,7 +1578,7 @@ function CreateQuestModal({
               </div>
               <div className="flex justify-between items-center relative z-10">
                 <h3 className="text-2xl font-black uppercase italic tracking-wider">
-                  Nova Missão
+                  {t("modals.createQuest.title")}
                 </h3>
                 <button
                   onClick={onClose}
@@ -1583,7 +1600,7 @@ function CreateQuestModal({
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-neon-green" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-neon-green">
-                      Alvo Principal
+                      {t("modals.createQuest.primaryTarget")}
                     </span>
                   </div>
                   <div>
@@ -1591,7 +1608,7 @@ function CreateQuestModal({
                       type="text"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Título da Missão (Ex: Treino de Força)"
+                      placeholder={t("modals.createQuest.placeholderTitle")}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                       required
                     />
@@ -1601,7 +1618,7 @@ function CreateQuestModal({
                       type="text"
                       value={desc}
                       onChange={(e) => setDesc(e.target.value)}
-                      placeholder="Descrição / Contexto Tático (Opcional)"
+                      placeholder={t("modals.createQuest.placeholderDesc")}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                     />
                   </div>
@@ -1612,7 +1629,7 @@ function CreateQuestModal({
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-neon-yellow" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-neon-yellow">
-                      1. Repetição
+                      {t("modals.createQuest.repetition.title")}
                     </span>
                   </div>
                   <div className="flex bg-black/50 p-1 rounded-xl border border-white/5">
@@ -1623,7 +1640,7 @@ function CreateQuestModal({
                         onClick={() => setRepetition(opt)}
                         className={`flex-1 py-2 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${repetition === opt ? "bg-white/10 text-white" : "text-white/40 hover:text-white/70"}`}
                       >
-                        {opt}
+                        {opt === "Diária" ? t("modals.createQuest.repetition.daily") : opt === "Semanal" ? t("modals.createQuest.repetition.weekly") : t("modals.createQuest.repetition.monthly")}
                       </button>
                     ))}
                   </div>
@@ -1651,7 +1668,7 @@ function CreateQuestModal({
                   {repetition === "Semanal" && (
                     <div className="pt-2">
                       <label className="block text-[9px] font-bold text-white/40 uppercase mb-1">
-                        Dias por Semana
+                        {t("modals.createQuest.repetition.daysPerWeek")}
                       </label>
                       <input
                         type="number"
@@ -1668,7 +1685,7 @@ function CreateQuestModal({
                   {repetition === "Mensal" && (
                     <div className="pt-2">
                       <label className="block text-[9px] font-bold text-white/40 uppercase mb-1">
-                        A cada X meses
+                        {t("modals.createQuest.repetition.everyXMonths", { count: monthlyInterval })}
                       </label>
                       <input
                         type="number"
@@ -1688,7 +1705,7 @@ function CreateQuestModal({
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-blue-400" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">
-                      2. Meta Obrigatória
+                      {t("modals.createQuest.goal.title")}
                     </span>
                   </div>
                   <div className="flex flex-col gap-3">
@@ -1714,14 +1731,14 @@ function CreateQuestModal({
                             e.target.value ? Number(e.target.value) : "",
                           )
                         }
-                        placeholder="Quantidade"
+                        placeholder={t("modals.createQuest.goal.amount")}
                         className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-sm font-bold focus:outline-none focus:border-blue-400 text-center"
                       />
                     ) : (
                       <div className="grid grid-cols-3 gap-2">
                         <div>
                           <label className="block text-[8px] font-bold text-white/30 uppercase mb-1">
-                            Horas
+                            {t("modals.createQuest.goal.hours")}
                           </label>
                           <input
                             type="number"
@@ -1738,7 +1755,7 @@ function CreateQuestModal({
                         </div>
                         <div>
                           <label className="block text-[8px] font-bold text-white/30 uppercase mb-1">
-                            Minutos
+                            {t("modals.createQuest.goal.minutes")}
                           </label>
                           <input
                             type="number"
@@ -1756,7 +1773,7 @@ function CreateQuestModal({
                         </div>
                         <div>
                           <label className="block text-[8px] font-bold text-white/30 uppercase mb-1">
-                            Segundos
+                            {t("modals.createQuest.goal.seconds")}
                           </label>
                           <input
                             type="number"
@@ -1782,7 +1799,7 @@ function CreateQuestModal({
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-sm bg-purple-400" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-purple-400">
-                      3. Intervalo de Tempo
+                      {t("modals.createQuest.interval.title")}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -1807,7 +1824,7 @@ function CreateQuestModal({
                   className="w-full bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#2fe073] hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(56,242,127,0.3)] hover:shadow-[0_0_30px_rgba(56,242,127,0.5)]"
                 >
                   <Target className="w-5 h-5" />
-                  Confirmar Missão
+                  {t("modals.createQuest.confirm")}
                 </button>
               </div>
             </form>
@@ -1895,7 +1912,7 @@ function CreateHabitModal({
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black uppercase italic">
-                  Novo Hábito
+                  {t("modals.createHabit.title")}
                 </h3>
                 <button
                   onClick={onClose}
@@ -1908,13 +1925,13 @@ function CreateHabitModal({
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Nome do Hábito
+                    {t("modals.createHabit.name")}
                   </label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ex: Leitura Matinal"
+                    placeholder={t("modals.createHabit.placeholderName")}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                     required
                   />
@@ -1923,7 +1940,7 @@ function CreateHabitModal({
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                      Frequência
+                      {t("modals.createHabit.frequency")}
                     </label>
                     <select
                       value={frequency}
@@ -1931,19 +1948,19 @@ function CreateHabitModal({
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors appearance-none text-white"
                     >
                       <option value="Diário" className="text-black">
-                        Diário
+                        {t("modals.createHabit.daily")}
                       </option>
                       <option value="Semanal" className="text-black">
-                        Semanal
+                        {t("modals.createHabit.weekly")}
                       </option>
                       <option value="Mensal" className="text-black">
-                        Mensal
+                        {t("modals.createHabit.monthly")}
                       </option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                      Horário (Opcional)
+                      {t("modals.createHabit.time")}
                     </label>
                     <input
                       type="time"
@@ -1956,7 +1973,7 @@ function CreateHabitModal({
 
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Meta (Dias)
+                    {t("modals.createHabit.goal")}
                   </label>
                   <input
                     type="number"
@@ -1970,7 +1987,7 @@ function CreateHabitModal({
 
                 <div className="space-y-3">
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40">
-                    Itens do Pacote
+                    {t("modals.createHabit.items")}
                   </label>
                   {subTasks.map((task, idx) => (
                     <div key={idx} className="flex gap-2">
@@ -1978,7 +1995,7 @@ function CreateHabitModal({
                         type="text"
                         value={task}
                         onChange={(e) => updateSubTask(idx, e.target.value)}
-                        placeholder={`Hábito ${idx + 1}`}
+                        placeholder={t("modals.createHabit.placeholderItem", { number: idx + 1 })}
                         className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs font-bold focus:outline-none focus:border-neon-green transition-colors"
                       />
                       {subTasks.length > 1 && (
@@ -2006,7 +2023,7 @@ function CreateHabitModal({
                   className="w-full mt-6 bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#2fe073] transition-colors flex justify-center items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
-                  Confirmar Hábito
+                  {t("modals.createHabit.confirm")}
                 </button>
               </form>
             </div>
@@ -2029,83 +2046,17 @@ function ReadyHabitsModal({
   onAdd: (habit: Omit<Habit, "id" | "streak">) => void;
   canAdd: boolean;
 }) {
-  const readyHabits = [
-    {
-      title: "Madrugada de Ferro",
-      name: "Madrugada de Ferro",
-      desc: "Acordar às 05:00 AM para dominar o dia com foco máximo.",
-      max: 30,
-      color: "from-orange-500 to-red-500",
-      frequency: "Diário",
-      time: "05:00 AM",
-      tasks: [
-        { title: "Acordar 05:00", done: false },
-        { title: "Banho Gelado", done: false },
-        { title: "Leitura", done: false },
-      ],
-      completed: [],
-    },
-    {
-      title: "Monge Digital",
-      name: "Monge Digital",
-      desc: "Zero redes sociais e distrações até o meio-dia.",
-      max: 21,
-      color: "from-purple-500 to-blue-500",
-      frequency: "Diário",
-      time: "08:00 AM",
-      tasks: [
-        { title: "Foco Total", done: false },
-        { title: "Sem Redes Sociais", done: false },
-        { title: "Deep Work", done: false },
-      ],
-      completed: [],
-    },
-    {
-      title: "Corpo Blindado",
-      name: "Corpo Blindado",
-      desc: "Sessão de treinamento de alta intensidade.",
-      max: 30,
-      color: "from-neon-green to-blue-400",
-      frequency: "Diário",
-      time: "06:00 PM",
-      tasks: [
-        { title: "Musculação", done: false },
-        { title: "Corrida", done: false },
-        { title: "Proteína", done: false },
-      ],
-      completed: [],
-    },
-    {
-      title: "Mente de Aço",
-      name: "Mente de Aço",
-      desc: "30 minutos de meditação profunda ou leitura técnica.",
-      max: 21,
-      color: "from-blue-400 to-indigo-500",
-      frequency: "Diário",
-      time: "10:00 PM",
-      tasks: [
-        { title: "Meditação", done: false },
-        { title: "Journaling", done: false },
-        { title: "Estudo", done: false },
-      ],
-      completed: [],
-    },
-    {
-      title: "Rito do Gelo",
-      name: "Rito do Gelo",
-      desc: "Banho gelado ao acordar para choque térmico regenerador.",
-      max: 15,
-      color: "from-cyan-400 to-blue-600",
-      frequency: "Diário",
-      time: "06:30 AM",
-      tasks: [
-        { title: "Respiração", done: false },
-        { title: "Imersão", done: false },
-        { title: "Secagem", done: false },
-      ],
-      completed: [],
-    },
-  ];
+  const t = useTranslations("Dashboard");
+  const readyHabits = t.raw("modals.readyHabits.list") as {
+    id: string;
+    title: string;
+    desc: string;
+    max: number;
+    color: string;
+    frequency: string;
+    time: string;
+    tasks: string[];
+  }[];
 
   return (
     <AnimatePresence>
@@ -2128,10 +2079,10 @@ function ReadyHabitsModal({
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <p className="text-[10px] font-black text-neon-yellow uppercase tracking-widest mb-1">
-                    PROTOCOLO KRONOS
+                    {t("modals.readyHabits.protocol")}
                   </p>
                   <h3 className="text-2xl font-black uppercase italic">
-                    Hábitos de Elite
+                    {t("modals.readyHabits.title")}
                   </h3>
                 </div>
                 <button
@@ -2155,17 +2106,20 @@ function ReadyHabitsModal({
                       <button
                         onClick={() => {
                           if (!canAdd) {
-                            alert(
-                              "Protocolo Ativo: Você já possui hábitos em andamento. Conclua a batalha atual para instalar um novo protocolo.",
-                            );
+                            alert(t("modals.readyHabits.activeProtocolError"));
                             return;
                           }
-                          onAdd(hb);
+                          onAdd({
+                            ...hb,
+                            name: hb.title,
+                            tasks: hb.tasks.map((t) => ({ title: t, done: false })),
+                            completed: [],
+                          });
                           onClose();
                         }}
                         className={`px-3 py-1 text-black text-[9px] font-black uppercase rounded-lg transition-all ${canAdd ? "bg-neon-yellow hover:scale-110 active:scale-95" : "bg-white/10 text-white/20 cursor-not-allowed"}`}
                       >
-                        {canAdd ? "Instalar" : "Bloqueado"}
+                        {canAdd ? t("modals.readyHabits.install") : t("modals.readyHabits.locked")}
                       </button>
                     </div>
                     <p className="text-[11px] text-white/40 font-bold leading-relaxed mb-4">
@@ -2174,15 +2128,15 @@ function ReadyHabitsModal({
                     <div className="flex items-center gap-4">
                       <div className="flex flex-col">
                         <span className="text-[7px] font-black text-white/20 uppercase">
-                          DURAÇÃO
+                          {t("modals.readyHabits.duration")}
                         </span>
                         <span className="text-[10px] font-black text-white/70">
-                          {hb.max} DIAS
+                          {hb.max} {t("modals.readyHabits.days")}
                         </span>
                       </div>
                       <div className="flex flex-col">
                         <span className="text-[7px] font-black text-white/20 uppercase">
-                          FREQUÊNCIA
+                          {t("modals.readyHabits.frequency")}
                         </span>
                         <span className="text-[10px] font-black text-white/70">
                           {hb.frequency}
@@ -2210,6 +2164,7 @@ function HabitTasksModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const t = useTranslations("Dashboard");
   if (!habit || !habit.tasks) return null;
   return (
     <AnimatePresence>
@@ -2233,7 +2188,7 @@ function HabitTasksModal({
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
-                    Itens do Pacote
+                    {t("modals.habitTasks.title")}
                   </p>
                   <h3 className="text-xl font-black uppercase italic text-white leading-tight">
                     {habit.title}
@@ -2250,10 +2205,10 @@ function HabitTasksModal({
                 {habit.tasks.map((task, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 p-3 bg-white/[0.05] border border-white/10 rounded-xl"
+                    className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl"
                   >
                     <div
-                      className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${task.done ? "bg-neon-green border-neon-green" : "border-white bg-black/40"}`}
+                      className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${task.done ? "bg-neon-green border-neon-green" : "border-white bg-black/40"}`}
                     >
                       {task.done && (
                         <div className="w-1.5 h-1.5 bg-black rounded-full" />
@@ -2271,7 +2226,7 @@ function HabitTasksModal({
                 onClick={onClose}
                 className="w-full mt-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
               >
-                Fechar Protocolo
+                {t("modals.habitTasks.close")}
               </button>
             </div>
           </motion.div>
@@ -2291,14 +2246,15 @@ function ProgressReportModal({
   onClose: () => void;
   stats: any;
 }) {
+  const t = useTranslations("Dashboard");
   const activityData = [
-    { name: "Seg", value: 40 },
-    { name: "Ter", value: 65 },
-    { name: "Qua", value: 45 },
-    { name: "Qui", value: 90 },
-    { name: "Sex", value: 55 },
-    { name: "Sáb", value: 30 },
-    { name: "Dom", value: 70 },
+    { name: t("days.seg"), value: 40 },
+    { name: t("days.ter"), value: 65 },
+    { name: t("days.qua"), value: 45 },
+    { name: t("days.qui"), value: 90 },
+    { name: t("days.sex"), value: 55 },
+    { name: t("days.sab"), value: 30 },
+    { name: t("days.dom"), value: 70 },
   ];
 
   return (
@@ -2324,11 +2280,14 @@ function ProgressReportModal({
               <div className="flex justify-between items-center mb-12">
                 <div>
                   <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white">
-                    RELIQUÁRIO DE{" "}
-                    <span className="text-neon-yellow">PROXIMIDADE</span>
+                    {t.rich("modals.report.title", {
+                      highlight: (chunks) => (
+                        <span className="text-neon-yellow">{chunks}</span>
+                      ),
+                    })}
                   </h2>
                   <p className="text-white/40 text-sm font-bold uppercase tracking-widest mt-2 px-1">
-                    Relatório Tático • Protocolo Alpha-9
+                    {t("modals.report.subtitle")}
                   </p>
                 </div>
                 <button
@@ -2350,12 +2309,12 @@ function ProgressReportModal({
                     {stats.class}
                   </h3>
                   <p className="text-neon-yellow text-sm font-black uppercase tracking-widest">
-                    Nível {stats.level}
+                    {t("modals.report.charProfile.level", { level: stats.level })}
                   </p>
                   <div className="grid grid-cols-2 gap-4 w-full mt-8">
                     <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
                       <p className="text-[10px] font-black text-white/30 uppercase mb-1">
-                        XP TOTAL
+                        {t("modals.report.charProfile.xp")}
                       </p>
                       <p className="text-xl font-black text-white">
                         {stats.xp}
@@ -2363,7 +2322,7 @@ function ProgressReportModal({
                     </div>
                     <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
                       <p className="text-[10px] font-black text-white/30 uppercase mb-1">
-                        RANK
+                        {t("modals.report.charProfile.rank")}
                       </p>
                       <p className="text-xl font-black text-neon-green">S+</p>
                     </div>
@@ -2371,15 +2330,14 @@ function ProgressReportModal({
                 </div>
 
                 {/* Graph Area */}
-                <div className="lg:col-span-2 p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem] flex flex-col min-h-[400px]">
+                <div className="lg:col-span-2 p-8 bg-white/2 border border-white/10 rounded-[2.5rem] flex flex-col min-h-[400px]">
                   <div className="flex items-center justify-between mb-8">
                     <h4 className="text-lg font-black uppercase italic text-white flex items-center gap-3">
-                      <TrendingUp className="w-5 h-5 text-neon-green" /> Fluxo
-                      de Performance
+                      <TrendingUp className="w-5 h-5 text-neon-green" /> {t("modals.report.performance.title")}
                     </h4>
                     <div className="flex gap-2">
                       <span className="px-3 py-1 rounded-full bg-neon-green/20 text-neon-green text-[10px] font-black uppercase tracking-widest leading-none">
-                        Últimos 7 Dias
+                        {t("modals.report.performance.last7Days")}
                       </span>
                     </div>
                   </div>
@@ -2440,31 +2398,31 @@ function ProgressReportModal({
               {/* Detalhadamente sections */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
                 <DetailCard
-                  title="Missões Concluídas"
+                  title={t("modals.report.details.quests")}
                   value={String(stats.questsCompleted || 0)}
                   icon={Target}
                   color="text-blue-400"
                 />
                 <DetailCard
-                  title="Hábitos Concluídos"
+                  title={t("modals.report.details.habits")}
                   value={String(stats.habitsCompleted || 0)}
                   icon={Flame}
                   color="text-orange-400"
                 />
                 <DetailCard
-                  title="Treinos Realizados"
+                  title={t("modals.report.details.trainings")}
                   value={String(stats.trainingsCompleted || 0)}
                   icon={Swords}
                   color="text-neon-green"
                 />
                 <DetailCard
-                  title="Vitórias"
+                  title={t("modals.report.details.victories")}
                   value={String(stats.victories || 0)}
                   icon={Award}
                   color="text-yellow-400"
                 />
                 <DetailCard
-                  title="Derrotas"
+                  title={t("modals.report.details.defeats")}
                   value={String(stats.defeats || 0)}
                   icon={X}
                   color="text-red-500"
@@ -2480,10 +2438,10 @@ function ProgressReportModal({
                 </div>
                 <div>
                   <p className="text-xs font-black text-white/50 uppercase">
-                    Conquista Recente
+                    {t("modals.report.achievements.recent")}
                   </p>
                   <p className="text-sm font-bold text-white uppercase tracking-wider">
-                    Lendário das Sombras
+                    {t("modals.report.achievements.legendary")}
                   </p>
                 </div>
               </div>
@@ -2578,17 +2536,17 @@ function BoardView({
       className="fixed inset-0 z-300 bg-[#030508] flex flex-col overflow-hidden"
     >
       {/* â”€â”€ TOP BAR â”€â”€ */}
-      <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-white/5 bg-black/40 backdrop-blur-xl flex-shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-white/5 bg-black/40 backdrop-blur-xl shrink-0">
         <button
           onClick={() => {
             setActiveProject(null);
             setView("list");
           }}
-          className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all flex-shrink-0"
+          className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all shrink-0"
         >
           <X className="w-4 h-4" />
         </button>
-        <span className="text-lg sm:text-xl flex-shrink-0">{proj.icon}</span>
+        <span className="text-lg sm:text-xl shrink-0">{proj.icon}</span>
         <div className="flex-1 min-w-0">
           <h2 className="text-white font-black text-sm sm:text-base truncate leading-tight">
             {proj.name}
@@ -2598,7 +2556,7 @@ function BoardView({
           </p>
         </div>
         {/* Progress bar - hidden on very small screens */}
-        <div className="hidden sm:block w-20 h-2 bg-white/10 rounded-full overflow-hidden flex-shrink-0">
+        <div className="hidden sm:block w-20 h-2 bg-white/10 rounded-full overflow-hidden shrink-0">
           <div
             className="h-full rounded-full bg-linear-to-r from-blue-500 to-emerald-500"
             style={{ width: `${projectProgress(proj)}%` }}
@@ -2619,7 +2577,7 @@ function BoardView({
               createdAt: "",
             })
           }
-          className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-400 text-[9px] sm:text-[10px] font-black uppercase hover:bg-blue-500/30 transition-all flex-shrink-0"
+          className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-400 text-[9px] sm:text-[10px] font-black uppercase hover:bg-blue-500/30 transition-all shrink-0"
         >
           <Plus className="w-3 h-3" />
           <span className="hidden xs:inline">Nova </span>Tarefa
@@ -2627,7 +2585,7 @@ function BoardView({
       </div>
 
       {/* â”€â”€ MOBILE COLUMN TABS â”€â”€ */}
-      <div className="flex sm:hidden overflow-x-auto scrollbar-none border-b border-white/5 bg-black/20 flex-shrink-0 px-2 py-2 gap-1.5">
+      <div className="flex sm:hidden overflow-x-auto scrollbar-none border-b border-white/5 bg-black/20 shrink-0 px-2 py-2 gap-1.5">
         {COLUMN_IDS.map((col) => {
           const colTasks = proj.tasks.filter((t) => t.column === col);
           const isActive = activeCol === col;
@@ -2636,7 +2594,7 @@ function BoardView({
             <button
               key={col}
               onClick={() => setActiveCol(col)}
-              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-2xl text-[10px] font-black uppercase tracking-wide transition-all ${
+              className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-2xl text-[10px] font-black uppercase tracking-wide transition-all ${
                 isActive
                   ? `${style.bg} border ${style.border} text-white`
                   : "bg-white/3 border border-white/5 text-white/30 hover:text-white/60"
@@ -2670,7 +2628,7 @@ function BoardView({
             setShowTaskModal={setShowTaskModal}
             setDragTask={setDragTask}
             handleTaskDrop={handleTaskDrop}
-            className="flex-shrink-0 w-72 snap-center"
+            className="shrink-0 w-72 snap-center"
           />
         ))}
       </div>
@@ -2738,7 +2696,7 @@ function KanbanColumn({
       onDrop={() => handleTaskDrop(col)}
     >
       {/* Column Header */}
-      <div className="flex items-center gap-2 px-4 py-3 sm:py-4 border-b border-white/10 bg-white/[0.04] flex-shrink-0">
+      <div className="flex items-center gap-2 px-4 py-3 sm:py-4 border-b border-white/10 bg-white/4 shrink-0">
         <div
           className={`w-2.5 h-2.5 rounded-full ${style.dot} shadow-[0_0_12px_currentColor]`}
         />
@@ -2821,7 +2779,7 @@ function KanbanColumn({
                   return updated;
                 });
               }}
-              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all touch-manipulation ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 shrink-0 flex items-center justify-center transition-all touch-manipulation ${
                 isDoneCol
                   ? "bg-emerald-500 border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.7)]"
                   : "border-white/50 hover:border-emerald-400 hover:bg-emerald-400/10 active:bg-emerald-400/20"
@@ -2852,7 +2810,7 @@ function KanbanColumn({
                   e.stopPropagation();
                   setShowTaskModal(task);
                 }}
-                className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10 transition-all flex-shrink-0 touch-manipulation"
+                className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10 transition-all shrink-0 touch-manipulation"
               >
                 <Pencil className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
@@ -2862,7 +2820,7 @@ function KanbanColumn({
       </div>
 
       {/* Quick Add input */}
-      <div className="p-3 border-t border-white/10 bg-white/[0.02] flex-shrink-0">
+      <div className="p-3 border-t border-white/10 bg-white/2 shrink-0">
         <input
           placeholder="+ Adicionar tarefa rápida..."
           onKeyDown={(e) => {
@@ -3372,7 +3330,7 @@ function ProjectsDashboard({
                     setActiveProject(proj);
                     setView("board");
                   }}
-                  className="p-5 bg-white/[0.02] border border-white/10 rounded-3xl cursor-pointer hover:border-white/20 transition-all relative overflow-hidden group"
+                  className="p-5 bg-white/2 border border-white/10 rounded-3xl cursor-pointer hover:border-white/20 transition-all relative overflow-hidden group"
                 >
                   <div
                     className="absolute top-0 left-0 w-full h-1 rounded-t-3xl"
@@ -3438,7 +3396,7 @@ function ProjectsDashboard({
                       )}
                     </div>
                     {proj.goal && (
-                      <div className="p-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-[10px] text-white/70 font-medium">
+                      <div className="p-2.5 bg-white/4 border border-white/10 rounded-xl text-[10px] text-white/70 font-medium">
                         <span className="text-yellow-400 font-black">
                           🏆 META:{" "}
                         </span>
@@ -3494,7 +3452,7 @@ function ProjectsDashboard({
                   <X className="w-4 h-4" />
                 </button>
               </div>
-              <div className="h-52 overflow-y-auto space-y-3 mb-4 p-3 bg-white/[0.02] border border-white/5 rounded-2xl scrollbar-thin">
+              <div className="h-52 overflow-y-auto space-y-3 mb-4 p-3 bg-white/2 border border-white/5 rounded-2xl scrollbar-thin">
                 {aiMessages.map((m, i) => (
                   <div
                     key={i}
@@ -4074,7 +4032,7 @@ function AIChatView({
                     )}
                   </div>
                   <p className="text-[9px] text-white/20 px-1">
-                    {new Date(msg.timestamp).toLocaleTimeString("pt-BR", {
+                    {new Date(msg.timestamp).toLocaleTimeString(locale, {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
@@ -4171,6 +4129,7 @@ function NewProjectModal({
   onClose: () => void;
   onCreate: (p: Project) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -4192,7 +4151,7 @@ function NewProjectModal({
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-white font-black text-xl uppercase">
-            Novo Projeto
+            {t("modals.projects.new")}
           </h3>
           <button
             onClick={onClose}
@@ -4204,41 +4163,41 @@ function NewProjectModal({
         <div className="space-y-4">
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Nome do Projeto
+              {t("modals.projects.name")}
             </label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none"
-              placeholder="Ex: Criar SaaS de Produtividade"
+              placeholder={t("modals.projects.placeholderName")}
             />
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Descrição
+              {t("modals.projects.desc")}
             </label>
             <textarea
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               rows={2}
               className="mt-1 w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none resize-none"
-              placeholder="Descreva o projeto..."
+              placeholder={t("modals.projects.placeholderDesc")}
             />
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Meta do Projeto 🏆
+              {t("modals.projects.goal")}
             </label>
             <input
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
               className="mt-1 w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none"
-              placeholder="Ex: Lançar até dia 30"
+              placeholder={t("modals.projects.placeholderGoal")}
             />
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Prazo Final
+              {t("modals.projects.deadline")}
             </label>
             <input
               type="date"
@@ -4249,7 +4208,7 @@ function NewProjectModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Prioridade
+              {t("modals.projects.priority")}
             </label>
             <div className="flex gap-2 mt-1">
               {(["Baixa", "Média", "Alta", "Urgente"] as const).map((p) => (
@@ -4258,14 +4217,14 @@ function NewProjectModal({
                   onClick={() => setPriority(p)}
                   className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase ${priority === p ? PRIORITY_STYLE[p] : "bg-white/5 border border-white/10 text-white/40"}`}
                 >
-                  {p}
+                  {t(`modals.projects.priorities.${p}`)}
                 </button>
               ))}
             </div>
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Cor
+              {t("modals.projects.color")}
             </label>
             <div className="flex gap-2 mt-1 flex-wrap">
               {PROJECT_COLORS.map((c) => (
@@ -4280,7 +4239,7 @@ function NewProjectModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Ícone
+              {t("modals.projects.icon")}
             </label>
             <div className="flex gap-2 mt-1 flex-wrap">
               {PROJECT_ICONS.map((ic) => (
@@ -4313,7 +4272,7 @@ function NewProjectModal({
           }}
           className="w-full mt-6 py-3.5 bg-blue-500/20 border border-blue-500/30 text-blue-400 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-blue-500/30 transition-all"
         >
-          Criar Projeto
+          {t("modals.projects.create")}
         </button>
       </motion.div>
     </motion.div>
@@ -4331,6 +4290,7 @@ function TaskDetailModal({
   onSave: (t: ProjectTask) => void;
   onDelete: (id: string) => void;
 }) {
+  const tl = useTranslations("Dashboard");
   const [t, setT] = useState<ProjectTask>({ ...task });
   const [newCheck, setNewCheck] = useState("");
   const [newComment, setNewComment] = useState("");
@@ -4362,13 +4322,13 @@ function TaskDetailModal({
         className="w-full max-w-lg bg-[#060a0f] border border-white/10 rounded-3xl overflow-hidden max-h-[92vh] flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-white/5 flex-shrink-0">
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-white/5 shrink-0">
           <div className="flex-1">
             <input
               value={t.title}
               onChange={(e) => setT((x) => ({ ...x, title: e.target.value }))}
               className="w-full bg-transparent text-white font-black text-base outline-none placeholder:text-white/20"
-              placeholder="Título da tarefa"
+              placeholder={tl("modals.tasks.title")}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -4395,7 +4355,7 @@ function TaskDetailModal({
             <div>
               <label className="text-[10px] text-white font-black uppercase flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />{" "}
-                Prioridade
+                {tl("modals.tasks.priority")}
               </label>
               <select
                 value={t.priority}
@@ -4407,7 +4367,7 @@ function TaskDetailModal({
               >
                 {["Baixa", "Média", "Alta", "Urgente"].map((p) => (
                   <option key={p} value={p} style={{ background: "#060a0f" }}>
-                    {p}
+                    {tl(`modals.projects.priorities.${p}`)}
                   </option>
                 ))}
               </select>
@@ -4415,7 +4375,7 @@ function TaskDetailModal({
             <div>
               <label className="text-[10px] text-white font-black uppercase flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-purple-400" />{" "}
-                Coluna
+                {tl("modals.tasks.columns.title")}
               </label>
               <select
                 value={t.column}
@@ -4427,15 +4387,14 @@ function TaskDetailModal({
               >
                 {COLUMN_IDS.map((c) => (
                   <option key={c} value={c} style={{ background: "#060a0f" }}>
-                    {c}
+                    {tl(`modals.tasks.columns.${c}`)}
                   </option>
                 ))}
               </select>
             </div>
             <div>
               <label className="text-[10px] text-white font-black uppercase flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-orange-400" /> Prazo
-                Final
+                <div className="w-1.5 h-1.5 rounded-full bg-orange-400" /> {tl("modals.tasks.deadline")}
               </label>
               <input
                 type="date"
@@ -4468,7 +4427,7 @@ function TaskDetailModal({
           </div>
           <div>
             <label className="text-[10px] text-white font-black uppercase flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-white" /> Descrição
+              <div className="w-1.5 h-1.5 rounded-full bg-white" /> {tl("modals.tasks.desc")}
             </label>
             <textarea
               value={t.desc}
@@ -4494,7 +4453,7 @@ function TaskDetailModal({
                 onClick={suggestChecklist}
                 className="text-[9px] text-purple-400 hover:text-purple-300 font-black uppercase flex items-center gap-1"
               >
-                <Bot className="w-3 h-3" /> IA Sugerir
+                <Bot className="w-3 h-3" /> {tl("modals.tasks.iaSuggest")}
               </button>
             </div>
             {t.checklist.length > 0 && (
@@ -4559,7 +4518,7 @@ function TaskDetailModal({
                         ),
                       }))
                     }
-                    className={`w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${item.done ? "bg-emerald-500 border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]" : "border-white border-opacity-100 shadow-[0_0_5px_rgba(255,255,255,0.2)]"}`}
+                    className={`w-6 h-6 rounded-full border-2 shrink-0 flex items-center justify-center transition-all ${item.done ? "bg-emerald-500 border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]" : "border-white border-opacity-100 shadow-[0_0_5px_rgba(255,255,255,0.2)]"}`}
                   >
                     {item.done && (
                       <span className="text-black text-[10px] font-black">
@@ -4640,7 +4599,7 @@ function TaskDetailModal({
               {t.comments.map((c) => (
                 <div
                   key={c.id}
-                  className="p-3 bg-white/[0.02] border border-white/5 rounded-xl"
+                  className="p-3 bg-white/2 border border-white/5 rounded-xl"
                 >
                   <p className="text-white/70 text-xs">{c.text}</p>
                   <p className="text-white/20 text-[9px] mt-1">{c.date}</p>
@@ -4694,7 +4653,7 @@ function TaskDetailModal({
           </div>
         </div>
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-white/5 flex-shrink-0">
+        <div className="px-5 py-4 border-t border-white/5 shrink-0">
           <button
             onClick={() => onSave(t)}
             className="w-full py-3 bg-blue-500/20 border border-blue-500/30 text-blue-400 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-blue-500/30 transition-all"
@@ -4814,6 +4773,7 @@ function FinancialDashboard({
   financialGoals: FinancialGoal[];
   setFinancialGoals: React.Dispatch<React.SetStateAction<FinancialGoal[]>>;
 }) {
+  const t = useTranslations("Dashboard");
   const [activeTab, setActiveTab] = useState<"overview" | "ai">("overview");
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [showCardModal, setShowCardModal] = useState(false);
@@ -4890,7 +4850,11 @@ function FinancialDashboard({
           ...prev,
           {
             type: "ai",
-            text: `✅ ${parsed.type === "entrada" ? "Receita" : "Despesa"} registrada!\n📂 Categoria: ${parsed.category}\n💰 Valor: ${parseBRL(parsed.value)}\n🗂️ +15 moedas ganhas!`,
+            text: t("modals.finance.ai.success", {
+              type: parsed.type === "entrada" ? t("modals.finance.ai.income") : t("modals.finance.ai.expense"),
+              category: tl(`modals.tasks.columns.${parsed.category}`), // Assuming categories match column keys or similar
+              amount: parseBRL(parsed.value),
+            }),
             accent: parsed.type === "entrada" ? "emerald" : "orange",
           },
         ]);
@@ -4899,7 +4863,7 @@ function FinancialDashboard({
           ...prev,
           {
             type: "ai",
-            text: 'Não consegui entender 🤔\nTente: "Gastei 50 no Uber" ou "Recebi 2000 de salário"',
+            text: t("modals.finance.ai.error"),
             accent: "red",
           },
         ]);
@@ -4910,18 +4874,18 @@ function FinancialDashboard({
     const ins: string[] = [];
     if (budgetOver)
       ins.push(
-        `⚠️ Orçamento ultrapassado em ${parseBRL(totalSaidas - budget)}!`,
+        t("modals.finance.insights.overBudget", { amount: parseBRL(totalSaidas - budget) }),
       );
     if (categoryTotals.length > 0)
       ins.push(
-        `📊 Maior gasto: ${[...categoryTotals].sort((a, b) => b.total - a.total)[0].name}`,
+        t("modals.finance.insights.highestExpense", { category: [...categoryTotals].sort((a, b) => b.total - a.total)[0].name }),
       );
     if (totalSaidas > totalEntradas && totalEntradas > 0)
-      ins.push("📉 Você gastou mais do que recebeu esse mês!");
+      ins.push(t("modals.finance.insights.spentMore"));
     if (saldo > 0 && totalEntradas > 0)
-      ins.push(`💡 Saldo positivo de ${parseBRL(saldo)} esse mês!`);
+      ins.push(t("modals.finance.insights.positiveBalance", { amount: parseBRL(saldo) }));
     if (ins.length === 0)
-      ins.push("Adicione transações para ver insights personalizados!");
+      ins.push(t("modals.finance.insights.noTransactions"));
     return ins;
   };
 
@@ -4941,10 +4905,14 @@ function FinancialDashboard({
         <div className="flex items-center justify-between py-6">
           <div>
             <h1 className="text-2xl md:text-4xl font-black italic uppercase tracking-tighter text-white">
-              Centro <span className="text-emerald-400">Financeiro</span>
+              {t.rich("finance.title", {
+                highlight: (chunks) => (
+                  <span className="text-emerald-400">{chunks}</span>
+                ),
+              })}
             </h1>
             <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mt-0.5">
-              Gestão Estratégica de Riqueza
+              {t("finance.subtitle")}
             </p>
           </div>
           <button
@@ -4956,7 +4924,7 @@ function FinancialDashboard({
         </div>
         {/* PROFILE */}
         <div className="p-4 bg-white/3 border border-white/10 rounded-3xl mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
             <Crown className="w-7 h-7 text-emerald-400" />
           </div>
           <div className="flex-1">
@@ -4964,7 +4932,7 @@ function FinancialDashboard({
               {playerStats.name || "Guerreiro"}
             </p>
             <p className="text-emerald-400 text-xs font-black uppercase">
-              {getRank(playerStats.level)} • Nível {playerStats.level}
+              {getRank(playerStats.level)} • {t("modals.projects.priorities.Alta")} {t("modals.report.charProfile.level", { level: playerStats.level })}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -5009,13 +4977,13 @@ function FinancialDashboard({
             onClick={() => setActiveTab("overview")}
             className={`flex-1 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === "overview" ? "bg-emerald-500/20 border border-emerald-500/30 text-emerald-400" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
           >
-            📊 Visão Geral
+            {t("modals.finance.tabs.overview")}
           </button>
           <button
             onClick={() => setActiveTab("ai")}
             className={`flex-1 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === "ai" ? "bg-blue-500/20 border border-blue-500/30 text-blue-400" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
           >
-            🤖 IA Financeira
+            {t("modals.finance.tabs.ai")}
           </button>
         </div>
 
@@ -5051,7 +5019,7 @@ function FinancialDashboard({
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xl">{card.icon}</span>
                     <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
-                      {card.label}
+                      {card.label === "Entradas" ? t("modals.finance.summary.income") : card.label === "Saídas" ? t("modals.finance.summary.expense") : t("modals.finance.summary.balance")}
                     </p>
                   </div>
                   <p
@@ -5059,19 +5027,19 @@ function FinancialDashboard({
                   >
                     {parseBRL(card.value)}
                   </p>
-                  <p className="text-[10px] text-white/20 mt-1">Este mês</p>
+                  <p className="text-[10px] text-white/20 mt-1">{t("modals.finance.summary.thisMonth")}</p>
                 </motion.div>
               ))}
             </div>
             {/* BUDGET */}
             <div
-              className={`p-5 border rounded-3xl mb-6 ${budgetOver ? "bg-red-500/5 border-red-500/20" : "bg-white/[0.02] border-white/10"}`}
+              className={`p-5 border rounded-3xl mb-6 ${budgetOver ? "bg-red-500/5 border-red-500/20" : "bg-white/2 border-white/10"}`}
             >
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">{budgetOver ? "⚠️" : "🎯"}</span>
                   <p className="text-white font-black text-sm">
-                    Orçamento Mensal
+                    {t("modals.finance.budget.title")}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -5095,19 +5063,19 @@ function FinancialDashboard({
               </div>
               {budgetOver && (
                 <p className="text-red-400 text-[10px] font-black mt-2 uppercase">
-                  ⚠️ Orçamento ultrapassado!
+                  {t("modals.finance.budget.limitExceeded")}
                 </p>
               )}
             </div>
             {/* CHARTS */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              <div className="p-5 bg-white/[0.02] border border-white/10 rounded-3xl">
+              <div className="p-5 bg-white/2 border border-white/10 rounded-3xl">
                 <p className="text-white font-black text-sm mb-4 uppercase tracking-widest">
-                  🥧 Gastos por Categoria
+                  {t("modals.finance.charts.expensesByCategory")}
                 </p>
                 {categoryTotals.length === 0 ? (
                   <div className="flex items-center justify-center h-40 text-white/20 text-xs">
-                    Sem despesas este mês
+                    {t("modals.finance.charts.noExpenses")}
                   </div>
                 ) : (
                   <>
@@ -5144,7 +5112,7 @@ function FinancialDashboard({
                       {categoryTotals.map((cat) => (
                         <div key={cat.name} className="flex items-center gap-2">
                           <div
-                            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                            className="w-2.5 h-2.5 rounded-full shrink-0"
                             style={{ background: cat.color }}
                           />
                           <div className="flex-1">
@@ -5170,9 +5138,9 @@ function FinancialDashboard({
                   </>
                 )}
               </div>
-              <div className="p-5 bg-white/[0.02] border border-white/10 rounded-3xl">
+              <div className="p-5 bg-white/2 border border-white/10 rounded-3xl">
                 <p className="text-white font-black text-sm mb-4 uppercase tracking-widest">
-                  📈 Evolução (6 Meses)
+                  {t("modals.finance.charts.evolution")}
                 </p>
                 <div className="h-52">
                   <ResponsiveContainer width="100%" height="100%">
@@ -5224,11 +5192,11 @@ function FinancialDashboard({
                 <div className="flex gap-4 mt-2">
                   <div className="flex items-center gap-1.5">
                     <div className="w-3 h-1 bg-emerald-400 rounded" />
-                    <span className="text-[10px] text-white/40">Entradas</span>
+                    <span className="text-[10px] text-white/40">{t("modals.finance.summary.income")}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <div className="w-3 h-1 bg-red-400 rounded" />
-                    <span className="text-[10px] text-white/40">Saídas</span>
+                    <span className="text-[10px] text-white/40">{t("modals.finance.summary.expense")}</span>
                   </div>
                 </div>
               </div>
@@ -5237,25 +5205,25 @@ function FinancialDashboard({
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  💳 Faturas de Cartão
+                  {t("modals.finance.cards.title")}
                 </p>
                 <button
                   onClick={() => setShowCardModal(true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-white text-[10px] font-black uppercase transition-all"
                 >
-                  <Plus className="w-3 h-3" /> Adicionar
+                  <Plus className="w-3 h-3" /> {t("modals.finance.cards.add")}
                 </button>
               </div>
               {creditCards.length === 0 ? (
                 <div className="p-6 border border-dashed border-white/10 rounded-2xl text-center text-white/20 text-xs">
-                  Nenhum cartão cadastrado
+                  {t("modals.finance.cards.noCards")}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {creditCards.map((card) => (
                     <div
                       key={card.id}
-                      className={`p-4 border rounded-2xl relative ${card.status === "Pago" ? "bg-emerald-500/5 border-emerald-500/20" : "bg-white/[0.02] border-white/10"}`}
+                      className={`p-4 border rounded-2xl relative ${card.status === "Pago" ? "bg-emerald-500/5 border-emerald-500/20" : "bg-white/2 border-white/10"}`}
                     >
                       <button
                         onClick={() =>
@@ -5274,7 +5242,7 @@ function FinancialDashboard({
                         {parseBRL(card.value)}
                       </p>
                       <p className="text-white/30 text-[10px] mt-1">
-                        Vence dia {card.dueDate}
+                        {t("modals.finance.cards.dueDate", { date: card.dueDate })}
                       </p>
                       <button
                         onClick={() =>
@@ -5292,7 +5260,7 @@ function FinancialDashboard({
                         }
                         className={`mt-3 px-2 py-1 rounded-lg text-[9px] font-black uppercase ${card.status === "Pago" ? "bg-emerald-500/20 text-emerald-400" : "bg-orange-500/20 text-orange-400"}`}
                       >
-                        {card.status}
+                        {card.status === "Pago" ? t("modals.finance.cards.paid") : t("modals.finance.cards.pending")}
                       </button>
                     </div>
                   ))}
@@ -5303,18 +5271,18 @@ function FinancialDashboard({
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  🏆 Metas Financeiras
+                  {t("modals.finance.goals.title")}
                 </p>
                 <button
                   onClick={() => setShowGoalModal(true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-white text-[10px] font-black uppercase transition-all"
                 >
-                  <Plus className="w-3 h-3" /> Nova Meta
+                  <Plus className="w-3 h-3" /> {t("modals.finance.goals.new")}
                 </button>
               </div>
               {financialGoals.length === 0 ? (
                 <div className="p-6 border border-dashed border-white/10 rounded-2xl text-center text-white/20 text-xs">
-                  Nenhuma meta definida
+                  {t("modals.finance.goals.noGoals")}
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -5326,7 +5294,7 @@ function FinancialDashboard({
                     return (
                       <div
                         key={goal.id}
-                        className="p-4 bg-white/[0.02] border border-white/10 rounded-2xl"
+                        className="p-4 bg-white/2 border border-white/10 rounded-2xl"
                       >
                         <div className="flex justify-between items-start mb-2">
                           <p className="text-white font-black text-sm">
@@ -5373,7 +5341,7 @@ function FinancialDashboard({
                           />
                         </div>
                         <p className="text-[10px] text-white/30 mt-1">
-                          {pct.toFixed(0)}% concluído
+                          {t("modals.finance.goals.completed", { percent: pct.toFixed(0) })}
                         </p>
                       </div>
                     );
@@ -5385,25 +5353,25 @@ function FinancialDashboard({
             <div className="mb-2">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white font-black text-sm uppercase tracking-widest">
-                  📋 Transações Recentes
+                  {t("modals.finance.transactions.title")}
                 </p>
                 <button
                   onClick={() => setShowTransactionModal(true)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase transition-all hover:bg-emerald-500/30"
                 >
-                  <Plus className="w-3 h-3" /> Nova
+                  <Plus className="w-3 h-3" /> {t("modals.finance.transactions.new")}
                 </button>
               </div>
               {transactions.length === 0 ? (
                 <div className="p-8 border border-dashed border-white/10 rounded-2xl text-center text-white/20 text-xs">
-                  Nenhuma transação. Use o botão abaixo ou a IA!
+                  {t("modals.finance.transactions.noTransactions")}
                 </div>
               ) : (
                 <div className="space-y-2">
                   {transactions.slice(0, 15).map((tx) => (
                     <div
                       key={tx.id}
-                      className="flex items-center gap-3 p-3 bg-white/[0.02] border border-white/5 rounded-xl hover:border-white/10 transition-colors"
+                      className="flex items-center gap-3 p-3 bg-white/2 border border-white/5 rounded-xl hover:border-white/10 transition-colors"
                     >
                       <div
                         className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm ${tx.type === "entrada" ? "bg-emerald-500/10" : "bg-red-500/10"}`}
@@ -5419,7 +5387,7 @@ function FinancialDashboard({
                         </p>
                       </div>
                       <p
-                        className={`font-black text-sm flex-shrink-0 ${tx.type === "entrada" ? "text-emerald-400" : "text-red-400"}`}
+                        className={`font-black text-sm shrink-0 ${tx.type === "entrada" ? "text-emerald-400" : "text-red-400"}`}
                       >
                         {tx.type === "entrada" ? "+" : "-"}
                         {parseBRL(tx.value)}
@@ -5446,7 +5414,7 @@ function FinancialDashboard({
           <div className="space-y-5">
             <div className="p-5 bg-blue-500/5 border border-blue-500/20 rounded-3xl">
               <p className="text-blue-400 font-black text-sm uppercase tracking-widest mb-3">
-                🔍 Análise Inteligente
+                {t("modals.finance.ai.analysis")}
               </p>
               <div className="space-y-2">
                 {getInsights().map((ins, i) => (
@@ -5459,17 +5427,17 @@ function FinancialDashboard({
                 ))}
               </div>
             </div>
-            <div className="flex flex-col h-[400px] bg-white/[0.02] border border-white/10 rounded-3xl overflow-hidden">
+            <div className="flex flex-col h-[400px] bg-white/2 border border-white/10 rounded-3xl overflow-hidden">
               <div className="flex items-center gap-3 px-5 py-4 border-b border-white/5">
                 <div className="w-8 h-8 rounded-xl bg-blue-500/20 flex items-center justify-center">
                   <Bot className="w-4 h-4 text-blue-400" />
                 </div>
                 <div>
                   <p className="text-white font-black text-xs">
-                    Assistente Financeiro IA
+                    {t("modals.finance.ai.title")}
                   </p>
                   <p className="text-white/30 text-[9px]">
-                    Interpreta linguagem natural
+                    {t("modals.finance.ai.subtitle")}
                   </p>
                 </div>
               </div>
@@ -5513,7 +5481,7 @@ function FinancialDashboard({
                 <button
                   key={ex}
                   onClick={() => setAiInputText(ex)}
-                  className="p-3 bg-white/[0.02] border border-white/5 rounded-2xl text-left text-white/40 text-[10px] font-medium hover:border-white/20 hover:text-white/70 transition-all"
+                  className="p-3 bg-white/2 border border-white/5 rounded-2xl text-left text-white/40 text-[10px] font-medium hover:border-white/20 hover:text-white/70 transition-all"
                 >
                   ðŸ’¬ {ex}
                 </button>
@@ -5529,9 +5497,10 @@ function FinancialDashboard({
           onClick={() => setShowTransactionModal(true)}
           className="w-full max-w-xl mx-auto flex items-center justify-center gap-3 py-4 bg-linear-to-r from-emerald-600 to-emerald-500 text-black font-black text-xs uppercase tracking-widest rounded-2xl shadow-[0_10px_30px_rgba(52,211,153,0.3)] hover:from-emerald-500 hover:to-emerald-400 transition-all active:scale-95"
         >
-          <Plus className="w-5 h-5" /> Nova Transação
+          <Plus className="w-5 h-5" /> {t("modals.finance.transactions.new")}
         </button>
       </div>
+
 
       <AnimatePresence>
         {showTransactionModal && (
@@ -5586,7 +5555,7 @@ function FinancialDashboard({
       </AnimatePresence>
     </motion.div>
   );
-}
+};
 
 function FinancialTransactionModal({
   onClose,
@@ -5595,6 +5564,7 @@ function FinancialTransactionModal({
   onClose: () => void;
   onSave: (tx: Omit<FinancialTransaction, "id">) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [type, setType] = useState<"entrada" | "saida">("saida");
   const [value, setValue] = useState("");
   const [category, setCategory] = useState(EXPENSE_CATEGORIES[0].name);
@@ -5615,7 +5585,7 @@ function FinancialTransactionModal({
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-white font-black text-xl uppercase">
-            Nova Transação
+            {t("modals.finance.transactions.new")}
           </h3>
           <button
             onClick={onClose}
@@ -5630,18 +5600,18 @@ function FinancialTransactionModal({
               onClick={() => setType("entrada")}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase ${type === "entrada" ? "bg-emerald-500/20 border border-emerald-500/30 text-emerald-400" : "bg-white/5 border border-white/10 text-white/40"}`}
             >
-              📥 Entrada
+              📥 {t("modals.finance.summary.income")}
             </button>
             <button
               onClick={() => setType("saida")}
               className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase ${type === "saida" ? "bg-red-500/20 border border-red-500/30 text-red-400" : "bg-white/5 border border-white/10 text-white/40"}`}
             >
-              📤 Saída
+              📤 {t("modals.finance.summary.expense")}
             </button>
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Valor (R$)
+              {t("modals.finance.transactions.valueLabel", { currency: "R$" })}
             </label>
             <input
               type="number"
@@ -5653,7 +5623,7 @@ function FinancialTransactionModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Categoria
+              {t("modals.finance.transactions.categoryLabel")}
             </label>
             <select
               value={category}
@@ -5674,19 +5644,19 @@ function FinancialTransactionModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Descrição
+              {t("modals.finance.transactions.descriptionLabel")}
             </label>
             <input
               type="text"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               className="mt-1 w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none"
-              placeholder="Ex: Almoço"
+              placeholder={t("modals.finance.transactions.descriptionPlaceholder")}
             />
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Data
+              {t("modals.finance.transactions.dateLabel")}
             </label>
             <input
               type="date"
@@ -5697,10 +5667,10 @@ function FinancialTransactionModal({
           </div>
           <div>
             <label className="text-[10px] font-black text-white/40 uppercase">
-              Forma de Pagamento
+              {t("modals.finance.transactions.paymentMethodLabel")}
             </label>
             <div className="flex gap-2 mt-1">
-              {["Cartão", "PIX", "Dinheiro"].map((m) => (
+              {[t("modals.finance.transactions.methods.Card"), "PIX", t("modals.finance.transactions.methods.Cash")].map((m) => (
                 <button
                   key={m}
                   onClick={() => setPaymentMethod(m)}
@@ -5726,7 +5696,7 @@ function FinancialTransactionModal({
           }}
           className="w-full mt-6 py-3.5 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-emerald-500/30 transition-all"
         >
-          Salvar Transação
+          {t("modals.finance.transactions.save")}
         </button>
       </motion.div>
     </motion.div>
@@ -5908,8 +5878,9 @@ function CreateTrainingModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (training: Omit<Training, "done">) => void;
+  onCreate: (training: any) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [day, setDay] = useState("SEG");
   const [name, setName] = useState("");
   const [duration, setDuration] = useState("60 min");
@@ -5990,13 +5961,13 @@ function CreateTrainingModal({
                   </div>
                   <div>
                     <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                      Estimativa Tempo
+                      {t("modals.training.duration")}
                     </label>
                     <input
                       type="text"
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
-                      placeholder="Ex: 60 min"
+                      placeholder={t("modals.training.placeholderDuration")}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                     />
                   </div>
@@ -6004,13 +5975,13 @@ function CreateTrainingModal({
 
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Identificação do Treino
+                    {t("modals.training.identification")}
                   </label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ex: Protocolo Hipertrofia A"
+                    placeholder={t("modals.training.placeholderName")}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                   />
                 </div>
@@ -6018,7 +5989,7 @@ function CreateTrainingModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
-                      Set de Exercícios
+                      {t("modals.training.exercises")}
                     </label>
                     <button
                       onClick={addExercise}
@@ -6040,7 +6011,7 @@ function CreateTrainingModal({
                             onChange={(e) =>
                               updateExercise(idx, "name", e.target.value)
                             }
-                            placeholder={`Exercício ${idx + 1}`}
+                            placeholder={t("modals.training.placeholderExercise", { number: idx + 1 })}
                             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                           />
                           <button
@@ -6053,7 +6024,7 @@ function CreateTrainingModal({
                         <div className="grid grid-cols-3 gap-2">
                           <div>
                             <label className="block text-[8px] font-black uppercase text-white/30 mb-1">
-                              Série
+                              {t("modals.training.series")}
                             </label>
                             <input
                               type="number"
@@ -6070,7 +6041,7 @@ function CreateTrainingModal({
                           </div>
                           <div>
                             <label className="block text-[8px] font-black uppercase text-white/30 mb-1">
-                              Pés/KG
+                              {t("modals.training.kg")}
                             </label>
                             <input
                               type="number"
@@ -6087,7 +6058,7 @@ function CreateTrainingModal({
                           </div>
                           <div>
                             <label className="block text-[8px] font-black uppercase text-white/30 mb-1">
-                              Reps
+                              {t("modals.training.reps")}
                             </label>
                             <input
                               type="number"
@@ -6126,7 +6097,7 @@ function CreateTrainingModal({
                   className="w-full mt-4 bg-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl hover:shadow-[0_0_20px_rgba(56,242,127,0.4)] transition-all flex justify-center items-center gap-2"
                 >
                   <Swords className="w-4 h-4" />
-                  Finalizar Protocolo de Treino
+                  {t("modals.training.finish")}
                 </button>
               </div>
             </div>
@@ -6143,6 +6114,7 @@ const MonthProgressChart = ({
 }: {
   habits: { id: number; name: string; completed: number[] }[];
 }) => {
+  const t = useTranslations("Dashboard");
   // Dynamic calculation: Calculate percentage per day based on real habit data
   const daysCount = 60; // Total points on chart for smoothness
   const currentMonthDays = 31;
@@ -6184,10 +6156,10 @@ const MonthProgressChart = ({
       <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
         <div className="space-y-1">
           <h3 className="text-xs md:text-base font-black uppercase tracking-[0.3em] text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]">
-            Progresso de Desempenho
+            {t("modals.kronos.performance")}
           </h3>
           <p className="text-[8px] md:text-[10px] text-white/30 font-bold uppercase tracking-widest">
-            Protocolo de Eficiência Biológica v4.0
+            {t("modals.kronos.biologicalProtocol")}
           </p>
         </div>
         <div className="text-right">
@@ -6220,7 +6192,7 @@ const MonthProgressChart = ({
           {[0, 25, 50, 75, 100].map((val) => (
             <div
               key={val}
-              className="absolute left-0 right-0 h-px bg-white/[0.05]"
+              className="absolute left-0 right-0 h-px bg-white/5"
               style={{ bottom: `${val}%` }}
             />
           ))}
@@ -6302,6 +6274,7 @@ const HabitMonthlyGrid = ({
   onSave: (id?: number) => void;
   onDelete: (id: number) => void;
 }) => {
+  const t = useTranslations("Dashboard");
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   return (
@@ -6309,15 +6282,15 @@ const HabitMonthlyGrid = ({
       <div className="flex items-center justify-between mb-8 md:mb-12">
         <div>
           <h3 className="text-xs md:text-base font-black uppercase tracking-[0.3em] text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
-            Círculo de Hábitos
+            {t("modals.kronos.habitsCircle")}
           </h3>
           <p className="text-[8px] md:text-[10px] text-white/20 font-bold uppercase tracking-widest mt-1">
-            Matriz de aquisição e consistência
+            {t("modals.kronos.matrix")}
           </p>
         </div>
         <div className="flex items-center gap-4">
           <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-white/30 italic">
-            Aquisição 31d
+            {t("modals.kronos.acquisition")}
           </span>
           <button
             onClick={() => {
@@ -6336,7 +6309,7 @@ const HabitMonthlyGrid = ({
         <div className="min-w-[850px]">
           {/* Time markings above grid (Days 1 to 31) */}
           <div className="flex mb-8 items-end">
-            <div className="w-48 md:w-56 lg:w-64 flex-shrink-0" />
+            <div className="w-48 md:w-56 lg:w-64 shrink-0" />
             <div className="flex-1 px-4 relative">
               <div className="h-px w-full bg-white/5 absolute top-1/2 left-0" />
               <div
@@ -6358,12 +6331,12 @@ const HabitMonthlyGrid = ({
           <div className="space-y-6 md:space-y-10">
             {isAdding && (
               <div className="flex items-center animate-in fade-in slide-in-from-top-2 duration-300">
-                <div className="w-full md:w-56 lg:w-64 flex-shrink-0 flex items-center gap-2 pr-6">
+                <div className="w-full md:w-56 lg:w-64 shrink-0 flex items-center gap-2 pr-6">
                   <input
                     autoFocus
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="INSERIR PROTOCOLO..."
+                    placeholder={t("modals.kronos.placeholderHabit")}
                     className="bg-white/5 border border-red-900/40 rounded-xl px-4 py-2 text-[10px] md:text-[11px] font-black text-white w-full outline-none focus:border-red-500/50 transition-all"
                     onKeyDown={(e) => e.key === "Enter" && onSave()}
                   />
@@ -6371,7 +6344,7 @@ const HabitMonthlyGrid = ({
                     onClick={() => onSave()}
                     className="md:hidden px-4 py-2 bg-red-600 text-white rounded-xl font-black uppercase text-[10px] shadow-[0_0_15px_rgba(220,38,38,0.3)] active:scale-95 transition-all text-xs"
                   >
-                    Salvar
+                    {t("modals.kronos.save")}
                   </button>
                 </div>
               </div>
@@ -6382,7 +6355,7 @@ const HabitMonthlyGrid = ({
               return (
                 <div key={habit.id} className="flex items-center group">
                   {/* Habit name and mini progress bar */}
-                  <div className="w-48 md:w-56 lg:w-64 flex-shrink-0 pr-6 lg:pr-10">
+                  <div className="w-48 md:w-56 lg:w-64 shrink-0 pr-6 lg:pr-10">
                     {editingId === habit.id ? (
                       <div className="flex items-center gap-2">
                         <input
@@ -6398,7 +6371,7 @@ const HabitMonthlyGrid = ({
                           onClick={() => onSave(habit.id)}
                           className="md:hidden px-3 py-1.5 bg-red-600 text-white rounded-xl font-black uppercase text-[9px] shadow-[0_0_15px_rgba(220,38,38,0.3)] active:scale-95 transition-all"
                         >
-                          Salvar
+                          {t("modals.kronos.save")}
                         </button>
                       </div>
                     ) : (
@@ -6495,6 +6468,7 @@ const KronosDashboard = ({
   onUpdate: (id: number, name: string) => void;
   onDelete: (id: number) => void;
 }) => {
+  const t = useTranslations("Dashboard");
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [input, setInput] = useState("");
@@ -6513,7 +6487,7 @@ const KronosDashboard = ({
 
   return (
     <FullViewWrapper
-      title="Central de Comando KRONOS"
+      title={t("modals.kronos.title")}
       icon={Crown}
       color="border-red-600/50"
       onClose={onClose}
@@ -6522,20 +6496,19 @@ const KronosDashboard = ({
         <div className="mb-8 md:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h2 className="text-xl md:text-5xl font-black text-white uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-              Tarefas Diárias
+              {t("modals.kronos.dailyTasks")}
             </h2>
             <div className="flex items-center gap-2 md:gap-3">
               <div className="w-6 md:w-8 h-0.5 md:h-1 bg-red-600 rounded-full" />
               <p className="text-[7px] md:text-xs text-white/40 font-black uppercase tracking-[0.2em]">
-                Acompanhe seu desempenho diário e complete objetivos para
-                evoluir.
+                {t("modals.kronos.dailyDesc")}
               </p>
             </div>
           </div>
           <div className="inline-block self-start md:self-auto">
             <div className="px-3 py-1.5 md:px-4 md:py-2 bg-red-600/5 border border-red-600/20 rounded-xl">
               <span className="text-[7px] md:text-[9px] font-black text-red-500 uppercase tracking-widest">
-                SISTEMA ATIVO: PROTOCOLO 0x44
+                {t("modals.kronos.activeSystem")}
               </span>
             </div>
           </div>
@@ -6571,6 +6544,7 @@ function ModeSelectionModal({
   onClose: () => void;
   onStart: (mode: BattleMode) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [selected, setSelected] = useState<BattleMode | null>(null);
   const modes: {
     id: BattleMode;
@@ -6582,24 +6556,24 @@ function ModeSelectionModal({
   }[] = [
     {
       id: "rotina",
-      label: "Rotina",
-      desc: "Complete suas missões diárias",
+      label: t("modals.battle.modes.rotina.label"),
+      desc: t("modals.battle.modes.rotina.desc"),
       icon: Target,
       color: "from-red-500 to-orange-500",
       glow: "rgba(255,0,76,0.4)",
     },
     {
       id: "habitos",
-      label: "Hábitos",
-      desc: "Fortaleça seus hábitos",
+      label: t("modals.battle.modes.habitos.label"),
+      desc: t("modals.battle.modes.habitos.desc"),
       icon: Flame,
       color: "from-orange-400 to-yellow-400",
       glow: "rgba(255,145,0,0.4)",
     },
     {
       id: "treinos",
-      label: "Treinos",
-      desc: "Domine seu treino do dia",
+      label: t("modals.battle.modes.treinos.label"),
+      desc: t("modals.battle.modes.treinos.desc"),
       icon: Swords,
       color: "from-cyan-400 to-blue-500",
       glow: "rgba(0,242,255,0.4)",
@@ -6627,10 +6601,10 @@ function ModeSelectionModal({
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-xl font-black uppercase italic tracking-wider">
-                    Escolha o Modo
+                    {t("modals.battle.chooseMode")}
                   </h3>
                   <p className="text-[9px] text-white/40 font-bold uppercase tracking-widest mt-1">
-                    Selecione sua batalha
+                    {t("modals.battle.selectBattle")}
                   </p>
                 </div>
                 <button
@@ -6649,7 +6623,7 @@ function ModeSelectionModal({
                   className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all active:scale-[0.98] ${
                     selected === m.id
                       ? "border-neon-green bg-neon-green/5 shadow-[0_0_25px_rgba(56,242,127,0.15)]"
-                      : "border-white/5 bg-white/[0.02] hover:border-white/15"
+                      : "border-white/5 bg-white/2 hover:border-white/15"
                   }`}
                 >
                   <div
@@ -6697,7 +6671,7 @@ function ModeSelectionModal({
                     : "bg-white/5 text-white/20 cursor-not-allowed"
                 }`}
               >
-                <Sword className="w-5 h-5" /> JOGAR
+                <Sword className="w-5 h-5" /> {t("modals.battle.play")}
               </button>
             </div>
           </motion.div>
@@ -6717,6 +6691,7 @@ function ValidationModal({
   onClose: () => void;
   message: string;
 }) {
+  const t = useTranslations("Dashboard");
   return (
     <AnimatePresence>
       {isOpen && (
@@ -6740,7 +6715,7 @@ function ValidationModal({
                 <Shield className="w-8 h-8 text-red-500" />
               </div>
               <h3 className="text-xl font-black uppercase italic tracking-wider text-red-500">
-                Guerras Indisponíveis
+                {t("modals.battle.validation.unavailable")}
               </h3>
               <p className="text-xs text-white/60 font-medium leading-relaxed">
                 {message}
@@ -6749,7 +6724,7 @@ function ValidationModal({
                 onClick={onClose}
                 className="w-full py-4 bg-white/3 border border-white/10 text-white/60 hover:text-white font-black text-[10px] uppercase tracking-widest rounded-2xl transition-all"
               >
-                ENTENDIDO
+                {t("modals.battle.validation.understood")}
               </button>
             </div>
           </motion.div>
@@ -6779,11 +6754,12 @@ function BattleView({
   onFullReset: () => void;
   onVictory: () => void;
 }) {
+  const t = useTranslations("Dashboard");
   const VILLAINS = [
-    { name: "Sombra do Caos", img: vilao1 },
-    { name: "Rei das Trevas", img: vilao2 },
-    { name: "Lorde Corrupto", img: vilao3 },
-    { name: "Dragão Sombrio", img: vilao4 },
+    { name: t("modals.battle.villains.shadow"), img: vilao1 },
+    { name: t("modals.battle.villains.darkKing"), img: vilao2 },
+    { name: t("modals.battle.villains.corruptLord"), img: vilao3 },
+    { name: t("modals.battle.villains.darkDragon"), img: vilao4 },
   ];
   const currentVillain = VILLAINS[battleIndex % 4];
 
@@ -6888,7 +6864,7 @@ function BattleView({
         setTotalXpGained((prev) => prev + 250);
         setXpHistory((prev) => [
           ...prev,
-          { time: "FIM", xp: totalXpGained + 300 },
+          { time: t("modals.battle.status.end"), xp: totalXpGained + 300 },
         ]);
       }, 800);
     }
@@ -7022,10 +6998,10 @@ function BattleView({
                 "0 0 60px rgba(220,38,38,0.6), 0 0 20px rgba(220,38,38,0.4)",
             }}
           >
-            GAME OVER
+            {t("modals.battle.status.defeat")}
           </h1>
           <p className="text-white/30 text-xs font-black uppercase tracking-[0.4em]">
-            Você foi derrotado
+            {t("modals.battle.result.defeatedMsg")}
           </p>
         </motion.div>
 
@@ -7049,10 +7025,10 @@ function BattleView({
           className="flex items-center gap-3 sm:gap-5 mb-8 flex-wrap justify-center"
         >
           {[
-            { label: "Nível", value: "→ 1", color: "text-red-400" },
-            { label: "XP", value: "→ 0", color: "text-orange-400" },
-            { label: "Moedas", value: "→ 0", color: "text-yellow-400" },
-            { label: "Conquistas", value: "Zeradas", color: "text-purple-400" },
+            { label: t("modals.battle.labels.level"), value: "→ 1", color: "text-red-400" },
+            { label: t("modals.battle.labels.xp"), value: "→ 0", color: "text-orange-400" },
+            { label: t("modals.battle.labels.coins"), value: "→ 0", color: "text-yellow-400" },
+            { label: t("modals.battle.labels.achievements"), value: t("modals.battle.labels.reset"), color: "text-purple-400" },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -7082,7 +7058,7 @@ function BattleView({
             }}
             className="flex-1 py-5 bg-linear-to-r from-red-700 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_40px_rgba(220,38,38,0.4)] hover:shadow-[0_10px_60px_rgba(220,38,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border border-red-500/30"
           >
-            <span className="text-lg">🔄</span> RECOMEÇAR DO ZERO
+            <span className="text-lg">🔄</span> {t("modals.battle.result.restart")}
           </button>
         </motion.div>
         <motion.p
@@ -7091,7 +7067,7 @@ function BattleView({
           transition={{ delay: 1.5 }}
           className="mt-5 text-[10px] font-bold text-white/15 uppercase tracking-widest text-center"
         >
-          Todo o progresso será perdido permanentemente
+          {t("modals.battle.result.lossWarning")}
         </motion.p>
       </motion.div>
     );
@@ -7121,7 +7097,7 @@ function BattleView({
           <div className="flex items-center gap-3">
             <div className="px-2 sm:px-4 py-1 sm:py-2 bg-black/60 border border-red-500/30 rounded-xl backdrop-blur-md">
               <span className="text-[8px] sm:text-[10px] font-black text-red-500 uppercase tracking-widest">
-                Modo Combate Ativo
+                {t("modals.battle.labels.activeMode")}
               </span>
             </div>
           </div>
@@ -7132,7 +7108,7 @@ function BattleView({
           <div className="flex flex-col items-center gap-4 flex-1 max-w-[250px] lg:max-w-[400px]">
             <div className="text-center">
               <p className="text-[9px] sm:text-[11px] lg:text-[12px] font-black text-red-500/80 uppercase tracking-widest mb-0.5 sm:mb-1">
-                Inimigo
+                {t("modals.battle.labels.enemy")}
               </p>
               <p className="text-sm sm:text-lg lg:text-2xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_10px_rgba(255,0,0,0.3)]">
                 {currentVillain.name}
@@ -7243,7 +7219,7 @@ function BattleView({
       {/* BOTTOM — Objectives (remaining space) */}
       <section className="flex-1 w-full bg-black flex flex-col z-30 relative overflow-hidden">
         {/* Header Objetivos */}
-        <div className="px-6 py-4 lg:px-10 lg:py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+        <div className="px-6 py-4 lg:px-10 lg:py-6 border-b border-white/5 bg-white/2 flex items-center justify-between">
           <div>
             <h2 className="text-sm lg:text-lg font-bold text-white tracking-tight flex items-center gap-2">
               <Target className="w-4 h-4 text-red-500" />
@@ -7289,11 +7265,11 @@ function BattleView({
                 className={`group relative flex items-center gap-4 px-5 py-4 rounded-2xl border border-white/10 transition-all duration-300 ${
                   task.done
                     ? "opacity-50 grayscale bg-white/5"
-                    : "bg-white/[0.05] hover:bg-white/[0.1] hover:border-red-500/40"
+                    : "bg-white/5 hover:bg-white/[0.1] hover:border-red-500/40"
                 }`}
               >
                 <div
-                  className={`relative flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                  className={`relative shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                     task.done
                       ? "bg-red-600 border-red-600 shadow-[0_0_15px_rgba(239,68,68,0.7)]"
                       : "bg-white border-white shadow-[0_0_10px_rgba(255,255,255,0.2)]"
@@ -7374,6 +7350,8 @@ export default function SystemDashboard({
   volume: number;
   setVolume: (v: number) => void;
 }) {
+  const locale = useLocale();
+  const t = useTranslations("Dashboard");
   const [showIntro, setShowIntro] = useState(true);
   const [activeLeft, setActiveLeft] = useState<
     "quests" | "habits" | "training" | "ranking"
@@ -8323,7 +8301,7 @@ export default function SystemDashboard({
 
   const UserMenu = () => (
     <div className="absolute top-full right-0 mt-6 w-48 bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden z-[200] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-      <div className="p-3 border-b border-white/5 bg-white/[0.02]">
+      <div className="p-3 border-b border-white/5 bg-white/2">
         <p className="text-[10px] font-black text-white uppercase tracking-widest">
           {playerStats.name}
         </p>
@@ -8669,7 +8647,7 @@ export default function SystemDashboard({
                         <div className="flex items-start gap-3">
                           {/* Checklist Dot */}
                           <div
-                            className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${q.done ? "bg-neon-green border-neon-green shadow-[0_0_10px_rgba(56,242,127,0.6)]" : "border-white/30 bg-black/40 group-hover:border-neon-green/50"}`}
+                            className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${q.done ? "bg-neon-green border-neon-green shadow-[0_0_10px_rgba(56,242,127,0.6)]" : "border-white/30 bg-black/40 group-hover:border-neon-green/50"}`}
                           >
                             {q.done && (
                               <motion.div
@@ -8762,7 +8740,7 @@ export default function SystemDashboard({
                   {habits.map((h, i) => (
                     <div
                       key={h.id}
-                      className="p-8 bg-white/3 border border-white/5 rounded-[2.5rem] flex flex-col gap-6 group hover:bg-white/[0.05] transition-all relative"
+                      className="p-8 bg-white/3 border border-white/5 rounded-[2.5rem] flex flex-col gap-6 group hover:bg-white/5 transition-all relative"
                     >
                       <button
                         onClick={(e) => {
@@ -8884,7 +8862,7 @@ export default function SystemDashboard({
                           onClick={() => setIsCreateTrainingModalOpen(true)}
                           className="w-full py-4 bg-neon-green text-black font-black uppercase tracking-widest rounded-xl hover:shadow-[0_0_20px_rgba(56,242,127,0.3)] transition-all flex items-center justify-center gap-2"
                         >
-                          <Plus className="w-4 h-4" /> Criar Novo Treino
+                          <Plus className="w-4 h-4" /> {t("panels.training.createTraining")}
                         </button>
                       </div>
                     </div>
@@ -8896,11 +8874,15 @@ export default function SystemDashboard({
                     <div className="p-6 bg-neon-green/5 border border-neon-green/20 rounded-2xl">
                       <div className="flex items-center justify-between mb-4">
                         <p className="text-xs font-black text-white/30 uppercase tracking-[0.4em]">
-                          Progresso Semanal
+                          {t("panels.training.weeklyProgress")}
                         </p>
                         <span className="text-sm font-black text-neon-green">
-                          {weeklyTrainings.filter((t) => t.done).length}/
-                          {weeklyTrainings.length} Treinos
+                          {t("panels.training.trainingsCount", {
+                            count: weeklyTrainings.filter((tr) => tr.done).length,
+                          })}/
+                          {t("panels.training.trainingsCount", {
+                            count: weeklyTrainings.length,
+                          })}
                         </span>
                       </div>
                       <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
@@ -8936,19 +8918,19 @@ export default function SystemDashboard({
 
                     {/* Training Cards Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {weeklyTrainings.map((t, i) => (
+                      {weeklyTrainings.map((training, i) => (
                         <motion.div
                           key={i}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: i * 0.1 }}
-                          className={`p-5 rounded-2xl border transition-all group ${t.done ? "bg-neon-green/5 border-neon-green/20" : "bg-white/[0.02] border-white/5 hover:bg-white/[0.05] hover:border-white/10"}`}
+                          className={`p-5 rounded-2xl border transition-all group ${training.done ? "bg-neon-green/5 border-neon-green/20" : "bg-white/2 border-white/5 hover:bg-white/5 hover:border-white/10"}`}
                         >
                           <div className="flex items-center justify-between mb-4">
                             <div
-                              className={`px-3 py-1.5 rounded-lg text-[10px] font-black ${t.done ? "bg-neon-green text-black" : "bg-white/5 text-white/50 border border-white/10"}`}
+                              className={`px-3 py-1.5 rounded-lg text-[10px] font-black ${training.done ? "bg-neon-green text-black" : "bg-white/5 text-white/50 border border-white/10"}`}
                             >
-                              {t.day}
+                              {training.day}
                             </div>
                             <div className="flex items-center gap-2">
                               <button
@@ -8963,28 +8945,28 @@ export default function SystemDashboard({
                               >
                                 <Trash2 className="w-3.5 h-3.5 text-white/30 hover:text-red-500" />
                               </button>
-                              {t.done && (
+                              {training.done && (
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-2 h-2 rounded-full bg-neon-green shadow-[0_0_8px_rgba(56,242,127,0.5)]" />
                                   <span className="text-[8px] font-black text-neon-green uppercase">
-                                    Concluído
+                                    {t("panels.training.done")}
                                   </span>
                                 </div>
                               )}
-                              {!t.done && (
+                              {!training.done && (
                                 <span className="text-[8px] font-black text-white/20 uppercase">
-                                  Pendente
+                                  {t("panels.training.pending")}
                                 </span>
                               )}
                             </div>
                           </div>
                           <h4
-                            className={`text-sm font-black uppercase italic mb-1 ${t.done ? "text-neon-green" : "text-white group-hover:text-neon-green transition-colors"}`}
+                            className={`text-sm font-black uppercase italic mb-1 ${training.done ? "text-neon-green" : "text-white group-hover:text-neon-green transition-colors"}`}
                           >
-                            {t.name}
+                            {training.name}
                           </h4>
                           <p className="text-[9px] text-white/30 font-bold mb-4">
-                            {t.duration} • {t.exercises.length} exercícios
+                            {training.duration} • {t.rich("panels.training.exercises", { count: training.exercises.length })}
                           </p>
 
                           <div className="space-y-3">
@@ -8992,11 +8974,11 @@ export default function SystemDashboard({
                               <div
                                 key={j}
                                 onClick={() => toggleExercise(i, j)}
-                                className={`p-3 border rounded-xl cursor-pointer transition-all ${ex.done ? "bg-neon-green/10 border-neon-green/30" : "bg-white/3 border-white/5 hover:bg-white/[0.06]"}`}
+                                className={`p-3 border rounded-xl cursor-pointer transition-all ${ex.done ? "bg-neon-green/10 border-neon-green/30" : "bg-white/3 border-white/5 hover:bg-white/6"}`}
                               >
                                 <div className="flex items-center gap-2 mb-2">
                                   <div
-                                    className={`w-3 h-3 rounded-sm border flex items-center justify-center flex-shrink-0 ${ex.done ? "bg-neon-green border-neon-green" : "border-white/15 bg-white/5"}`}
+                                    className={`w-3 h-3 rounded-sm border flex items-center justify-center shrink-0 ${ex.done ? "bg-neon-green border-neon-green" : "border-white/15 bg-white/5"}`}
                                   >
                                     {ex.done && (
                                       <div className="w-1.5 h-1.5 bg-black rounded-[1px]" />
@@ -9011,7 +8993,7 @@ export default function SystemDashboard({
                                 <div className="flex gap-4 pl-5">
                                   <div className="flex flex-col">
                                     <span className="text-[7px] font-black text-white/20 uppercase tracking-widest">
-                                      Série
+                                      {t("panels.training.series", { count: 1 }).split(" ")[1]}
                                     </span>
                                     <span
                                       className={`text-[10px] font-black ${ex.done ? "text-neon-green/40" : "text-neon-green"}`}
@@ -9021,7 +9003,7 @@ export default function SystemDashboard({
                                   </div>
                                   <div className="flex flex-col">
                                     <span className="text-[7px] font-black text-white/20 uppercase tracking-widest">
-                                      KG
+                                      {t("panels.training.weight")}
                                     </span>
                                     <span
                                       className={`text-[10px] font-black ${ex.done ? "text-white/20" : "text-white"}`}
@@ -9031,7 +9013,7 @@ export default function SystemDashboard({
                                   </div>
                                   <div className="flex flex-col">
                                     <span className="text-[7px] font-black text-white/20 uppercase tracking-widest">
-                                      Reps
+                                      {t("panels.training.reps")}
                                     </span>
                                     <span
                                       className={`text-[10px] font-black ${ex.done ? "text-white/20" : "text-white"}`}
@@ -9052,13 +9034,13 @@ export default function SystemDashboard({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                         onClick={() => setIsCreateTrainingModalOpen(true)}
-                        className="p-5 rounded-2xl border-2 border-dashed border-neon-green/20 bg-neon-green/[0.02] flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-neon-green/5 hover:border-neon-green/40 transition-all group min-h-[200px]"
+                        className="p-5 rounded-2xl border-2 border-dashed border-neon-green/20 bg-neon-green/2 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-neon-green/5 hover:border-neon-green/40 transition-all group min-h-[200px]"
                       >
                         <div className="w-12 h-12 rounded-full bg-neon-green/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                           <Plus className="w-6 h-6 text-neon-green" />
                         </div>
                         <span className="text-[10px] font-black text-neon-green uppercase tracking-widest">
-                          Criar Treino
+                          {t("panels.training.actions.create")}
                         </span>
                       </motion.div>
                     </div>
@@ -9067,29 +9049,29 @@ export default function SystemDashboard({
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {[
                         {
-                          label: "Treinos Feitos",
-                          value: `${weeklyTrainings.filter((t) => t.done).length}`,
-                          icon: "ðŸ‹",
+                          label: t("panels.training.stats.completed"),
+                          value: `${weeklyTrainings.filter((tr) => tr.done).length}`,
+                          icon: "🏋️ ",
                         },
                         {
-                          label: "Streak Semanal",
+                          label: t("panels.training.stats.streak"),
                           value: "3 sem",
                           icon: "🔥",
                         },
                         {
-                          label: "Exercícios Totais",
-                          value: `${weeklyTrainings.reduce((acc, t) => acc + t.exercises.length, 0)}`,
-                          icon: "ðŸ’ª",
+                          label: t("panels.training.stats.totalExercises"),
+                          value: `${weeklyTrainings.reduce((acc, tr) => acc + tr.exercises.length, 0)}`,
+                          icon: "💪",
                         },
                         {
-                          label: "Tempo Total",
+                          label: t("panels.training.stats.totalTime"),
                           value: "275 min",
-                          icon: "â±",
+                          icon: "⏱️ ",
                         },
                       ].map((stat, i) => (
                         <div
                           key={i}
-                          className="p-4 bg-white/[0.02] border border-white/5 rounded-xl text-center hover:bg-white/[0.05] transition-colors"
+                          className="p-4 bg-white/2 border border-white/5 rounded-xl text-center hover:bg-white/5 transition-colors"
                         >
                           <span className="text-xl leading-none">
                             {stat.icon}
@@ -9124,20 +9106,20 @@ export default function SystemDashboard({
                       </div>
                       <div className="relative z-10">
                         <p className="text-[10px] font-black text-neon-yellow uppercase tracking-[0.3em] mb-1">
-                          SUA DIVISíƒO
+                          {t("panels.ranking.yourDivision")}
                         </p>
                         <h3 className="text-3xl sm:text-4xl font-black uppercase italic mb-2 tracking-tighter text-white">
                           â›“ FERRO IV
                         </h3>
                         <p className="text-sm font-black text-neon-green uppercase tracking-widest mb-6 sm:mb-8">
-                          TOP 5% GLOBAL
+                          {t("panels.ranking.topGlobal", { percent: 5 })}
                         </p>
 
                         <div className="space-y-6 mb-8 sm:mb-10">
                           <div>
                             <div className="flex justify-between items-end mb-2">
                               <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">
-                                RANK ATUAL
+                                {t("panels.ranking.currentRank")}
                               </span>
                               <span className="text-xl sm:text-2xl font-black text-white italic">
                                 #12
@@ -9147,14 +9129,14 @@ export default function SystemDashboard({
                               <div className="h-full w-[70%] bg-linear-to-r from-neon-yellow to-orange-500 shadow-[0_0_15px_rgba(255,242,0,0.3)]" />
                             </div>
                             <p className="text-[9px] font-black text-white/20 uppercase tracking-widest mt-2 italic text-right">
-                              Mais 2.5k XP para o Rank #11
+                              {t("panels.ranking.nextRankXp", { xp: "2.5k", rank: 11 })}
                             </p>
                           </div>
 
                           <div className="grid grid-cols-2 gap-3 sm:gap-4">
                             <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/5">
                               <p className="text-[8px] font-black text-white/30 uppercase mb-1">
-                                Taxa de Foco
+                                {t("panels.ranking.focusRate")}
                               </p>
                               <p className="text-lg sm:text-xl font-black text-neon-yellow italic">
                                 94%
@@ -9175,10 +9157,10 @@ export default function SystemDashboard({
                             </div>
                             <div>
                               <p className="text-[10px] font-black text-white/80 uppercase tracking-tight">
-                                Evolução Diária
+                                {t("panels.ranking.dailyEvolution")}
                               </p>
                               <p className="text-[9px] font-black text-neon-green uppercase">
-                                +128 POSIí‡í•ES
+                                {t("panels.ranking.positions", { count: 128 })}
                               </p>
                             </div>
                           </div>
@@ -9192,17 +9174,17 @@ export default function SystemDashboard({
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-6 mb-2 gap-2">
                       <div className="flex items-center gap-4">
                         <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">
-                          RANK GLOBAL
+                          {t("panels.ranking.globalRank")}
                         </p>
                         <div className="hidden sm:block h-px w-20 bg-white/5" />
                         <p className="text-[10px] font-black text-neon-yellow/40 uppercase tracking-[0.4em]">
-                          TEMPORADA 01
+                          {t("panels.ranking.season", { number: 1 })}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                         <span className="text-[9px] font-black text-white/40 uppercase">
-                          Termina em: 12d 04h
+                          {t("panels.ranking.endsIn", { time: "12d 04h" })}
                         </span>
                       </div>
                     </div>
@@ -9294,7 +9276,7 @@ export default function SystemDashboard({
                                                                 ? "bg-neon-green/10 border-neon-green/30 shadow-[0_0_20px_rgba(56,242,127,0.1)]"
                                                                 : r.rank <= 3
                                                                   ? "bg-neon-yellow/5 border-neon-yellow/20 hover:bg-neon-yellow/10"
-                                                                  : "bg-white/1 border-white/5 hover:bg-white/[0.04] hover:border-white/10"
+                                                                  : "bg-white/1 border-white/5 hover:bg-white/4 hover:border-white/10"
                                                             }`}
                         >
                           {/* Rank Number */}
@@ -9333,7 +9315,7 @@ export default function SystemDashboard({
                               <h4
                                 className={`text-sm sm:text-lg font-black uppercase italic truncate ${r.isMe ? "text-neon-green" : "text-white/90"}`}
                               >
-                                {r.name} {r.isMe && "(VOCÊ)"}
+                                {r.name} {r.isMe && t("panels.ranking.you")}
                               </h4>
                               {r.status === "ONLINE" && (
                                 <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-neon-green shadow-[0_0_5px_rgba(56,242,127,1)]" />
@@ -9358,7 +9340,7 @@ export default function SystemDashboard({
                               {r.xp}
                             </p>
                             <p className="text-[7px] sm:text-[9px] font-black text-white/20 uppercase tracking-widest mt-1">
-                              XP TOTAL
+                              {t("panels.ranking.totalXp")}
                             </p>
                           </div>
 
@@ -9393,30 +9375,30 @@ export default function SystemDashboard({
                   <div className="mb-8 flex flex-col items-center sm:items-start text-center sm:text-left transition-all duration-300">
                     <h2 className="text-3xl sm:text-4xl font-black uppercase italic text-white mb-2 leading-none">
                       {checklistTab === "calendar"
-                        ? "HOJE"
+                        ? t("panels.checklist.tabs.today")
                         : checklistTab === "checklist"
-                          ? "Tarefas"
-                          : "Pomodoro"}
+                          ? t("panels.checklist.tabs.tasks")
+                          : t("panels.checklist.tabs.pomodoro")}
                     </h2>
                     <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">
                       {checklistTab === "calendar"
-                        ? "Suas Tarefas De Hoje"
+                        ? t("panels.checklist.subtitles.today")
                         : checklistTab === "checklist"
-                          ? "Sistema Tradicional"
-                          : "Metodo Cientifico"}
+                          ? t("panels.checklist.subtitles.tasks")
+                          : t("panels.checklist.subtitles.pomodoro")}
                     </p>
                   </div>
 
                   {/* Sub-navigation Menu */}
                   <div className="flex items-center justify-center sm:justify-start gap-4 mb-8">
                     {[
-                      { id: "calendar", icon: Calendar, label: "Calendário" },
+                      { id: "calendar", icon: Calendar, label: t("panels.checklist.tabs.calendar") },
                       {
                         id: "checklist",
                         icon: CheckSquare,
-                        label: "Checklist",
+                        label: t("panels.checklist.tabs.tasks"),
                       },
-                      { id: "pomodoro", icon: Timer, label: "Pomodoro" },
+                      { id: "pomodoro", icon: Timer, label: t("panels.checklist.tabs.pomodoro") },
                     ].map((tab) => (
                       <button
                         key={tab.id}
@@ -9445,7 +9427,7 @@ export default function SystemDashboard({
                         <div className="p-6 bg-[#0a0a0a] border border-white/10 rounded-3xl">
                           <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-black uppercase italic">
-                              Hoje
+                              {t("panels.checklist.tabs.today")}
                             </h3>
                             <button
                               onClick={() => setIsAddingTask(!isAddingTask)}
@@ -9468,7 +9450,7 @@ export default function SystemDashboard({
                                 <div className="p-4 bg-white/3 border border-white/10 rounded-2xl space-y-4">
                                   <div>
                                     <p className="text-[10px] font-black uppercase text-white/40 mb-2 tracking-widest">
-                                      Nome da Tarefa
+                                      {t("panels.checklist.placeholders.taskName")}
                                     </p>
                                     <input
                                       type="text"
@@ -9477,12 +9459,12 @@ export default function SystemDashboard({
                                         setNewTaskInput(e.target.value)
                                       }
                                       className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm font-bold text-white focus:outline-none focus:border-neon-green/50 transition-all"
-                                      placeholder="O que você vai fazer?"
+                                      placeholder={t("panels.checklist.placeholders.newTask")}
                                     />
                                   </div>
                                   <div>
                                     <p className="text-[10px] font-black uppercase text-white/40 mb-2 tracking-widest">
-                                      Prioridade
+                                      {t("panels.checklist.placeholders.priority")}
                                     </p>
                                     <div className="grid grid-cols-3 gap-2">
                                       {(
@@ -9545,7 +9527,7 @@ export default function SystemDashboard({
                                     }}
                                     className="w-full py-3 bg-neon-green text-black rounded-xl font-black uppercase text-xs hover:scale-[1.02] active:scale-[0.98] transition-all"
                                   >
-                                    Salvar Tarefa
+                                    {t("panels.checklist.actions.saveTask")}
                                   </button>
                                 </div>
                               </motion.div>
@@ -9575,7 +9557,7 @@ export default function SystemDashboard({
                               const renderTask = (task: any) => (
                                 <div
                                   key={task.id}
-                                  className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center justify-between group"
+                                  className="p-4 bg-white/2 border border-white/5 rounded-2xl flex items-center justify-between group"
                                 >
                                   <div className="flex items-center gap-4">
                                     <div
@@ -9631,7 +9613,7 @@ export default function SystemDashboard({
                                       !isAddingTask &&
                                       completedTasks.length === 0 && (
                                         <p className="text-center py-8 text-white/10 font-black uppercase italic text-xs">
-                                          Nenhuma tarefa para hoje
+                                          {t("panels.checklist.messages.noTasks")}
                                         </p>
                                       )}
                                     {pendingTasks.map(renderTask)}
@@ -9643,7 +9625,7 @@ export default function SystemDashboard({
                                       <div className="flex items-center gap-2 mb-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-neon-green/40" />
                                         <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                                          Concluído
+                                          {t("panels.training.done")}
                                         </p>
                                       </div>
                                       {completedTasks.map(renderTask)}
@@ -9668,7 +9650,7 @@ export default function SystemDashboard({
                         <div className="p-6 bg-[#0a0a0a] border border-white/10 rounded-3xl">
                           <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-black uppercase italic">
-                              Tarefas
+                              {t("panels.checklist.personalTasks.title")}
                             </h3>
                             <button
                               onClick={() =>
@@ -9693,7 +9675,7 @@ export default function SystemDashboard({
                                 <div className="p-5 bg-white/3 border border-white/10 rounded-2xl space-y-4">
                                   <div>
                                     <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-2">
-                                      Nome da Tarefa
+                                      {t("panels.checklist.personalTasks.nameLabel")}
                                     </p>
                                     <input
                                       type="text"
@@ -9701,7 +9683,7 @@ export default function SystemDashboard({
                                       onChange={(e) =>
                                         setNewPersonalTaskInput(e.target.value)
                                       }
-                                      placeholder="O que precisa ser feito?"
+                                      placeholder={t("panels.checklist.personalTasks.placeholder")}
                                       className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/10 focus:border-neon-green/50 outline-none transition-all"
                                     />
                                   </div>
@@ -9731,7 +9713,7 @@ export default function SystemDashboard({
                                                   : "bg-white/5 border-white/5 text-white/20 hover:bg-white/10"
                                               }`}
                                             >
-                                              {p}
+                                              {t(`common.priorities.${p === "Normal" ? "normal" : p === "Atenção" ? "attention" : "urgent"}`)}
                                             </button>
                                           ),
                                         )}
@@ -9772,7 +9754,7 @@ export default function SystemDashboard({
                                     className="w-full mt-2 py-3 bg-neon-green text-black rounded-xl font-black uppercase text-xs hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                   >
                                     <Plus className="w-4 h-4" />
-                                    Salvar Tarefa
+                                    {t("panels.checklist.personalTasks.saveAction")}
                                   </button>
                                 </div>
                               </motion.div>
@@ -9790,7 +9772,7 @@ export default function SystemDashboard({
                               const renderPersonal = (task: any) => (
                                 <div
                                   key={task.id}
-                                  className={`p-4 rounded-2xl border transition-all flex items-center justify-between group ${task.done ? "bg-neon-green/5 border-neon-green/20" : "bg-white/[0.02] border-white/5 hover:bg-white/5"}`}
+                                  className={`p-4 rounded-2xl border transition-all flex items-center justify-between group ${task.done ? "bg-neon-green/5 border-neon-green/20" : "bg-white/2 border-white/5 hover:bg-white/5"}`}
                                 >
                                   <div
                                     onClick={() =>
@@ -9850,7 +9832,7 @@ export default function SystemDashboard({
                                   <div className="space-y-3">
                                     {personalTasks.length === 0 && (
                                       <p className="text-center py-8 text-white/10 font-black uppercase italic text-xs">
-                                        Seu checklist está vazio
+                                        {t("panels.checklist.messages.noTasks")}
                                       </p>
                                     )}
                                     {pending.map(renderPersonal)}
@@ -9861,7 +9843,7 @@ export default function SystemDashboard({
                                       <div className="flex items-center gap-2 mb-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-neon-green/40" />
                                         <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                                          Concluído
+                                          {t("panels.training.done")}
                                         </p>
                                       </div>
                                       {completed.map(renderPersonal)}
@@ -9892,8 +9874,8 @@ export default function SystemDashboard({
                               <p className="text-[10px] font-black text-neon-green uppercase tracking-[0.2em] mb-2 font-display">
                                 {pomodoroGroup.length > 0 &&
                                 currentPomodoroIdx < pomodoroGroup.length
-                                  ? `FOCO EM: ${pomodoroGroup[currentPomodoroIdx].title}`
-                                  : "DEFINA UM OBJETIVO"}
+                                  ? `${t("panels.checklist.pomodoro.activeTaskPrefix")}${pomodoroGroup[currentPomodoroIdx].title}`
+                                  : t("panels.checklist.pomodoro.noTargetMessage")}
                               </p>
                               <div className="text-5xl sm:text-7xl font-bold text-white tracking-tight tabular-nums flex justify-center gap-1 sm:gap-2">
                                 <span className="min-w-[1.2ch]">
@@ -9911,7 +9893,7 @@ export default function SystemDashboard({
                                 </span>
                               </div>
                               <p className="text-[8px] sm:text-[10px] font-black text-white/20 uppercase tracking-[0.5em] mt-2">
-                                Mergulhe no Foco
+                                {t("panels.checklist.pomodoro.subtitle")}
                               </p>
                             </div>
 
@@ -9932,10 +9914,10 @@ export default function SystemDashboard({
                                                                                         }`}
                               >
                                 {pomodoroGroup.length === 0
-                                  ? "Adicione um Objetivo"
+                                  ? t("panels.checklist.pomodoro.addGoalMessage")
                                   : pomodoroActive
-                                    ? "Pausar"
-                                    : "Iniciar Foco"}
+                                    ? t("panels.checklist.pomodoro.pauseAction")
+                                    : t("panels.checklist.pomodoro.startAction")}
                               </button>
                               <button
                                 onClick={() => {
@@ -9944,7 +9926,7 @@ export default function SystemDashboard({
                                 }}
                                 className="w-full sm:w-auto px-8 py-4 sm:py-5 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-white text-xs sm:text-sm transition-all font-black uppercase"
                               >
-                                Reiniciar
+                                {t("panels.checklist.pomodoro.resetAction")}
                               </button>
                             </div>
                           </div>
@@ -9953,7 +9935,7 @@ export default function SystemDashboard({
                           <div className="lg:col-span-2 p-6 bg-[#0a0a0a] border border-white/10 rounded-[2rem] flex flex-col">
                             <div className="flex items-center justify-between mb-6">
                               <h3 className="text-lg font-black uppercase italic text-white/60">
-                                Objetivo
+                                {t("panels.checklist.pomodoro.objectiveTitle")}
                               </h3>
                               <button
                                 onClick={() =>
@@ -9978,7 +9960,7 @@ export default function SystemDashboard({
                                   <div className="p-4 bg-white/3 border border-white/10 rounded-2xl space-y-4">
                                     <div>
                                       <p className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-1.5">
-                                        Tarefa Principal
+                                        {t("panels.checklist.pomodoro.mainTaskLabel")}
                                       </p>
                                       <input
                                         type="text"
@@ -9988,14 +9970,14 @@ export default function SystemDashboard({
                                             e.target.value,
                                           )
                                         }
-                                        placeholder="O que vamos focar?"
+                                        placeholder={t("panels.checklist.pomodoro.mainTaskPlaceholder")}
                                         className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-white/10 focus:border-neon-green/50 outline-none transition-all"
                                       />
                                     </div>
                                     <div className="space-y-4">
                                       <div>
                                         <p className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-1.5">
-                                          Prioridade
+                                          {t("panels.checklist.personalTasks.priorityLabel")}
                                         </p>
                                         <div className="flex gap-2">
                                           {["Normal", "Atenção", "Urgente"].map(
@@ -10017,7 +9999,7 @@ export default function SystemDashboard({
                                                     : "bg-white/5 border-white/5 text-white/20 hover:bg-white/10"
                                                 }`}
                                               >
-                                                {p}
+                                                {t(`modals.pomodoro.priorities.${p}`)}
                                               </button>
                                             ),
                                           )}
@@ -10082,7 +10064,7 @@ export default function SystemDashboard({
                                       }}
                                       className="w-full mt-2 py-3 bg-neon-green text-black rounded-xl font-black uppercase text-[10px] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                     >
-                                      Salvar Objetivo
+                                      {t("modals.pomodoro.labels.saveObjective")}
                                     </button>
                                   </div>
                                 </motion.div>
@@ -10175,10 +10157,10 @@ export default function SystemDashboard({
                                         onClick={() => setPomodoroActive(false)}
                                         className="w-full py-5 bg-white text-black rounded-[2rem] font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
                                       >
-                                        Pausar Sessão
+                                        {t("modals.pomodoro.labels.pauseSession")}
                                       </button>
                                       <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">
-                                        Pressione para sair do mergulho
+                                        {t("modals.pomodoro.labels.exitDiving")}
                                       </p>
                                     </div>
                                   </div>
@@ -10204,11 +10186,11 @@ export default function SystemDashboard({
                                 return (
                                   <div
                                     key={task.id}
-                                    className={`p-4 rounded-2xl border transition-all relative overflow-hidden group ${isActiveIdx ? "bg-neon-green/5 border-neon-green/20" : "bg-white/[0.02] border-white/5 hover:bg-white/[0.04]"}`}
+                                    className={`p-4 rounded-2xl border transition-all relative overflow-hidden group ${isActiveIdx ? "bg-neon-green/5 border-neon-green/20" : "bg-white/2 border-white/5 hover:bg-white/4"}`}
                                   >
                                     <div className="flex items-center justify-between mb-3">
                                       <div className="flex items-center gap-4">
-                                        <div className="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
+                                        <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
                                           <svg className="w-full h-full -rotate-90">
                                             <circle
                                               cx="20"
@@ -10273,7 +10255,7 @@ export default function SystemDashboard({
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
+                                        </div>
                                       <button
                                         onClick={() =>
                                           setPomodoroGroup((prev) =>
@@ -10582,7 +10564,7 @@ export default function SystemDashboard({
               <BottomSheet
                 open={mobilePanel === "quests"}
                 onClose={() => setMobilePanel(null)}
-                title="Painel Rotina"
+                title={t("panels.quests.title")}
               >
                 <QuestsPanel
                   quests={quests}
@@ -10595,7 +10577,7 @@ export default function SystemDashboard({
               <BottomSheet
                 open={mobilePanel === "habits"}
                 onClose={() => setMobilePanel(null)}
-                title="Streaks & Hábitos"
+                title={t("panels.habits.title")}
               >
                 <HabitsPanel
                   habits={habits}
@@ -10610,7 +10592,7 @@ export default function SystemDashboard({
               <BottomSheet
                 open={mobilePanel === "training"}
                 onClose={() => setMobilePanel(null)}
-                title="Treinos da Semana"
+                title={t("panels.training.title")}
               >
                 <TrainingPanel
                   weeklyTrainings={weeklyTrainings}
@@ -10622,7 +10604,7 @@ export default function SystemDashboard({
               <BottomSheet
                 open={mobilePanel === "ranking"}
                 onClose={() => setMobilePanel(null)}
-                title="Ranking Global"
+                title={t("panels.ranking.title")}
               >
                 <RankingPanel
                   setCurrentView={setCurrentView}
@@ -10633,7 +10615,7 @@ export default function SystemDashboard({
               <BottomSheet
                 open={mobilePanel === "arsenal"}
                 onClose={() => setMobilePanel(null)}
-                title="Arsenal de Poder"
+                title={t("panels.arsenal.title")}
               >
                 <div className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-purple-400/20 pr-1 pb-4">
                   <ArsenalPanel
@@ -10654,7 +10636,7 @@ export default function SystemDashboard({
                 initial={{ x: -80, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.7 }}
-                className="w-64 xl:w-80 2xl:w-96 flex-shrink-0 border-r border-white/5 backdrop-blur-xl bg-black/20 flex flex-col overflow-hidden"
+                className="w-64 xl:w-80 2xl:w-96 shrink-0 border-r border-white/5 backdrop-blur-xl bg-black/20 flex flex-col overflow-hidden"
               >
                 <div className="flex border-b border-white/5 bg-black/20">
                   {(
@@ -10671,7 +10653,7 @@ export default function SystemDashboard({
                       className={`flex-1 py-2 2xl:py-3 flex flex-col items-center gap-1 text-[8px] 2xl:text-[9px] font-black uppercase tracking-wider transition-all border-b-2 ${activeLeft === id ? "border-neon-green text-neon-green bg-neon-green/5" : "border-transparent text-white/30 hover:text-white/60"}`}
                     >
                       <Icon className="w-3.5 h-3.5 2xl:w-4 2xl:h-4" />
-                      {label}
+                      {t(`panels.${id === "quests" ? "quests" : id === "habits" ? "habits" : id === "training" ? "training" : "ranking"}.tab`)}
                     </button>
                   ))}
                 </div>
@@ -10746,16 +10728,16 @@ export default function SystemDashboard({
                     )}
                   </AnimatePresence>
                 </div>
-                <div className="p-3 2xl:p-4 border-t border-white/5 bg-black/20 space-y-2 2xl:space-y-2.5 flex-shrink-0">
+                <div className="p-3 2xl:p-4 border-t border-white/5 bg-black/20 space-y-2 2xl:space-y-2.5 shrink-0">
                   <XPBar
                     current={playerStats.xp}
                     max={playerStats.xpMax}
-                    label="Experiência"
+                    type="xp"
                   />
                   <XPBar
                     current={playerStats.hp}
                     max={playerStats.hpMax}
-                    label="Vida"
+                    type="hp"
                   />
                 </div>
               </motion.aside>
@@ -10787,7 +10769,7 @@ export default function SystemDashboard({
                           •
                         </span>
                         <span className="text-[10px] font-black text-white/60">
-                          Nível {playerStats.level}
+                          {t("modals.report.charProfile.level", { level: playerStats.level })}
                         </span>
                       </div>
                     </motion.div>
@@ -10820,7 +10802,7 @@ export default function SystemDashboard({
                       <div className="flex items-center gap-1.5">
                         <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400/20" />
                         <span className="text-[10px] font-black text-red-400 uppercase tracking-widest">
-                          Vida
+                          {t("battle.status.hp")}
                         </span>
                       </div>
                       <span className="text-[10px] font-black text-red-400">
@@ -10851,13 +10833,13 @@ export default function SystemDashboard({
                     onClick={() => setShowModeSelection(true)}
                     className="px-6 py-4 xl:px-8 xl:py-4 2xl:px-10 2xl:py-5 bg-neon-green text-black font-black text-[12px] xl:text-[14px] 2xl:text-base uppercase tracking-widest rounded-xl shadow-[0_0_20px_rgba(56,242,127,0.4)] hover:shadow-[0_0_30px_rgba(56,242,127,0.6)] hover:scale-105 transition-all flex items-center gap-2"
                   >
-                    <Sword className="w-5 h-5 2xl:w-6 2xl:h-6" /> Iniciar Rotina
+                    <Sword className="w-5 h-5 2xl:w-6 2xl:h-6" /> {t("panels.quests.startRoutine")}
                   </button>
                   <button
                     onClick={() => setCurrentView("kronos")}
                     className="px-6 py-4 xl:px-8 xl:py-4 2xl:px-10 2xl:py-5 bg-linear-to-br from-[#FFD700] via-[#FDB931] to-[#9E7E38] border-b-4 border-black/20 text-black font-black text-[12px] xl:text-[14px] 2xl:text-base uppercase tracking-widest rounded-xl hover:shadow-[0_0_30px_rgba(253,185,49,0.4)] hover:scale-105 transition-all flex items-center gap-2"
                   >
-                    <Star className="w-5 h-5 2xl:w-6 2xl:h-6" /> Kronos
+                    <Star className="w-5 h-5 2xl:w-6 2xl:h-6" /> {t("panels.quests.kronos")}
                   </button>
                 </motion.div>
               </div>
@@ -10867,7 +10849,7 @@ export default function SystemDashboard({
                 initial={{ x: 80, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.7 }}
-                className="w-60 xl:w-72 2xl:w-80 flex-shrink-0 border-l border-white/5 backdrop-blur-xl bg-black/20 flex flex-col overflow-y-auto scrollbar-thin"
+                className="w-60 xl:w-72 2xl:w-80 shrink-0 border-l border-white/5 backdrop-blur-xl bg-black/20 flex flex-col overflow-y-auto scrollbar-thin"
               >
                 <div className="p-3 2xl:p-4 border-b border-white/5 bg-black/20">
                   <div className="flex items-center gap-2">
@@ -11115,18 +11097,9 @@ export default function SystemDashboard({
 
 // ─── Global Game Over Overlay ─────────────────────────────────────────────â”€
 function GameOverOverlay({ onReset }: { onReset: () => void }) {
-  const MOTIVATIONAL_PHRASES = [
-    "A derrota não é o fim. É o começo de uma nova batalha.",
-    "Os guerreiros mais fortes foram construídos pelas suas piores derrotas.",
-    "Cada queda é uma lição. Levante-se mais forte do que antes.",
-    "O caminho para a vitória passa pelo fracasso. Continue.",
-    "Recomeçar do zero é o privilégio dos corajosos. Você é um.",
-    "Não existe guerreiro invencível â€” existe quem nunca desistiu.",
-  ];
-  const phrase =
-    MOTIVATIONAL_PHRASES[
-      Math.floor(Date.now() / 1000) % MOTIVATIONAL_PHRASES.length
-    ];
+  const t = useTranslations("Dashboard");
+  const phrases = t.raw("modals.gameOver.phrases") as string[];
+  const phrase = phrases[Math.floor(Date.now() / 1000) % phrases.length];
 
   return (
     <motion.div
@@ -11171,7 +11144,7 @@ function GameOverOverlay({ onReset }: { onReset: () => void }) {
         className="text-6xl sm:text-8xl font-black uppercase italic text-red-600 mb-4 text-center tracking-tighter"
         style={{ textShadow: "0 0 40px rgba(220,38,38,0.8)" }}
       >
-        GAME OVER
+        {t("modals.gameOver.title")}
       </motion.h1>
 
       <motion.div
@@ -11192,7 +11165,7 @@ function GameOverOverlay({ onReset }: { onReset: () => void }) {
         onClick={onReset}
         className="px-12 py-6 bg-linear-to-r from-red-700 to-red-600 text-white font-black text-sm uppercase tracking-[0.3em] rounded-3xl shadow-[0_20px_50px_rgba(220,38,38,0.5)] hover:scale-105 active:scale-95 transition-all border border-red-500/50"
       >
-        REVANCHE (RECOMEÇAR DO ZERO)
+        {t("modals.gameOver.action")}
       </motion.button>
     </motion.div>
   );
@@ -11210,6 +11183,7 @@ function EditTrainingModal({
   onClose: () => void;
   onSave: (updated: Training) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [day, setDay] = useState("");
   const [name, setName] = useState("");
   const [duration, setDuration] = useState("");
@@ -11261,7 +11235,7 @@ function EditTrainingModal({
             <div className="p-6 overflow-y-auto scrollbar-thin flex-1">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black uppercase italic">
-                  Editar Treino
+                  {t("modals.editTraining.title")}
                 </h3>
                 <button
                   onClick={onClose}
@@ -11275,21 +11249,21 @@ function EditTrainingModal({
                 {/* Day */}
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Dia da Semana
+                    {t("modals.editTraining.day")}
                   </label>
                   <select
                     value={day}
                     onChange={(e) => setDay(e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors text-white appearance-none"
                   >
-                    {["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"].map(
+                    {["seg", "ter", "qua", "qui", "sex", "sab", "dom"].map(
                       (d) => (
                         <option
                           key={d}
-                          value={d}
+                          value={d.toUpperCase()}
                           className="bg-black text-white"
                         >
-                          {d}
+                          {t(`days.${d}`)}
                         </option>
                       ),
                     )}
@@ -11299,7 +11273,7 @@ function EditTrainingModal({
                 {/* Name */}
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Nome do Treino
+                    {t("modals.editTraining.name")}
                   </label>
                   <input
                     type="text"
@@ -11313,7 +11287,7 @@ function EditTrainingModal({
                 {/* Duration */}
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">
-                    Duração
+                    {t("modals.editTraining.duration")}
                   </label>
                   <input
                     type="text"
@@ -11328,7 +11302,7 @@ function EditTrainingModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
-                      Exercícios
+                      {t("modals.editTraining.exercises")}
                     </label>
                     <button
                       onClick={addExercise}
@@ -11350,7 +11324,7 @@ function EditTrainingModal({
                             onChange={(e) =>
                               updateExercise(idx, "name", e.target.value)
                             }
-                            placeholder={`Nome do Exercício ${idx + 1}`}
+                            placeholder={t("modals.editTraining.placeholderExercise", { number: idx + 1 })}
                             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:border-neon-green transition-colors"
                           />
                           <button
@@ -11431,7 +11405,7 @@ function EditTrainingModal({
                   className="w-full mt-4 bg-linear-to-r from-neon-yellow to-neon-green text-black font-black uppercase tracking-widest py-4 rounded-xl shadow-[0_10px_30px_rgba(253,224,71,0.2)] hover:shadow-[0_10px_40px_rgba(56,242,127,0.4)] transition-all flex justify-center items-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  Salvar Alterações no Protocolo
+                  {t("modals.editTraining.save")}
                 </button>
               </div>
             </div>
@@ -11451,6 +11425,7 @@ function SettingsModal({
   volume: number;
   setVolume: (v: number) => void;
 }) {
+  const t = useTranslations("Dashboard");
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -11481,12 +11456,12 @@ function SettingsModal({
             </div>
             <div>
               <h3 className="text-base sm:text-xl font-black uppercase tracking-[0.2em] text-white">
-                Configurações
+                {t("panels.settings.title")}
               </h3>
               <div className="flex items-center gap-2 mt-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-neon-green animate-pulse" />
                 <p className="text-[7px] sm:text-[9px] font-black text-neon-green/60 uppercase tracking-widest leading-none">
-                  SISTEMA KRONOS v.1.0_
+                  {t("panels.settings.systemVersion")}
                 </p>
               </div>
             </div>
@@ -11506,9 +11481,9 @@ function SettingsModal({
         <div className="p-5 sm:p-8 space-y-5 sm:space-y-8 bg-linear-to-b from-transparent to-white/[0.01]">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="h-[1px] w-6 bg-neon-yellow/50" />
+              <div className="h-px w-6 bg-neon-yellow/50" />
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-neon-yellow/60">
-                CONTROLE DE SINTONIA
+                {t("panels.settings.tuningControl")}
               </p>
             </div>
 
@@ -11517,14 +11492,14 @@ function SettingsModal({
                 <div className="flex justify-between items-end">
                   <p className="text-xs font-black uppercase tracking-widest text-white flex items-center gap-3">
                     <Volume2 className="w-5 h-5 text-neon-yellow" />{" "}
-                    VOLUME_MESTRE
+                    {t("panels.settings.masterVolume")}
                   </p>
                   <div className="flex flex-col items-end">
                     <span className="text-xl font-black text-neon-yellow leading-none">
                       {volume}
                     </span>
                     <span className="text-[8px] font-bold text-white/20 uppercase">
-                      PERCENTUAL
+                      {t("panels.settings.percentage")}
                     </span>
                   </div>
                 </div>
@@ -11548,23 +11523,23 @@ function SettingsModal({
 
           <div className="space-y-5">
             <div className="flex items-center gap-3">
-              <div className="h-[1px] w-6 bg-neon-green/50" />
+              <div className="h-px w-6 bg-neon-green/50" />
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-neon-green/60">
-                PERFORMANCE VISUAL
+                {t("panels.settings.visualPerformance")}
               </p>
             </div>
             <div className="flex items-center justify-between p-6 bg-neon-green/5 border-2 border-neon-green/40 rounded-3xl relative overflow-hidden group">
               <div className="relative z-10">
                 <p className="text-sm font-black uppercase text-white tracking-widest">
-                  Pós-Processamento
+                  {t("panels.settings.postProcessing")}
                 </p>
                 <p className="text-[9px] text-neon-green/60 uppercase mt-1 tracking-[0.2em] font-bold">
-                  Resolução Nativa Ativada
+                  {t("panels.settings.nativeResolution")}
                 </p>
               </div>
               <div className="flex items-center gap-4 relative z-10">
                 <span className="text-[10px] font-black text-neon-green">
-                  ULTRA
+                  {t("panels.settings.ultra")}
                 </span>
                 <div className="w-14 h-7 bg-black rounded-full p-1 border border-neon-green/30">
                   <div className="w-5 h-5 bg-neon-green rounded-full shadow-[0_0_15px_rgba(56,242,127,1)]" />
@@ -11579,7 +11554,7 @@ function SettingsModal({
             onClick={onClose}
             className="w-full py-4 bg-neon-green text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-xl shadow-[0_5px_20px_rgba(56,242,127,0.2)] hover:shadow-[0_8px_30px_rgba(56,242,127,0.4)] hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-3"
           >
-            <Shield className="w-4 h-4" /> SALVAR ALTERAÇÕES
+            <Shield className="w-4 h-4" /> {t("panels.settings.saveChanges")}
           </button>
         </div>
       </motion.div>
@@ -11595,9 +11570,10 @@ function NewsView({
   articles: NewsArticle[];
   onClose: () => void;
 }) {
+  const t = useTranslations("Dashboard");
   return (
     <FullViewWrapper
-      title="Crônicas de Kronos"
+      title={t("panels.news.title")}
       icon={Newspaper}
       color="border-neon-yellow"
       onClose={onClose}
@@ -11606,10 +11582,10 @@ function NewsView({
         {/* Featured News Header */}
         <div className="mb-12 text-center sm:text-left">
           <h2 className="text-4xl sm:text-5xl font-black uppercase italic text-white mb-4 tracking-tighter">
-            íšltimas do Reino
+            {t("panels.news.subtitle")}
           </h2>
           <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">
-            Fique por dentro das atualizaçõeses e lendas
+            {t("panels.news.description")}
           </p>
         </div>
 
@@ -11658,7 +11634,7 @@ function NewsView({
                   <div className="w-1 h-1 rounded-full bg-white/10" />
                   <Timer className="w-3 h-3 text-white/20" />
                   <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">
-                    {article.readTime} leitura
+                    {t("panels.news.readTime", { minutes: article.readTime })}
                   </span>
                 </div>
 
@@ -11672,7 +11648,7 @@ function NewsView({
 
                 <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
                   <button className="text-[10px] font-black text-neon-yellow uppercase tracking-widest flex items-center gap-2 group/btn">
-                    Ler Crônica
+                    {t("panels.news.readAction")}
                     <TrendingUp className="w-3 h-3 transition-transform group-hover/btn:translate-x-1" />
                   </button>
                   <button className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all">
@@ -11690,7 +11666,7 @@ function NewsView({
         {/* Bottom decoration */}
         <div className="mt-16 py-12 border-t border-white/5 text-center">
           <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.5em]">
-            Fim das Crônicas Atuais
+            {t("panels.news.footer")}
           </p>
         </div>
       </div>
@@ -11712,6 +11688,7 @@ function FriendsView({
   onAddFriend: (id: string) => void;
   currentUser: any;
 }) {
+  const t = useTranslations("Dashboard");
   const [searchInput, setSearchInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
@@ -11727,7 +11704,7 @@ function FriendsView({
 
   return (
     <FullViewWrapper
-      title="Central de Alianças"
+      title={t("panels.friends.title")}
       icon={Friends}
       color="border-neon-green"
       onClose={onClose}
@@ -11747,7 +11724,7 @@ function FriendsView({
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               onFocus={() => setIsSearching(true)}
-              placeholder="Buscar guerreiros pelo nome..."
+              placeholder={t("panels.friends.searchPlaceholder")}
               className="w-full bg-transparent px-4 py-4 text-sm font-bold text-white outline-none placeholder:text-white/10"
             />
             {searchInput && (
@@ -11795,7 +11772,7 @@ function FriendsView({
                           {hero.name}
                         </h4>
                         <p className="text-[8px] font-black text-white/30 uppercase tracking-widest mt-1">
-                          Nível {hero.level} • {(hero.xp / 1000).toFixed(1)}k XP
+                          {t("panels.friends.level", { level: hero.level })} • {(hero.xp / 1000).toFixed(1)}k XP
                         </p>
                       </div>
                     </div>
@@ -11803,13 +11780,13 @@ function FriendsView({
                       onClick={() => onAddFriend(hero.uid || hero.id)}
                       className="px-4 py-2 bg-neon-green text-black text-[9px] font-black uppercase rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(56,242,127,0.3)]"
                     >
-                      Adicionar
+                      {t("panels.friends.addAction")}
                     </button>
                   </div>
                 ))}
                 {searchResults.length === 0 && (
                   <p className="col-span-full py-10 text-center text-white/10 font-black uppercase italic text-xs">
-                    Nenhum guerreiro encontrado
+                    {t("panels.friends.noResults")}
                   </p>
                 )}
               </div>
@@ -11825,19 +11802,19 @@ function FriendsView({
               <div className="grid grid-cols-3 gap-4">
                 {[
                   {
-                    label: "Total Amigos",
+                    label: t("panels.friends.stats.total"),
                     value: friends.length,
                     color: "text-white",
                   },
                   {
-                    label: "Sincronizados",
+                    label: t("panels.friends.stats.synced"),
                     value: "98%",
                     color: "text-neon-yellow",
                   },
                 ].map((stat, i) => (
                   <div
                     key={i}
-                    className="p-4 bg-white/[0.02] border border-white/5 rounded-3xl text-center"
+                    className="p-4 bg-white/2 border border-white/5 rounded-3xl text-center"
                   >
                     <p className="text-[7px] font-black uppercase tracking-[0.3em] text-white/20 mb-2">
                       {stat.label}
@@ -11854,7 +11831,7 @@ function FriendsView({
                 <div className="flex items-center gap-3">
                   <div className="h-px w-8 bg-white/10" />
                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
-                    Seus Aliados
+                    {t("panels.friends.alliesTitle")}
                   </h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -11885,11 +11862,11 @@ function FriendsView({
                           </h4>
                           <div className="flex items-center gap-3 mt-1.5">
                             <p className="text-[8px] font-black text-white/30 uppercase tracking-widest">
-                              Nível {friend.level}
+                              {t("panels.friends.level", { level: friend.level })}
                             </p>
                             <div className="w-1 h-1 rounded-full bg-white/10" />
                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">
-                              Aliado Sincronizado
+                              {t("panels.friends.allySynced")}
                             </p>
                           </div>
                         </div>
@@ -11902,7 +11879,7 @@ function FriendsView({
                   ))}
                   {friends.length === 0 && (
                     <p className="col-span-full py-10 text-center text-white/10 font-black uppercase italic text-xs">
-                      Sem aliados no momento
+                      {t("panels.friends.noFriends")}
                     </p>
                   )}
                 </div>
@@ -11937,6 +11914,7 @@ function UnifiedShopModal({
   onBuy: (type: "characters" | "pets", id: number, price: number) => void;
   onSelect: (type: "characters" | "pets", id: number) => void;
 }) {
+  const t = useTranslations("Dashboard");
   const [tab, setTab] = useState<"characters" | "pets">(activeTab);
   const items = tab === "characters" ? SHOP_CHARACTERS : SHOP_PETS;
 
@@ -11959,12 +11937,16 @@ function UnifiedShopModal({
 
           <div className="flex flex-col items-center sm:items-start w-full sm:w-auto">
             <h2 className="text-2xl sm:text-4xl font-black italic tracking-tighter text-white uppercase leading-none text-center sm:text-left">
-              CENTRAL DE <span className="text-neon-yellow">Poder</span>
+              {t.rich("panels.shop.title", {
+                highlight: (chunks) => (
+                  <span className="text-neon-yellow">{chunks}</span>
+                ),
+              })}
             </h2>
             <div className="flex items-center gap-2 mt-6 p-1 bg-white/5 border border-white/10 rounded-2xl w-fit">
               {[
-                { id: "characters", label: "Guerreiros" },
-                { id: "pets", label: "Companheiros" },
+                { id: "characters", label: t("panels.shop.tabs.warriors") },
+                { id: "pets", label: t("panels.shop.tabs.companions") },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -11986,13 +11968,13 @@ function UnifiedShopModal({
           <div className="flex items-center gap-6 self-center">
             <div className="flex flex-col items-end">
               <span className="text-[10px] font-black uppercase tracking-widest text-white/30">
-                Seu Saldo
+                {t("panels.shop.yourBalance")}
               </span>
               <div className="flex items-center gap-2 text-neon-yellow">
                 <span className="text-2xl font-black italic tracking-tighter">
                   {playerGold.toLocaleString()}
                 </span>
-                <span className="text-xs font-black uppercase">CASH</span>
+                <span className="text-xs font-black uppercase">{t("panels.shop.currency")}</span>
               </div>
             </div>
             <button
@@ -12092,9 +12074,9 @@ function UnifiedShopModal({
                     <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   )}
                   {isSelected
-                    ? "Selecionado"
+                    ? t("panels.shop.actions.selected")
                     : isOwned
-                      ? "Selecionar"
+                      ? t("panels.shop.actions.select")
                       : `${item.price.toLocaleString()} CASH`}
                 </button>
               </motion.div>
@@ -12106,7 +12088,7 @@ function UnifiedShopModal({
           <div className="flex items-center gap-2 opacity-30">
             <div className="w-1.5 h-1.5 rounded-full bg-neon-yellow" />
             <span className="text-[8px] font-black tracking-widest text-white uppercase">
-              Sincronização de Compras
+              {t("panels.shop.sync")}
             </span>
           </div>
         </div>

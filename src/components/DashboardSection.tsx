@@ -1,8 +1,33 @@
 import { motion } from "motion/react";
-import { LayoutDashboard, Zap, TrendingUp, Trophy, Target } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Zap, TrendingUp, Trophy, Target } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function DashboardSection() {
+  const t = useTranslations("DashboardSection");
+
+  const featureItems = [
+    {
+      icon: TrendingUp,
+      title: t("features.progressBar.title"),
+      desc: t("features.progressBar.desc"),
+    },
+    {
+      icon: Zap,
+      title: t("features.xpLevel.title"),
+      desc: t("features.xpLevel.desc"),
+    },
+    {
+      icon: Target,
+      title: t("features.streakSystem.title"),
+      desc: t("features.streakSystem.desc"),
+    },
+    {
+      icon: Trophy,
+      title: t("features.globalRanking.title"),
+      desc: t("features.globalRanking.desc"),
+    },
+  ];
+
   return (
     <section
       id="dashboard"
@@ -19,41 +44,20 @@ export default function DashboardSection() {
             viewport={{ once: true }}
           >
             <h2 className="text-[10px] font-black text-neon-green uppercase tracking-[0.3em] mb-4">
-              Interface de Elite
+              {t("subtitle")}
             </h2>
             <h3 className="text-2xl sm:text-4xl md:text-5xl font-black font-display tracking-normal leading-tight mb-6 sm:mb-8 uppercase">
-              Seu Centro de <br />
-              <span className="text-neon-yellow">Comando Pessoal</span>
+              {t.rich("title", {
+                br: () => <br />,
+                highlight: (chunks) => <span className="text-neon-yellow">{chunks}</span>
+              })}
             </h3>
             <p className="text-base sm:text-lg text-white mb-8 font-medium">
-              O Dashboard do Kronos não é apenas uma lista de tarefas. É um
-              cockpit de performance que monitora cada aspecto da sua evolução
-              em tempo real.
+              {t("description")}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              {[
-                {
-                  icon: TrendingUp,
-                  title: "Barra de Progresso",
-                  desc: "Visualização clara da sua jornada diária.",
-                },
-                {
-                  icon: Zap,
-                  title: "XP & Level",
-                  desc: "Gamificação profunda com feedback imediato.",
-                },
-                {
-                  icon: Target,
-                  title: "Streak System",
-                  desc: "Mantenha o fogo sagrado da consistência.",
-                },
-                {
-                  icon: Trophy,
-                  title: "Global Ranking",
-                  desc: "Sua posição entre os melhores do mundo.",
-                },
-              ].map((item, i) => (
+              {featureItems.map((item, i) => (
                 <div
                   key={i}
                   className="flex flex-col gap-3 p-4 rounded-2xl glass-card border-white/5"
@@ -82,12 +86,12 @@ export default function DashboardSection() {
                 <div className="flex justify-between items-end">
                   <div>
                     <div className="text-[8px] sm:text-[10px] font-black text-white/40 uppercase mb-1">
-                      Status do Sistema
+                      {t("mockup.status")}
                     </div>
                     <div className="text-xl sm:text-2xl font-black font-sans uppercase">
-                      Nível 42{" "}
+                      {t("mockup.level")}{" "}
                       <span className="text-neon-green text-xs sm:text-sm ml-2">
-                        Mestre
+                        {t("mockup.master")}
                       </span>
                     </div>
                   </div>
@@ -96,7 +100,7 @@ export default function DashboardSection() {
                       Streak
                     </div>
                     <div className="text-xl sm:text-2xl font-black font-sans uppercase">
-                      15 Dias
+                      {t("mockup.streak")}
                     </div>
                   </div>
                 </div>
@@ -113,7 +117,7 @@ export default function DashboardSection() {
                 <div className="grid grid-cols-3 gap-3 sm:gap-4">
                   <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-center">
                     <div className="text-[8px] sm:text-[9px] font-black text-white/40 uppercase mb-1">
-                      XP Total
+                      {t("mockup.xpTotal")}
                     </div>
                     <div className="text-base sm:text-lg font-black font-sans">
                       12.4k
@@ -121,7 +125,7 @@ export default function DashboardSection() {
                   </div>
                   <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-center">
                     <div className="text-[8px] sm:text-[9px] font-black text-white/40 uppercase mb-1">
-                      Ranking
+                      {t("mockup.ranking")}
                     </div>
                     <div className="text-base sm:text-lg font-black font-sans text-neon-yellow">
                       #08
@@ -129,7 +133,7 @@ export default function DashboardSection() {
                   </div>
                   <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-center">
                     <div className="text-[8px] sm:text-[9px] font-black text-white/40 uppercase mb-1">
-                      Missões
+                      {t("mockup.missions")}
                     </div>
                     <div className="text-base sm:text-lg font-black font-sans">
                       142
@@ -139,14 +143,14 @@ export default function DashboardSection() {
 
                 <div className="pt-4 border-t border-white/10">
                   <div className="text-[8px] sm:text-[10px] font-black text-white/40 uppercase mb-4">
-                    Missões Ativas
+                    {t("mockup.activeMissions")}
                   </div>
                   <div className="space-y-2 sm:space-y-3">
                     <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-neon-green/5 border border-neon-green/20">
                       <div className="flex items-center gap-3">
                         <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-neon-green rotate-45" />
                         <div className="text-[10px] sm:text-xs font-bold uppercase">
-                          Treino de Força
+                          {t("mockup.strengthTraining")}
                         </div>
                       </div>
                       <div className="text-[8px] sm:text-[10px] font-black text-neon-green uppercase">
@@ -157,7 +161,7 @@ export default function DashboardSection() {
                       <div className="flex items-center gap-3">
                         <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white/20 rotate-45" />
                         <div className="text-[10px] sm:text-xs font-bold uppercase">
-                          Leitura Profunda
+                          {t("mockup.deepReading")}
                         </div>
                       </div>
                       <div className="text-[8px] sm:text-[10px] font-black text-white/40 uppercase">
